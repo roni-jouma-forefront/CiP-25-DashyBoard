@@ -1,3 +1,36 @@
+Spår B2B - Hotellversion Pilow
+Hotellkedjan Pilows riktar sig till trötta piloter världen över och ska starta upp ett nytt koncept precis intill en flygplats. Det är helt upp till er vilken flygplats hotellet ska etablera sig på. Varje rum ska bestyckas med en smart spegel, ni kan anta att det är färre än 100 rum. Det är er uppgift att utveckla systemet för dessa speglar.
+
+I hotellversionen krävs ingen personlig inloggning och vädret bestäms av hotellets position. Däremot kräver personalen en central kontrollstation som kan hantera gästernas speglar/dashboard. Från kontrollstationen ska personal kunna konfigurera rummens speglar efter gästens information. Som till exempel namn och pilotens nästa resmål.
+
+Hotellspegeln innehåller:
+
+Klocka
+Lokalväder enl. hotellets ICAO kod
+Destination
+Väder på flygplatsen
+Gate (om finns)
+Avgångstid (om finns)
+Flygplatsinformation
+Arrivals
+Departures + Boarding gates
+Utöver innehåll ska hotellpersonalen kunna administrera sina enheter via en konsol eller applikation där de ska kunna:
+
+Anpassa gästinformationen till varje rum/enhet
+Namn
+Nästa destination eller flygning
+Skicka ut meddelanden och information som visas på gästernas enheter
+
+DashyBoard features	Hotellversion (B2B)
+
+Klocka	✅
+Lokaltrafik (t.ex. SL)	✅
+Adminverktyg för att anpassa	✅
+ICAO anpassat väder	✅
+Flygplatsens boarding gates	✅
+Flygplatsens arrivals	✅
+Meddelandetjänst main -> sub	✅
+
 # CiP-25-DashyBoard
 
 System Architecture
@@ -13,6 +46,8 @@ Entity Relationship Diagram
 <img width="758" height="306" alt="image" src="https://github.com/user-attachments/assets/18bfe718-9f0c-4e64-9515-990717997161" />
 
 2. Git Workflow & Pull Requests (PRs)
+
+   Skapa branch från Dev -> PR och Merge into Dev -> PR av Dev into Main
 
 <img width="777" height="333" alt="image" src="https://github.com/user-attachments/assets/907a44da-d252-46fc-9f8a-93a5efd1b4c4" />
 
