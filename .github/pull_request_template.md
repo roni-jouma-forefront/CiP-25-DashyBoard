@@ -8,3 +8,5 @@
 * [ ] Om din kod innehåller migrations, har du testat så att dessa funkar?
 * [ ] Har du uppdaterat dokumentation kopplat till PR, om nödvändigt?
 * [ ] Har seeders uppdaterats, om ny testdata krävs?
+
+Resolved: # (Nummer på issue i projectet du arbetar med)
