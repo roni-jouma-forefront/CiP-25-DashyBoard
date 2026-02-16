@@ -1,4 +1,4 @@
-namespace Dashyboard.IntegrationTests;
+namespace Dashyboard.IntegrationTests.Infrastructure;
 
 public class Tests
 {
