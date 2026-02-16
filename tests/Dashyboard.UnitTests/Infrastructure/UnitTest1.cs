@@ -1,4 +1,4 @@
-namespace Dashyboard.UnitTests.Domain;
+namespace Dashyboard.UnitTests.Infrastructure;
 
 public class Tests
 {
