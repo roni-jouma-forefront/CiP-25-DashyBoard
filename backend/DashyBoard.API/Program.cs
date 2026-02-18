@@ -2,7 +2,6 @@ using DashyBoard.Application;
 using DashyBoard.Infrastructure;
 using DashyBoard.API.Middleware;
 using DashyBoard.Infrastructure.Persistence;
-using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,11 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -34,12 +28,12 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-// Hämta connection string
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// Registrera DbContext
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+// Ensure database is created
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    context.Database.EnsureCreated();
+}
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
