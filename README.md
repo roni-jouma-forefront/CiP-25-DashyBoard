@@ -51,5 +51,59 @@ Entity Relationship Diagram
 
 <img width="777" height="333" alt="image" src="https://github.com/user-attachments/assets/907a44da-d252-46fc-9f8a-93a5efd1b4c4" />
 
+## 🐳 Docker Setup
+
+### Starting the Application
+
+Run all services (frontend and backend):
+```bash
+docker-compose up --build
+```
+
+### Accessing the Application
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:5000
+
+### Services
+
+1. **dashyboard-frontend** - React + Vite application served by Nginx
+2. **dashyboard-api** - .NET 8 Web API with SQLite database
+
+### Database
+
+The application uses SQLite for data storage. The database file is stored in `backend/data/` directory which is mounted as a volume in Docker, ensuring data persists between container restarts.
+
+#### Running Migrations
+
+To create or update the database schema:
+
+```bash
+cd backend/DashyBoard.API
+dotnet ef migrations add InitialCreate --project ../DashyBoard.Infrastructure
+dotnet ef database update
+```
+
+The database will be automatically created in the `backend/data/` directory.
+
+### Development
+
+For local development without Docker:
+
+**Backend:**
+```bash
+cd backend/DashyBoard.API
+dotnet run
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend development server includes a proxy to the backend API at `/api/*`.
+
 
 

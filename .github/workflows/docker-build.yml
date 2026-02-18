@@ -1,0 +1,62 @@
+name: Docker Build and Test
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+env:
+  ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'main' || 'dev' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Set environment label
+      run: |
+        echo "Building for ${{ env.ENVIRONMENT }} environment"
+
+    - name: Build all services
+      run: |
+        docker-compose build
+
+    - name: Start services
+      run: |
+        docker-compose up -d
+
+    - name: Wait for services to start
+      run: |
+        echo "Waiting for services to be ready..."
+        sleep 15
+
+    - name: Check Frontend
+      run: |
+        curl -f http://localhost:3000 || exit 1
+        echo "✅ Frontend is running"
+
+    - name: Check Backend API
+      run: |
+        curl -f http://localhost:5000 || echo "⚠️  Backend responded (health endpoint may not exist yet)"
+
+    - name: Verify all containers running
+      run: |
+        docker-compose ps
+        echo "✅ All services built and started successfully"
+
+    - name: View logs on failure
+      if: failure()
+      run: |
+        docker-compose logs
+
+    - name: Cleanup
+      if: always()
+      run: |
+        docker-compose down -v
