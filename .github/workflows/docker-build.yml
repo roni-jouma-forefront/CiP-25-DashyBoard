@@ -26,11 +26,11 @@ jobs:
 
     - name: Build all services
       run: |
-        docker-compose build
+        docker compose build
 
     - name: Start services
       run: |
-        docker-compose up -d
+        docker compose up -d
 
     - name: Wait for services to start
       run: |
@@ -48,15 +48,15 @@ jobs:
 
     - name: Verify all containers running
       run: |
-        docker-compose ps
+        docker compose ps
         echo "✅ All services built and started successfully"
 
     - name: View logs on failure
       if: failure()
       run: |
-        docker-compose logs
+        docker compose logs
 
     - name: Cleanup
       if: always()
       run: |
-        docker-compose down -v
+        docker compose down -v
