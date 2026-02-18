@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>cca302f1-72a2-4b9d-a618-8ad2b1a06e82</UserSecretsId>
+    <UserSecretsId>dashyboard-api-secrets</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
