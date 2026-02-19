@@ -1,63 +1,59 @@
-﻿using System.Net.Http.Headers;
-using System.Text.Json;
+﻿using System.Text.Json;
 using DashyBoard.Application.Common.Interfaces.External;
 using DashyBoard.Application.DTOs.Swedavia;
 using DashyBoard.Domain.Entities.ExternalEntities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace DashyBoard.Infrastructure.Services.External;
 
-public class SwedaviaWaitTimeApiService : ISwedaviaWaitTimeApiService
+public class SwedaviaWaitTimeApiService : SwedaviaApiServiceBase, ISwedaviaWaitTimeApiService
 {
-    private readonly HttpClient _httpClient;
-    private readonly string _waitTimeApiKey;
-
-    public SwedaviaWaitTimeApiService(HttpClient httpClient, IConfiguration configuration)
+    public SwedaviaWaitTimeApiService(
+        HttpClient httpClient,
+        IConfiguration configuration,
+        ILogger<SwedaviaWaitTimeApiService> logger)
+        : base(
+            httpClient,
+            configuration["Swedavia:WaitTimeApiKey"]
+                ?? throw new InvalidOperationException("Swedavia WaitTime API key is not configured"),
+            logger)
     {
-        _httpClient = httpClient;
-        _httpClient.BaseAddress = new Uri("https://api.swedavia.se/");
-
-        _waitTimeApiKey = configuration["Swedavia:WaitTimeApiKey"]
-            ?? throw new InvalidOperationException("Swedavia WaitTime API key is not configured");
     }
 
     public async Task<IEnumerable<WaitTimeDto>> GetWaitTimesAsync(
         string airport,
-        string? flightId = null,
         DateOnly? date = null,
         CancellationToken cancellationToken = default)
     {
-        var queryParams = new List<string>();
-        if (!string.IsNullOrEmpty(flightId))
-            queryParams.Add($"flightid={flightId}");
-        if (date.HasValue)
-            queryParams.Add($"date={date.Value:yyyy-MM-dd}");
+        var airportCode = airport.ToUpperInvariant();
+        var endpoint = BuildEndpoint("waittimepublic/v2/airports", airportCode);
 
-        var queryString = queryParams.Count > 0 ? "?" + string.Join("&", queryParams) : string.Empty;
+        Logger.LogInformation(
+            "Fetching wait times for airport {Airport}{DateInfo}",
+            airportCode,
+            date.HasValue ? $" on {date.Value:yyyy-MM-dd}" : " (current)");
 
-        using var request = new HttpRequestMessage(HttpMethod.Get, $"waittimepublic/v2/airports/{airport}/flights{queryString}");
-        request.Headers.Add("Ocp-Apim-Subscription-Key", _waitTimeApiKey);
+        var airportWaitTimes = await SendApiRequestAsync<AirportWaitTimeResponse>(endpoint, cancellationToken);
+        var waitTimes = MapToWaitTimeDtos(airportWaitTimes?.WaitTimes ?? new List<SecurityQueueWaitTime>());
 
-        var response = await _httpClient.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        Logger.LogInformation(
+            "Retrieved {Count} wait time entries for {Airport}",
+            waitTimes.Count(),
+            airportCode);
 
-        var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        var waitTimes = JsonSerializer.Deserialize<List<WaitTimeApiModel>>(content, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        });
-
-        return MapToWaitTimeDtos(waitTimes ?? new List<WaitTimeApiModel>());
+        return waitTimes;
     }
 
-    private static IEnumerable<WaitTimeDto> MapToWaitTimeDtos(IEnumerable<WaitTimeApiModel> apiModels)
+    private static IEnumerable<WaitTimeDto> MapToWaitTimeDtos(IEnumerable<SecurityQueueWaitTime> apiModels)
     {
         return apiModels.Select(wt => new WaitTimeDto
         {
-            Airport = wt.Airport ?? string.Empty,
-            FlightId = wt.FlightId,
-            Date = wt.Date,
-            WaitTimeMinutes = wt.WaitTimeMinutes
+            QueueName = wt.QueueName ?? string.Empty,
+            Terminal = wt.Terminal ?? string.Empty,
+            CurrentTime = wt.CurrentTime,
+            CurrentProjectedWaitTime = wt.CurrentProjectedWaitTime,
+            IsFastTrack = wt.IsFastTrack
         });
     }
 }

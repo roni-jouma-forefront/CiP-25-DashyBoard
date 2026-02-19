@@ -1,24 +1,27 @@
-﻿using DashyBoard.Application.Common.Interfaces.External;
-using DashyBoard.Application.DTOs.Swedavia;
+﻿using DashyBoard.Application.DTOs.Swedavia;
+using DashyBoard.Application.Features.WaitTimes.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DashyBoard.API.Controllers;
 
+[ApiController]
+[Route("api/[controller]")]
 public class WaitTimesController : ControllerBase
 {
-    private readonly ISwedaviaWaitTimeApiService _swedaviaApiService;
+    private readonly IMediator _mediator;
 
-    public WaitTimesController(ISwedaviaWaitTimeApiService swedaviaApiService)
+    public WaitTimesController(IMediator mediator)
     {
-        _swedaviaApiService = swedaviaApiService;
+        _mediator = mediator;
     }
     /// <summary>
-    /// Get wait times for all flights at an airport
+    /// Get current security queue wait times at an airport
     /// </summary>
     /// <param name="airport">Airport code (e.g., ARN for Stockholm Arlanda)</param>
     /// <param name="cancellationToken"></param>
-    /// <returns>List of wait times</returns>
-    [HttpGet("waittimes/{airport}")]
+    /// <returns>List of current security queue wait times by terminal</returns>
+    [HttpGet("{airport}")]
     [ProducesResponseType(typeof(IEnumerable<WaitTimeDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -29,85 +32,8 @@ public class WaitTimesController : ControllerBase
 
         try
         {
-            var waitTimes = await _swedaviaApiService.GetWaitTimesAsync(
-                airport,
-                cancellationToken: cancellationToken);
-
-            return Ok(waitTimes);
-        }
-        catch (HttpRequestException ex)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Failed to fetch wait times from Swedavia API", error = ex.Message });
-        }
-    }
-
-    /// <summary>
-    /// Get wait times for a specific flight
-    /// </summary>
-    /// <param name="airport">Airport code (e.g., ARN for Stockholm Arlanda)</param>
-    /// <param name="flightId">Flight ID</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>Wait times for the specified flight</returns>
-    [HttpGet("waittimes/{airport}/flight/{flightId}")]
-    [ProducesResponseType(typeof(IEnumerable<WaitTimeDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetWaitTimesByFlight(
-        string airport,
-        string flightId,
-        CancellationToken cancellationToken = default)
-    {
-        if (string.IsNullOrWhiteSpace(airport))
-            return BadRequest("Airport code is required");
-
-        if (string.IsNullOrWhiteSpace(flightId))
-            return BadRequest("Flight ID is required");
-
-        try
-        {
-            var waitTimes = await _swedaviaApiService.GetWaitTimesAsync(
-                airport,
-                flightId,
-                cancellationToken: cancellationToken);
-
-            return Ok(waitTimes);
-        }
-        catch (HttpRequestException ex)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Failed to fetch wait times from Swedavia API", error = ex.Message });
-        }
-    }
-
-    /// <summary>
-    /// Get wait times for a specific date
-    /// </summary>
-    /// <param name="airport">Airport code (e.g., ARN for Stockholm Arlanda)</param>
-    /// <param name="date">Date in format yyyy-MM-dd</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>Wait times for the specified date</returns>
-    [HttpGet("waittimes/{airport}/date/{date}")]
-    [ProducesResponseType(typeof(IEnumerable<WaitTimeDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetWaitTimesByDate(
-        string airport,
-        string date,
-        CancellationToken cancellationToken = default)
-    {
-        if (string.IsNullOrWhiteSpace(airport))
-            return BadRequest("Airport code is required");
-
-        if (!DateOnly.TryParse(date, out var parsedDate))
-            return BadRequest("Invalid date format. Use yyyy-MM-dd");
-
-        try
-        {
-            var waitTimes = await _swedaviaApiService.GetWaitTimesAsync(
-                airport,
-                date: parsedDate,
-                cancellationToken: cancellationToken);
+            var query = new GetWaitTimesQuery(airport, DateOnly.FromDateTime(DateTime.UtcNow));
+            var waitTimes = await _mediator.Send(query, cancellationToken);
 
             return Ok(waitTimes);
         }
