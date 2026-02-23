@@ -14,7 +14,7 @@ services:
   dashyboard-api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: backend/Dockerfile
     container_name: dashyboard-api
     ports:
       - "5000:8080"

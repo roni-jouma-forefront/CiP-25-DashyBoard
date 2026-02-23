@@ -128,6 +128,18 @@ sqlite3 backend/data/DashyBoard_Dev.db
 SELECT * FROM Hotels;
 ```
 
+### Seeding Test Data
+
+- Seed script: [backend/scripts/seed.sql](backend/scripts/seed.sql)
+- Database file (dev): `backend/data/DashyBoard_Dev.db`
+
+```bash
+docker cp backend/scripts/seed.sql dashyboard-api:/app/seed.sql
+docker compose exec dashyboard-api sh -c "sqlite3 /app/data/DashyBoard_Dev.db '.read /app/seed.sql'"
+```
+
+If you change the seed file, rerun the `docker cp` step before seeding again.
+
 ### How Database Schema is Created
 
 The application uses **Entity Framework Core's `EnsureCreated()`** method which automatically creates the database schema from entity classes on startup. No migrations needed for development.
