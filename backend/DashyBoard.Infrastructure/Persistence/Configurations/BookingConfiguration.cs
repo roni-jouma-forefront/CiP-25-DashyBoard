@@ -8,6 +8,11 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
 {
     public void Configure(EntityTypeBuilder<Booking> builder)
     {
+        builder.HasKey(b => b.Id);
+
+        builder.Property(b => b.Id)
+            .ValueGeneratedOnAdd();
+
         builder.HasOne<Room>()
             .WithMany()
             .HasForeignKey(b => b.RoomId)
@@ -20,7 +25,7 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
 
         builder.HasOne<Flight>()
             .WithMany()
-            .HasForeignKey(b => b.DepartureFlightId)
+            .HasForeignKey(b => b.FlightId)
             .OnDelete(DeleteBehavior.SetNull);
     }
 }
