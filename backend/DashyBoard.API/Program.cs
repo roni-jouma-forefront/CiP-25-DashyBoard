@@ -25,13 +25,23 @@ builder.Services.AddCors(options =>
 // Add Clean Architecture layers
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-
 var app = builder.Build();
 
-// Ensure database is created
+// Ensure database directory and database are created
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var connectionString = context.Database.GetConnectionString();
+    if (connectionString != null)
+    {
+        var builder2 = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder(connectionString);
+        var dbPath = builder2.DataSource;
+        var dbDir = Path.GetDirectoryName(dbPath);
+        if (!string.IsNullOrEmpty(dbDir))
+        {
+            Directory.CreateDirectory(dbDir);
+        }
+    }
     context.Database.EnsureCreated();
 }
 

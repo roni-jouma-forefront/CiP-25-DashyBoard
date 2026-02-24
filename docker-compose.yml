@@ -14,7 +14,7 @@ services:
   dashyboard-api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: backend/Dockerfile
     container_name: dashyboard-api
     ports:
       - "5000:8080"
@@ -22,6 +22,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
+      - Swedavia__FlightInfoApiKey=${SWEDAVIA_FLIGHT_API_KEY}
+      - Swedavia__WaitTimeApiKey=${SWEDAVIA_WAIT_TIME_API_KEY}
+      - CheckWx__ApiKey=${CHECKWX_API_KEY}
     volumes:
       - ./backend/data:/app/data
     networks:

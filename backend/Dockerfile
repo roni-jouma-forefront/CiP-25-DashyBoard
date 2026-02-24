@@ -31,6 +31,11 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
+# Add sqlite3 to the runtime image for seeding/inspection
+RUN apt-get update \
+	&& apt-get install -y sqlite3 \
+	&& rm -rf /var/lib/apt/lists/*
+
 # Create data directory for SQLite database
 RUN mkdir -p /app/data
 
