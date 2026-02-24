@@ -1,10 +1,11 @@
 ﻿using DashyBoard.Application.Common.Interfaces;
+using DashyBoard.Application.Common.Models;
 using DashyBoard.Domain.Entities;
 using MediatR;
 
 namespace DashyBoard.Application.Features.Messages.Commands.CreateMessage;
 
-public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, int>
+public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, Result<int>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -13,7 +14,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         _context = context;
     }
 
-    public async Task<int> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
+    public async Task<Result<int>> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
         var message = new Message
         {
@@ -27,6 +28,6 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         _context.Messages.Add(message);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return message.Id;
+        return Result<int>.Success(message.Id);
     }
 }
