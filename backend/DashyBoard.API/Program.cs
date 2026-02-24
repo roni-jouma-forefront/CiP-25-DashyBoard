@@ -32,6 +32,11 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    // Ensure data directory exists
+    var dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "data");
+    Directory.CreateDirectory(dataDirectory);
+
     context.Database.EnsureCreated();
 }
 
