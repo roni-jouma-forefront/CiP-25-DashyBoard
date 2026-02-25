@@ -1,10 +1,15 @@
 import { Box } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useDrop } from "react-dnd";
-import MockWidget1 from "./MockWidget1";
+import DraggableWrapper from "./DraggableWrapper";
+import WeatherWidget from "./WeatherWidget";
+import Watch from "../base/watch";
 
 function MirrorDashboard() {
-  const [order, setOrder] = useState([1, 2, 3]);
+  const [order, setOrder] = useState([1, 2]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -21,20 +26,58 @@ function MirrorDashboard() {
 
   return (
     <>
-      <h1>Spegelsida</h1>
+      <Box
+        sx={{
+          flexGrow: 1,
+        }}
+      >
+        <AppBar
+          position="fixed"
+          sx={{
+            background: "linear-gradient(45deg, rgb(23, 3, 137), #09f)",
+            top: 0,
+            left: 0,
+            right: 0,
+            display: "flex",
+            justifyContent: "row",
+          }}
+        >
+          <Toolbar>
+            <Typography variant="h6" component="div">
+              Room 123
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Box>
+
       <Box
         ref={drop as unknown as React.RefObject<HTMLDivElement>}
         sx={{
-          border: "30px solid",
           borderImage: "linear-gradient(45deg, #f06, #09f) 1",
-          padding: { xs: "1rem", sm: "3rem", md: "10rem" },
+          paddingRight: { xs: "1rem", sm: "3rem", md: "10rem" },
           backgroundColor: isOver ? "rgba(0,0,0,0.1)" : "transparent",
           display: "flex",
-          justifyContent: "center",
+          alignContent: "flex-start",
         }}
       >
         {order.map((id) => {
-          if (id === 1) return <MockWidget1 key={1} />;
+          if (id === 1)
+            return (
+              <DraggableWrapper key={1} id={1}>
+                <Watch
+                  key={1}
+                  location="Stockholm"
+                  timeZone="Europe/Stockholm"
+                />
+              </DraggableWrapper>
+            );
+          if (id === 2)
+            return (
+              <DraggableWrapper key={2} id={2}>
+                <WeatherWidget />
+              </DraggableWrapper>
+            );
+          //if (id === 3) return <Watch key={3} />;
           // if (id === 2) return <MockWidget2 key={2} />;
           // if (id === 3) return <MockWidget3 key={3} />;
         })}
