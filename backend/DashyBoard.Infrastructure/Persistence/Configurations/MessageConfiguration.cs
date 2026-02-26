@@ -8,6 +8,11 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
 {
     public void Configure(EntityTypeBuilder<Message> builder)
     {
+        builder.HasKey(m => m.Id);
+
+        builder.Property(m => m.Id)
+            .ValueGeneratedOnAdd();
+
         builder.HasOne<Hotel>()
             .WithMany()
             .HasForeignKey(m => m.HotelId)

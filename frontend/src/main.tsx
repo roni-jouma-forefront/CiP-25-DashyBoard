@@ -2,11 +2,12 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import RoomPage from "./pages/Room";
 import AdminHome from "./pages/admin/AdminHome";
 import RoomAdminPage from "./pages/admin/Rooms.tsx";
 import SettingsPage from "./pages/admin/Settings";
 import RoomDetailsPage from "./pages/admin/RoomDetails";
+import Room from "./pages/Room";
+import MirrorDndProvider from "./components/mirror/MirrorDndProvider.tsx";
 
 import { BrowserRouter, Routes, Route } from "react-router";
 
@@ -20,7 +21,8 @@ createRoot(document.getElementById("root")!).render(
           <Route path="rooms/:id" element={<RoomDetailsPage />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>
-        <Route path="/room/:id" element={<RoomPage />} />
+        <Route path="/room/:id" element={<Room />}></Route>
+        <Route path="/mirror" element={<MirrorDndProvider />}></Route>
       </Routes>
     </StrictMode>
   </BrowserRouter>,

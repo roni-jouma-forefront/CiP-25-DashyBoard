@@ -37,6 +37,9 @@ public static class DependencyInjection
         services.AddHttpClient<ISwedaviaWaitTimeApiService, SwedaviaWaitTimeApiService>()
             .AddPolicyHandler(GetRetryPolicy());
 
+        services.AddHttpClient<ICheckWxApiService, CheckWxApiService>()
+            .AddPolicyHandler(GetRetryPolicy());
+
         return services;
     }
 
