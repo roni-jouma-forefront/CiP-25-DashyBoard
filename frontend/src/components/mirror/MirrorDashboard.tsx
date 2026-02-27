@@ -34,7 +34,7 @@ function MirrorDashboard() {
         <AppBar
           position="fixed"
           sx={{
-            background: "linear-gradient(45deg, rgb(23, 3, 137), #09f)",
+            background: "rgb(0, 45, 135))",
             top: 0,
             left: 0,
             right: 0,
@@ -74,7 +74,7 @@ function MirrorDashboard() {
           if (id === 2)
             return (
               <DraggableWrapper key={2} id={2}>
-                <WeatherWidget />
+                <WeatherWidget icao="ESSA"/>
               </DraggableWrapper>
             );
           //if (id === 3) return <Watch key={3} />;

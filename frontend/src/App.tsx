@@ -16,6 +16,9 @@ function App() {
           <li>
             <Link to="/room/123">Room -default</Link>
           </li>
+          <li>
+            <Link to="/mirror">Spegel</Link>
+          </li>
         </ul>
       </nav>
     </>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -6,20 +7,52 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-const metarData = {
-  rawMetar: "ESSA 251220Z 18005KT 9999 FEW030 07/03 Q1021 NOSIG",
-  icaoCode: "ESSA",
-  airport: "Arlanda Airport",
-  observationTime: new Date(),
-  wind: { direction: 180, speed: 5, unit: "KT" },
-  visibility: { value: 9999, unit: "m" },
-  temperature: { celsius: 7, dewpoint: 3 },
-  pressure: { value: 1021, unit: "hPa" },
-  clouds: [{ coverage: "FEW", altitude: 3000 }],
-  weather: "Sunny",
+interface WeatherProps {
+  icao: string; 
+}
+
+type MetarData = {
+  icao?: string;
+  observed?: string;
+  station?: {
+    name?: string;
+    location?: string;
+  };
+  temperature?: {
+    celsius?: number;
+    fahrenheit?: number;
+  };
+  humidity?: number;
+  windSpeedMps?: number;
+  conditions?: string | null;
 };
 
-function WeatherWidget() {
+function WeatherWidget({ icao }: WeatherProps) {
+  const [metarData, setMetarData] = useState<MetarData | null>(null);
+
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/CheckWx/${icao}`);
+        const json = await response.json();
+        const item: MetarData | null = Array.isArray(json) ? (json[0] ?? null) : (json ?? null);
+
+        console.log("raw json:", json);
+        console.log("selected item:", item);
+
+        setMetarData(item);
+      } catch (err) {
+        console.error(err);
+        setMetarData(null);
+      }
+    };
+
+    load();
+  }, [icao]);
+
+console.log("this is", metarData);
+
   return (
     <>
       <Box
@@ -49,76 +82,91 @@ function WeatherWidget() {
           >
             Weather
           </Typography>
-
-          <TableContainer component={Paper} sx={{ maxWidth: 700 }}>
+          
+          
+                    {!metarData ? (
+            <Typography>Loading weather...</Typography>
+          ) : (
+            <>
+              {/* <Typography>ICAO: {metarData.icao ?? "-"}</Typography>
+              <Typography>Station: {metarData.station?.name ?? "-"}</Typography>
+              <Typography>Temp: {metarData.temperature?.celsius ?? "-"}°C</Typography>
+              <Typography>Fukt: {metarData.humidity ?? "-"}%</Typography>
+              <Typography>Vind: {metarData.windSpeedMps ?? "-"} m/s</Typography>
+              <Typography>Villkor: {metarData.conditions ?? "-"}</Typography> */}
+           
+          
+           <TableContainer component={Paper} sx={{ maxWidth: 700 }}>
             <Table>
               <TableBody>
                 <TableRow sx={{ backgroundColor: "#f5f7fa" }}>
                   <TableCell sx={{ fontWeight: "bold", width: "40%" }}>
-                    Flygplats:
+                    Airport:
                   </TableCell>
-                  <TableCell>{metarData.airport}</TableCell>
+                  <TableCell>{metarData.station?.name ?? "-"}</TableCell>
                 </TableRow>
 
                 <TableRow>
                   <TableCell sx={{ fontWeight: "bold" }}>ICAO:</TableCell>
-                  <TableCell>{metarData.icaoCode}</TableCell>
+                  <TableCell>{metarData.icao ?? "-"}</TableCell>
                 </TableRow>
 
-                <TableRow sx={{ backgroundColor: "#f5f7fa" }}>
+                {/* <TableRow sx={{ backgroundColor: "#f5f7fa" }}>
                   <TableCell sx={{ fontWeight: "bold" }}>
                     Observationstid:
                   </TableCell>
                   <TableCell>
                     {metarData.observationTime.toLocaleString("sv-SE")}
                   </TableCell>
-                </TableRow>
+                </TableRow> */}
 
                 <TableRow>
-                  <TableCell sx={{ fontWeight: "bold" }}>Vind:</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Wind (m/s):</TableCell>
                   <TableCell>
-                    {metarData.wind.direction}° {metarData.wind.speed}{" "}
-                    {metarData.wind.unit}
+                   {metarData.windSpeedMps ?? "-"} m/s
                   </TableCell>
                 </TableRow>
 
-                <TableRow sx={{ backgroundColor: "#f5f7fa" }}>
+                {/* <TableRow sx={{ backgroundColor: "#f5f7fa" }}>
                   <TableCell sx={{ fontWeight: "bold" }}>Sikt:</TableCell>
                   <TableCell>
                     {metarData.visibility.value} {metarData.visibility.unit}
                   </TableCell>
-                </TableRow>
+                </TableRow> */}
 
                 <TableRow>
-                  <TableCell sx={{ fontWeight: "bold" }}>Temperatur:</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Temperature:</TableCell>
                   <TableCell>
-                    {metarData.temperature.celsius}°C /{" "}
-                    {metarData.temperature.dewpoint}°C
+                    {metarData.temperature?.celsius ?? "-"}°C /{" "}
+                    {metarData.temperature?.fahrenheit ?? "-"}°F
                   </TableCell>
                 </TableRow>
 
                 <TableRow sx={{ backgroundColor: "#f5f7fa" }}>
-                  <TableCell sx={{ fontWeight: "bold" }}>Tryck:</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Humidity:</TableCell>
                   <TableCell>
-                    {metarData.pressure.value} {metarData.pressure.unit}
+                    {metarData.humidity ?? "-"}%
                   </TableCell>
                 </TableRow>
 
                 <TableRow>
-                  <TableCell sx={{ fontWeight: "bold" }}>Väder:</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Conditions:</TableCell>
                   <TableCell
                     sx={{ display: "flex", alignItems: "center", gap: 1 }}
                   >
-                    ☀️ ( {metarData.weather} )
+                    {metarData.conditions ?? "-"}
                   </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
-          </TableContainer>
-        </Box>
+          </TableContainer> 
+           </>
+          )}
+        </Box> 
       </Box>
     </>
   );
 }
 
 export default WeatherWidget;
+
