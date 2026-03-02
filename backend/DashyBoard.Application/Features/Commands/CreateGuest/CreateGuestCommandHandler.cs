@@ -5,16 +5,20 @@ using MediatR;
 
 namespace DashyBoard.Application.Features.Commands.CreateGuest;
 
-public class CreateGuestCommandHandler(IRepository<Guest> repository)
+public class CreateGuestCommandHandler(IRepository<Guest> repository, IDateTime dateTime)
     : IRequestHandler<CreateGuestCommand, Result<Guid>>
 {
-    public async Task<Result<Guid>> Handle(CreateGuestCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(
+        CreateGuestCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var guest = new Guest
         {
-            Id        = Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             FirstName = request.FirstName,
-            LastName  = request.LastName,
+            LastName = request.LastName,
+            CreatedAt = dateTime.CetNow,
         };
 
         await repository.AddAsync(guest, cancellationToken);

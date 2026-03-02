@@ -28,7 +28,8 @@ public class ArrivalsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetArrivals(
         string airport,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(airport) || airport.Length != 3)
             return BadRequest("Airport code must be a valid 3-letter IATA code");
@@ -42,8 +43,10 @@ public class ArrivalsController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Failed to fetch arrivals from Swedavia API", error = ex.Message });
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new { message = "Failed to fetch arrivals from Swedavia API", error = ex.Message }
+            );
         }
     }
 
@@ -61,7 +64,8 @@ public class ArrivalsController : ControllerBase
     public async Task<IActionResult> GetArrivalsByDate(
         string airport,
         string date,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(airport) || airport.Length != 3)
             return BadRequest("Airport code must be a valid 3-letter IATA code");
@@ -78,10 +82,13 @@ public class ArrivalsController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Failed to fetch arrivals from Swedavia API", error = ex.Message });
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new { message = "Failed to fetch arrivals from Swedavia API", error = ex.Message }
+            );
         }
     }
+
     /// <summary>
     /// Get flight arrivals for a specific flight ID at an airport
     /// </summary>
@@ -96,7 +103,8 @@ public class ArrivalsController : ControllerBase
     public async Task<IActionResult> GetArrivalsByFlightId(
         string airport,
         string flightId,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(airport) || airport.Length != 3)
             return BadRequest("Airport code must be a valid 3-letter IATA code");
@@ -106,15 +114,21 @@ public class ArrivalsController : ControllerBase
 
         try
         {
-            var query = new GetArrivalsQuery(airport, DateOnly.FromDateTime(DateTime.UtcNow), flightId);
+            var query = new GetArrivalsQuery(
+                airport,
+                DateOnly.FromDateTime(DateTime.UtcNow),
+                flightId
+            );
             var arrivals = await _mediator.Send(query, cancellationToken);
 
             return Ok(arrivals);
         }
         catch (HttpRequestException ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Failed to fetch arrivals from Swedavia API", error = ex.Message });
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new { message = "Failed to fetch arrivals from Swedavia API", error = ex.Message }
+            );
         }
     }
 }

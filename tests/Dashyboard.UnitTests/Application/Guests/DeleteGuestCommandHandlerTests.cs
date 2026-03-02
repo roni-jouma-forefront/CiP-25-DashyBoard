@@ -22,7 +22,12 @@ public class DeleteGuestCommandHandlerTests
     {
         // Arrange
         var guestId = Guid.NewGuid();
-        var guest = new Guest { Id = guestId, FirstName = "Alice", LastName = "Smith" };
+        var guest = new Guest
+        {
+            Id = guestId,
+            FirstName = "Alice",
+            LastName = "Smith",
+        };
 
         _repositoryMock
             .Setup(r => r.GetByIdAsync(guestId, It.IsAny<CancellationToken>()))
@@ -63,7 +68,12 @@ public class DeleteGuestCommandHandlerTests
     {
         // Arrange
         var guestId = Guid.NewGuid();
-        var guest = new Guest { Id = guestId, FirstName = "Alice", LastName = "Smith" };
+        var guest = new Guest
+        {
+            Id = guestId,
+            FirstName = "Alice",
+            LastName = "Smith",
+        };
 
         _repositoryMock
             .Setup(r => r.GetByIdAsync(guestId, It.IsAny<CancellationToken>()))
@@ -77,7 +87,8 @@ public class DeleteGuestCommandHandlerTests
         // Assert
         _repositoryMock.Verify(
             r => r.DeleteAsync(It.Is<Guest>(g => g.Id == guestId), It.IsAny<CancellationToken>()),
-            Times.Once);
+            Times.Once
+        );
     }
 
     [Test]
@@ -98,6 +109,7 @@ public class DeleteGuestCommandHandlerTests
         // Assert
         _repositoryMock.Verify(
             r => r.DeleteAsync(It.IsAny<Guest>(), It.IsAny<CancellationToken>()),
-            Times.Never);
+            Times.Never
+        );
     }
 }

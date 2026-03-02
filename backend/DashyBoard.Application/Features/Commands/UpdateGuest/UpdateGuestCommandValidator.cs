@@ -7,11 +7,15 @@ public class UpdateGuestCommandValidator : AbstractValidator<UpdateGuestCommand>
     public UpdateGuestCommandValidator()
     {
         RuleFor(x => x.FirstName)
-            .NotEmpty().WithMessage("First name is required")
-            .MaximumLength(35).WithMessage("First name must not exceed 35 characters");
+            .NotEmpty()
+            .WithMessage("First name is required")
+            .MaximumLength(35)
+            .WithMessage("First name must not exceed 35 characters");
 
         RuleFor(x => x.LastName)
-            .NotEmpty().WithMessage("Last name is required")
-            .MaximumLength(35).WithMessage("Last name must not exceed 35 characters");
+            .NotEmpty()
+            .WithMessage("Last name is required")
+            .MaximumLength(35)
+            .WithMessage("Last name must not exceed 35 characters");
     }
 }

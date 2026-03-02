@@ -22,13 +22,18 @@ public class GetGuestQueryHandlerTests
     {
         // Arrange
         var guestId = Guid.NewGuid();
-        var guest = new Guest { Id = guestId, FirstName = "Alice", LastName = "Smith" };
+        var guest = new Guest
+        {
+            Id = guestId,
+            FirstName = "Alice",
+            LastName = "Smith",
+        };
 
         _repositoryMock
             .Setup(r => r.GetByIdAsync(guestId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(guest);
 
-        var query = new GetGuestQuery(guestId, "Alice", "Smith");
+        var query = new GetGuestQuery(guestId);
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);
@@ -50,7 +55,7 @@ public class GetGuestQueryHandlerTests
             .Setup(r => r.GetByIdAsync(guestId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Guest?)null);
 
-        var query = new GetGuestQuery(guestId, "Alice", "Smith");
+        var query = new GetGuestQuery(guestId);
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);
@@ -69,7 +74,7 @@ public class GetGuestQueryHandlerTests
             .Setup(r => r.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Guest?)null);
 
-        var query = new GetGuestQuery(guestId, "Alice", "Smith");
+        var query = new GetGuestQuery(guestId);
 
         // Act
         await _handler.Handle(query, CancellationToken.None);
@@ -77,6 +82,7 @@ public class GetGuestQueryHandlerTests
         // Assert
         _repositoryMock.Verify(
             r => r.GetByIdAsync(guestId, It.IsAny<CancellationToken>()),
-            Times.Once);
+            Times.Once
+        );
     }
 }

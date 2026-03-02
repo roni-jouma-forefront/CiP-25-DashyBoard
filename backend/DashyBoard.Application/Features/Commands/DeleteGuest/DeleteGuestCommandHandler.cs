@@ -8,7 +8,10 @@ namespace DashyBoard.Application.Features.Commands.DeleteGuest;
 public class DeleteGuestCommandHandler(IRepository<Guest> repository)
     : IRequestHandler<DeleteGuestCommand, Result<Guid>>
 {
-    public async Task<Result<Guid>> Handle(DeleteGuestCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(
+        DeleteGuestCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var guest = await repository.GetByIdAsync(request.Id, cancellationToken);
 

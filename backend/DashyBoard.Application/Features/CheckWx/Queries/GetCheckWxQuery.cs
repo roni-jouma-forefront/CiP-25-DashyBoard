@@ -3,6 +3,4 @@ using MediatR;
 
 namespace DashyBoard.Application.Features.CheckWx.Queries;
 
-public record GetCheckWxQuery(
-    string Icao
-) : IRequest<IEnumerable<CheckWxDto>>;
+public record GetCheckWxQuery(string Icao) : IRequest<IEnumerable<CheckWxDto>>;

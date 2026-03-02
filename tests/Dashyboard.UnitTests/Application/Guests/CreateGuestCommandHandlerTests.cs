@@ -8,13 +8,19 @@ namespace Dashyboard.UnitTests.Application.Guests;
 public class CreateGuestCommandHandlerTests
 {
     private Mock<IRepository<Guest>> _repositoryMock;
+    private Mock<IDateTime> _dateTimeMock;
     private CreateGuestCommandHandler _handler;
 
     [SetUp]
     public void SetUp()
     {
         _repositoryMock = new Mock<IRepository<Guest>>();
-        _handler = new CreateGuestCommandHandler(_repositoryMock.Object);
+        _dateTimeMock = new Mock<IDateTime>();
+        _dateTimeMock
+            .Setup(x => x.CetNow)
+            .Returns(new DateTime(2026, 3, 2, 12, 0, 0, DateTimeKind.Unspecified));
+
+        _handler = new CreateGuestCommandHandler(_repositoryMock.Object, _dateTimeMock.Object);
     }
 
     [Test]
@@ -32,7 +38,7 @@ public class CreateGuestCommandHandlerTests
 
         // Assert
         Assert.That(result.Succeeded, Is.True);
-        Assert.That(result.Data,      Is.Not.EqualTo(Guid.Empty));
+        Assert.That(result.Data, Is.Not.EqualTo(Guid.Empty));
     }
 
     [Test]
@@ -49,9 +55,13 @@ public class CreateGuestCommandHandlerTests
         await _handler.Handle(command, CancellationToken.None);
 
         // Assert
-        _repositoryMock.Verify(r => r.AddAsync(
-            It.Is<Guest>(g => g.FirstName == "Bob" && g.LastName == "Jones"),
-            It.IsAny<CancellationToken>()),
-            Times.Once);
+        _repositoryMock.Verify(
+            r =>
+                r.AddAsync(
+                    It.Is<Guest>(g => g.FirstName == "Bob" && g.LastName == "Jones"),
+                    It.IsAny<CancellationToken>()
+                ),
+            Times.Once
+        );
     }
 }

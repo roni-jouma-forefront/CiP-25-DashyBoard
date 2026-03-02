@@ -22,7 +22,12 @@ public class UpdateGuestCommandHandlerTests
     {
         // Arrange
         var guestId = Guid.NewGuid();
-        var existingGuest = new Guest { Id = guestId, FirstName = "Old", LastName = "Name" };
+        var existingGuest = new Guest
+        {
+            Id = guestId,
+            FirstName = "Old",
+            LastName = "Name",
+        };
 
         _repositoryMock
             .Setup(r => r.GetByIdAsync(guestId, It.IsAny<CancellationToken>()))
@@ -35,7 +40,7 @@ public class UpdateGuestCommandHandlerTests
 
         // Assert
         Assert.That(result.Succeeded, Is.True);
-        Assert.That(result.Data,      Is.EqualTo(guestId));
+        Assert.That(result.Data, Is.EqualTo(guestId));
     }
 
     [Test]
@@ -55,7 +60,7 @@ public class UpdateGuestCommandHandlerTests
 
         // Assert
         Assert.That(result.Succeeded, Is.False);
-        Assert.That(result.Errors,    Is.Not.Empty);
+        Assert.That(result.Errors, Is.Not.Empty);
     }
 
     [Test]
@@ -63,7 +68,12 @@ public class UpdateGuestCommandHandlerTests
     {
         // Arrange
         var guestId = Guid.NewGuid();
-        var existingGuest = new Guest { Id = guestId, FirstName = "Old", LastName = "Name" };
+        var existingGuest = new Guest
+        {
+            Id = guestId,
+            FirstName = "Old",
+            LastName = "Name",
+        };
 
         _repositoryMock
             .Setup(r => r.GetByIdAsync(guestId, It.IsAny<CancellationToken>()))
@@ -77,7 +87,8 @@ public class UpdateGuestCommandHandlerTests
         // Assert
         _repositoryMock.Verify(
             r => r.UpdateAsync(It.Is<Guest>(g => g.Id == guestId), It.IsAny<CancellationToken>()),
-            Times.Once);
+            Times.Once
+        );
     }
 
     [Test]
@@ -98,6 +109,7 @@ public class UpdateGuestCommandHandlerTests
         // Assert
         _repositoryMock.Verify(
             r => r.UpdateAsync(It.IsAny<Guest>(), It.IsAny<CancellationToken>()),
-            Times.Never);
+            Times.Never
+        );
     }
 }

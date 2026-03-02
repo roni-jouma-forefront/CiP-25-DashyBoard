@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using DashyBoard.Application.Common.Interfaces;
 using DashyBoard.Application.Features.Queries.GetAllGuests;
 using DashyBoard.Domain.Entities;
@@ -23,8 +24,18 @@ public class GetAllGuestsQueryHandlerTests
         // Arrange
         var guests = new List<Guest>
         {
-            new Guest { Id = Guid.NewGuid(), FirstName = "Alice", LastName = "Smith" },
-            new Guest { Id = Guid.NewGuid(), FirstName = "Bob",   LastName = "Jones" },
+            new Guest
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Alice",
+                LastName = "Smith",
+            },
+            new Guest
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Bob",
+                LastName = "Jones",
+            },
         };
 
         _repositoryMock
@@ -65,7 +76,12 @@ public class GetAllGuestsQueryHandlerTests
         var guestId = Guid.NewGuid();
         var guests = new List<Guest>
         {
-            new Guest { Id = guestId, FirstName = "Alice", LastName = "Smith" }
+            new Guest
+            {
+                Id = guestId,
+                FirstName = "Alice",
+                LastName = "Smith",
+            },
         };
 
         _repositoryMock
@@ -82,5 +98,47 @@ public class GetAllGuestsQueryHandlerTests
         Assert.That(dto.Id, Is.EqualTo(guestId));
         Assert.That(dto.FirstName, Is.EqualTo("Alice"));
         Assert.That(dto.LastName, Is.EqualTo("Smith"));
+    }
+
+    [Test]
+    public async Task Handle_ShouldUseFindAsync_WhenFirstNameFilterIsProvided()
+    {
+        // Arrange
+        var filteredGuests = new List<Guest>
+        {
+            new Guest
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Alice",
+                LastName = "Smith",
+            },
+        };
+
+        _repositoryMock
+            .Setup(r =>
+                r.FindAsync(
+                    It.IsAny<Expression<Func<Guest, bool>>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(filteredGuests);
+
+        var query = new GetAllGuestsQuery(FirstName: "Ali");
+
+        // Act
+        var result = await _handler.Handle(query, CancellationToken.None);
+
+        // Assert
+        Assert.That(result, Has.Count.EqualTo(1));
+        Assert.That(result[0].FirstName, Is.EqualTo("Alice"));
+        _repositoryMock.Verify(
+            r =>
+                r.FindAsync(
+                    It.IsAny<Expression<Func<Guest, bool>>>(),
+                    It.IsAny<CancellationToken>()
+                ),
+            Times.Once
+        );
+        _repositoryMock.Verify(r => r.GetAllAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }

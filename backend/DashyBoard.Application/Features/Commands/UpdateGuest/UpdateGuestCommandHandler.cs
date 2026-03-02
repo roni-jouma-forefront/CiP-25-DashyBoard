@@ -8,7 +8,10 @@ namespace DashyBoard.Application.Features.Commands.UpdateGuest;
 public class UpdateGuestCommandHandler(IRepository<Guest> repository)
     : IRequestHandler<UpdateGuestCommand, Result<Guid>>
 {
-    public async Task<Result<Guid>> Handle(UpdateGuestCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(
+        UpdateGuestCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var guest = await repository.GetByIdAsync(request.Id, cancellationToken);
 
