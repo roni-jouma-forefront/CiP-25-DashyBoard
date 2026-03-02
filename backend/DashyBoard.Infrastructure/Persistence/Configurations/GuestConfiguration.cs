@@ -12,6 +12,8 @@ public class GuestConfiguration : IEntityTypeConfiguration<Guest>
 
         builder.Property(g => g.Id).ValueGeneratedOnAdd();
 
-        builder.Property(g => g.FullName).IsRequired().HasMaxLength(200);
+        builder.Property(g => g.FirstName).IsRequired().HasMaxLength(35);
+
+        builder.Property(g => g.LastName).IsRequired().HasMaxLength(35);
     }
 }

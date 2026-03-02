@@ -1,8 +1,6 @@
-using DashyBoard.Domain.Common;
+namespace DashyBoard.Application.DTOs;
 
-namespace DashyBoard.Domain.Entities;
-
-public class Guest : BaseAuditableEntity
+public class GuestDto
 {
     public Guid Id { get; set; }
     public required string FirstName { get; set; }
