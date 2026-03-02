@@ -16,18 +16,23 @@ public class CheckWxApiService : ICheckWxApiService
     public CheckWxApiService(
         HttpClient httpClient,
         IConfiguration configuration,
-        ILogger<CheckWxApiService> logger)
+        ILogger<CheckWxApiService> logger
+    )
     {
         _httpClient = httpClient;
         _logger = logger;
-        _apiKey = configuration["CheckWx:ApiKey"]
+        _apiKey =
+            configuration["CheckWx:ApiKey"]
             ?? throw new InvalidOperationException("CheckWx API key not configured");
 
         _httpClient.BaseAddress = new Uri("https://api.checkwx.com/");
         _httpClient.DefaultRequestHeaders.Add("X-API-Key", _apiKey);
     }
 
-    public async Task<IEnumerable<CheckWxDto>> GetCurrentWeatherAsync(string icao, CancellationToken cancellationToken)
+    public async Task<IEnumerable<CheckWxDto>> GetCurrentWeatherAsync(
+        string icao,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
@@ -35,7 +40,8 @@ public class CheckWxApiService : ICheckWxApiService
 
             var apiResponse = await _httpClient.GetFromJsonAsync<CheckWxApiResponse>(
                 $"v2/metar/{icao}/decoded",
-                cancellationToken);
+                cancellationToken
+            );
 
             _logger.LogInformation("Successfully retrieved weather data for ICAO: {Icao}", icao);
             return MapToCheckWxDtos(apiResponse?.Data ?? new List<CheckWxApiData>());
@@ -58,23 +64,27 @@ public class CheckWxApiService : ICheckWxApiService
         {
             Icao = data.Icao,
             Observed = data.Observed,
-            Station = data.Station != null ? new StationDto
-            {
-                Name = data.Station.Name,
-                Location = data.Station.Location
-            } : null,
-            Temperature = data.Temperature != null ? new TemperatureDto
-            {
-                Celsius = data.Temperature.Celsius,
-                Fahrenheit = data.Temperature.Fahrenheit
-            } : null,
+            Station =
+                data.Station != null
+                    ? new StationDto { Name = data.Station.Name, Location = data.Station.Location }
+                    : null,
+            Temperature =
+                data.Temperature != null
+                    ? new TemperatureDto
+                    {
+                        Celsius = data.Temperature.Celsius,
+                        Fahrenheit = data.Temperature.Fahrenheit,
+                    }
+                    : null,
             Humidity = data.Humidity,
             WindSpeedMps = data.Wind?.Speed?.Mps,
-            Conditions = data.Conditions?.Select(c => new WeatherDto
-            {
-                Code = c.Code ?? string.Empty,
-                Text = c.Text
-            }).ToList()
+            Conditions = data
+                .Conditions?.Select(c => new WeatherDto
+                {
+                    Code = c.Code ?? string.Empty,
+                    Text = c.Text,
+                })
+                .ToList(),
         });
     }
 }

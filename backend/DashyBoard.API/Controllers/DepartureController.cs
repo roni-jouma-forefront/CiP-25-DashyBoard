@@ -28,7 +28,8 @@ public class DepartureController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetDepartures(
         string airport,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(airport) || airport.Length != 3)
             return BadRequest("Airport code must be a valid 3-letter IATA code");
@@ -42,8 +43,10 @@ public class DepartureController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Failed to fetch departures from Swedavia API", error = ex.Message });
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new { message = "Failed to fetch departures from Swedavia API", error = ex.Message }
+            );
         }
     }
 
@@ -61,7 +64,8 @@ public class DepartureController : ControllerBase
     public async Task<IActionResult> GetDeparturesByDate(
         string airport,
         string date,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(airport) || airport.Length != 3)
             return BadRequest("Airport code must be a valid 3-letter IATA code");
@@ -78,8 +82,10 @@ public class DepartureController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Failed to fetch departures from Swedavia API", error = ex.Message });
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new { message = "Failed to fetch departures from Swedavia API", error = ex.Message }
+            );
         }
     }
 
@@ -97,7 +103,8 @@ public class DepartureController : ControllerBase
     public async Task<IActionResult> GetDeparturesByFlightId(
         string airport,
         string flightId,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(airport) || airport.Length != 3)
             return BadRequest("Airport code must be a valid 3-letter IATA code");
@@ -107,15 +114,21 @@ public class DepartureController : ControllerBase
 
         try
         {
-            var query = new GetDeparturesQuery(airport, DateOnly.FromDateTime(DateTime.UtcNow), flightId);
+            var query = new GetDeparturesQuery(
+                airport,
+                DateOnly.FromDateTime(DateTime.UtcNow),
+                flightId
+            );
             var departures = await _mediator.Send(query, cancellationToken);
 
             return Ok(departures);
         }
         catch (HttpRequestException ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Failed to fetch departures from Swedavia API", error = ex.Message });
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new { message = "Failed to fetch departures from Swedavia API", error = ex.Message }
+            );
         }
     }
 }

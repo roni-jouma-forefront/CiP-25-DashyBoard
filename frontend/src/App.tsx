@@ -1,6 +1,9 @@
 import "./App.css";
-import { Link } from "react-router";
-import Watch from "./components/base/watch";
+// import { Link } from "react-router";
+import { AdminLayout } from "./components/admin/layout/AdminLayout";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Outlet } from "react-router";
 
 function App() {
   return (
@@ -21,6 +24,11 @@ function App() {
           </li>
         </ul>
       </nav>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <AdminLayout>
+          <Outlet />
+        </AdminLayout>
+      </LocalizationProvider>
     </>
   );
 }
