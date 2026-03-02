@@ -15,6 +15,7 @@ public class WaitTimesController : ControllerBase
     {
         _mediator = mediator;
     }
+
     /// <summary>
     /// Get current security queue wait times at an airport
     /// </summary>
@@ -25,7 +26,10 @@ public class WaitTimesController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<WaitTimeDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetWaitTimes(string airport, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetWaitTimes(
+        string airport,
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(airport))
             return BadRequest("Airport code is required");
@@ -39,8 +43,10 @@ public class WaitTimesController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Failed to fetch wait times from Swedavia API", error = ex.Message });
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new { message = "Failed to fetch wait times from Swedavia API", error = ex.Message }
+            );
         }
     }
 }

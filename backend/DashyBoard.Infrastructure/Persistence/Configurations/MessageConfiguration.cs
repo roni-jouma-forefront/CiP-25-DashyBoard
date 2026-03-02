@@ -10,15 +10,16 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
     {
         builder.HasKey(m => m.Id);
 
-        builder.Property(m => m.Id)
-            .ValueGeneratedOnAdd();
+        builder.Property(m => m.Id).ValueGeneratedOnAdd();
 
-        builder.HasOne<Hotel>()
+        builder
+            .HasOne<Hotel>()
             .WithMany()
             .HasForeignKey(m => m.HotelId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        builder.HasOne<Booking>()
+        builder
+            .HasOne<Booking>()
             .WithMany()
             .HasForeignKey(m => m.BookingId)
             .OnDelete(DeleteBehavior.SetNull);

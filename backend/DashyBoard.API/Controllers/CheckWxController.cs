@@ -26,7 +26,10 @@ public class CheckWxController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<CheckWxDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetWeather(string icao, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetWeather(
+        string icao,
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(icao))
             return BadRequest("ICAO code is required");
@@ -40,8 +43,14 @@ public class CheckWxController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Failed to fetch weather data from CheckWX API", error = ex.Message });
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new
+                {
+                    message = "Failed to fetch weather data from CheckWX API",
+                    error = ex.Message,
+                }
+            );
         }
     }
 }

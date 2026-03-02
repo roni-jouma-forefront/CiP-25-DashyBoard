@@ -4,7 +4,8 @@ using MediatR;
 
 namespace DashyBoard.Application.Features.Flights.Queries;
 
-public class GetDeparturesQueryHandler : IRequestHandler<GetDeparturesQuery, IEnumerable<FlightInfoDto>>
+public class GetDeparturesQueryHandler
+    : IRequestHandler<GetDeparturesQuery, IEnumerable<FlightInfoDto>>
 {
     private readonly ISwedaviaFlightApiService _flightApiService;
 
@@ -13,12 +14,16 @@ public class GetDeparturesQueryHandler : IRequestHandler<GetDeparturesQuery, IEn
         _flightApiService = flightApiService;
     }
 
-    public async Task<IEnumerable<FlightInfoDto>> Handle(GetDeparturesQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<FlightInfoDto>> Handle(
+        GetDeparturesQuery request,
+        CancellationToken cancellationToken
+    )
     {
         return await _flightApiService.GetDeparturesAsync(
             request.FlightId ?? string.Empty,
             request.Airport,
             request.Date,
-            cancellationToken);
+            cancellationToken
+        );
     }
 }

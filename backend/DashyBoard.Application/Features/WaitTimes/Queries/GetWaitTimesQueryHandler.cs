@@ -13,11 +13,15 @@ public class GetWaitTimesQueryHandler : IRequestHandler<GetWaitTimesQuery, IEnum
         _waitTimeApiService = waitTimeApiService;
     }
 
-    public async Task<IEnumerable<WaitTimeDto>> Handle(GetWaitTimesQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<WaitTimeDto>> Handle(
+        GetWaitTimesQuery request,
+        CancellationToken cancellationToken
+    )
     {
         return await _waitTimeApiService.GetWaitTimesAsync(
             request.Airport,
             request.Date,
-            cancellationToken);
+            cancellationToken
+        );
     }
 }

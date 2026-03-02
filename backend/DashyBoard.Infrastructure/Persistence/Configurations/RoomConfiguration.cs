@@ -10,13 +10,12 @@ public class RoomConfiguration : IEntityTypeConfiguration<Room>
     {
         builder.HasKey(r => r.Id);
 
-        builder.Property(r => r.Id)
-            .ValueGeneratedOnAdd();
+        builder.Property(r => r.Id).ValueGeneratedOnAdd();
 
-        builder.Property(r => r.RoomNumber)
-            .HasMaxLength(20);
+        builder.Property(r => r.RoomNumber).HasMaxLength(20);
 
-        builder.HasOne<Hotel>()
+        builder
+            .HasOne<Hotel>()
             .WithMany()
             .HasForeignKey(r => r.HotelId)
             .OnDelete(DeleteBehavior.Cascade);
