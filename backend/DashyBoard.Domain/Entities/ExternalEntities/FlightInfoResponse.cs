@@ -2,8 +2,8 @@
 
 public class FlightInfoResponse
 {
-    public AirportInfoApiModel? To { get; set; }  // For arrivals
-    public AirportInfoApiModel? From { get; set; }  // For departures
+    public AirportInfoApiModel? To { get; set; } // For arrivals
+    public AirportInfoApiModel? From { get; set; } // For departures
     public List<FlightInfoApiModel>? Flights { get; set; }
 }
 
@@ -17,8 +17,8 @@ public class FlightInfoApiModel
 {
     public string? FlightId { get; set; }
     public LocationAndStatusApiModel? LocationAndStatus { get; set; }
-    public FlightTimeApiModel? ArrivalTime { get; set; }  // For arrivals
-    public FlightTimeApiModel? DepartureTime { get; set; }  // For departures
+    public FlightTimeApiModel? ArrivalTime { get; set; } // For arrivals
+    public FlightTimeApiModel? DepartureTime { get; set; } // For departures
     public FlightLegIdentifierApiModel? FlightLegIdentifier { get; set; }
 }
 
@@ -27,7 +27,6 @@ public class FlightLegIdentifierApiModel
     public string? DepartureAirportIcao { get; set; }
     public string? ArrivalAirportIcao { get; set; }
 }
-
 
 public class LocationAndStatusApiModel
 {

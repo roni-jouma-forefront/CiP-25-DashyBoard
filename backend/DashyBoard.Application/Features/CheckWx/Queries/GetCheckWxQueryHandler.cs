@@ -13,10 +13,11 @@ public class GetCheckWxQueryHandler : IRequestHandler<GetCheckWxQuery, IEnumerab
         _checkWxApiService = checkWxApiService;
     }
 
-    public async Task<IEnumerable<CheckWxDto>> Handle(GetCheckWxQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<CheckWxDto>> Handle(
+        GetCheckWxQuery request,
+        CancellationToken cancellationToken
+    )
     {
-        return await _checkWxApiService.GetCurrentWeatherAsync(
-            request.Icao,
-            cancellationToken);
+        return await _checkWxApiService.GetCurrentWeatherAsync(request.Icao, cancellationToken);
     }
 }

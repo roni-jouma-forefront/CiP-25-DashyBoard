@@ -10,9 +10,10 @@ public class Flight : BaseAuditableEntity
     public string? Status { get; set; }
     public DateTime? ScheduledDeparture { get; set; }
     public DateTime? ScheduledArrival { get; set; }
+
     public enum FlightType
     {
         Arrival,
-        Departure
+        Departure,
     }
 }

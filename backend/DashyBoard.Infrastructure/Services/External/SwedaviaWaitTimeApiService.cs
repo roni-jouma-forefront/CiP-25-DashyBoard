@@ -12,19 +12,22 @@ public class SwedaviaWaitTimeApiService : SwedaviaApiServiceBase, ISwedaviaWaitT
     public SwedaviaWaitTimeApiService(
         HttpClient httpClient,
         IConfiguration configuration,
-        ILogger<SwedaviaWaitTimeApiService> logger)
+        ILogger<SwedaviaWaitTimeApiService> logger
+    )
         : base(
             httpClient,
             configuration["Swedavia:WaitTimeApiKey"]
-                ?? throw new InvalidOperationException("Swedavia WaitTime API key is not configured"),
-            logger)
-    {
-    }
+                ?? throw new InvalidOperationException(
+                    "Swedavia WaitTime API key is not configured"
+                ),
+            logger
+        ) { }
 
     public async Task<IEnumerable<WaitTimeDto>> GetWaitTimesAsync(
         string airport,
         DateOnly? date = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var airportCode = airport.ToUpperInvariant();
         var endpoint = BuildEndpoint("waittimepublic/v2/airports", airportCode);
@@ -32,20 +35,29 @@ public class SwedaviaWaitTimeApiService : SwedaviaApiServiceBase, ISwedaviaWaitT
         Logger.LogInformation(
             "Fetching wait times for airport {Airport}{DateInfo}",
             airportCode,
-            date.HasValue ? $" on {date.Value:yyyy-MM-dd}" : " (current)");
+            date.HasValue ? $" on {date.Value:yyyy-MM-dd}" : " (current)"
+        );
 
-        var airportWaitTimes = await SendApiRequestAsync<AirportWaitTimeResponse>(endpoint, cancellationToken);
-        var waitTimes = MapToWaitTimeDtos(airportWaitTimes?.WaitTimes ?? new List<SecurityQueueWaitTime>());
+        var airportWaitTimes = await SendApiRequestAsync<AirportWaitTimeResponse>(
+            endpoint,
+            cancellationToken
+        );
+        var waitTimes = MapToWaitTimeDtos(
+            airportWaitTimes?.WaitTimes ?? new List<SecurityQueueWaitTime>()
+        );
 
         Logger.LogInformation(
             "Retrieved {Count} wait time entries for {Airport}",
             waitTimes.Count(),
-            airportCode);
+            airportCode
+        );
 
         return waitTimes;
     }
 
-    private static IEnumerable<WaitTimeDto> MapToWaitTimeDtos(IEnumerable<SecurityQueueWaitTime> apiModels)
+    private static IEnumerable<WaitTimeDto> MapToWaitTimeDtos(
+        IEnumerable<SecurityQueueWaitTime> apiModels
+    )
     {
         return apiModels.Select(wt => new WaitTimeDto
         {
@@ -53,7 +65,7 @@ public class SwedaviaWaitTimeApiService : SwedaviaApiServiceBase, ISwedaviaWaitT
             Terminal = wt.Terminal ?? string.Empty,
             CurrentTime = wt.CurrentTime,
             CurrentProjectedWaitTime = wt.CurrentProjectedWaitTime,
-            IsFastTrack = wt.IsFastTrack
+            IsFastTrack = wt.IsFastTrack,
         });
     }
 }

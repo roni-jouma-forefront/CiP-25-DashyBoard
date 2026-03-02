@@ -11,11 +11,12 @@ public class Booking : BaseAuditableEntity
     public Guid? FlightId { get; set; }
     public DateTime CheckIn { get; set; }
     public DateTime CheckOut { get; set; }
+
     public enum Status
     {
         Confirmed,
         Cancelled,
         Completed,
-        Active
+        Active,
     }
 }

@@ -13,12 +13,16 @@ public class GetArrivalsQueryHandler : IRequestHandler<GetArrivalsQuery, IEnumer
         _flightApiService = flightApiService;
     }
 
-    public async Task<IEnumerable<FlightInfoDto>> Handle(GetArrivalsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<FlightInfoDto>> Handle(
+        GetArrivalsQuery request,
+        CancellationToken cancellationToken
+    )
     {
         return await _flightApiService.GetArrivalsAsync(
             request.FlightId ?? string.Empty,
             request.Airport,
             request.Date,
-            cancellationToken);
+            cancellationToken
+        );
     }
 }

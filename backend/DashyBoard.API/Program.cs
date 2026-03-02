@@ -1,6 +1,6 @@
+using DashyBoard.API.Middleware;
 using DashyBoard.Application;
 using DashyBoard.Infrastructure;
-using DashyBoard.API.Middleware;
 using DashyBoard.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,12 +14,13 @@ builder.Services.AddSwaggerGen();
 // Add CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
+    options.AddPolicy(
+        "AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        }
+    );
 });
 
 // Add Clean Architecture layers

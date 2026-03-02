@@ -22,6 +22,7 @@ namespace DashyBoard.Application.DTOs.CheckWX
         public int? Celsius { get; set; }
         public int? Fahrenheit { get; set; }
     }
+
     public class WeatherDto
     {
         public string Code { get; set; } = string.Empty;

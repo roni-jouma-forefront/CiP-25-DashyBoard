@@ -3,7 +3,4 @@ using MediatR;
 
 namespace DashyBoard.Application.Features.WaitTimes.Queries;
 
-public record GetWaitTimesQuery(
-    string Airport,
-    DateOnly Date
-) : IRequest<IEnumerable<WaitTimeDto>>;
+public record GetWaitTimesQuery(string Airport, DateOnly Date) : IRequest<IEnumerable<WaitTimeDto>>;
