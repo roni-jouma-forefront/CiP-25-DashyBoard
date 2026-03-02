@@ -88,13 +88,6 @@ console.log("this is", metarData);
             <Typography>Loading weather...</Typography>
           ) : (
             <>
-              {/* <Typography>ICAO: {metarData.icao ?? "-"}</Typography>
-              <Typography>Station: {metarData.station?.name ?? "-"}</Typography>
-              <Typography>Temp: {metarData.temperature?.celsius ?? "-"}°C</Typography>
-              <Typography>Fukt: {metarData.humidity ?? "-"}%</Typography>
-              <Typography>Vind: {metarData.windSpeedMps ?? "-"} m/s</Typography>
-              <Typography>Villkor: {metarData.conditions ?? "-"}</Typography> */}
-           
           
            <TableContainer component={Paper} sx={{ maxWidth: 700 }}>
             <Table>
@@ -111,28 +104,12 @@ console.log("this is", metarData);
                   <TableCell>{metarData.icao ?? "-"}</TableCell>
                 </TableRow>
 
-                {/* <TableRow sx={{ backgroundColor: "#f5f7fa" }}>
-                  <TableCell sx={{ fontWeight: "bold" }}>
-                    Observationstid:
-                  </TableCell>
-                  <TableCell>
-                    {metarData.observationTime.toLocaleString("sv-SE")}
-                  </TableCell>
-                </TableRow> */}
-
                 <TableRow>
                   <TableCell sx={{ fontWeight: "bold" }}>Wind (m/s):</TableCell>
                   <TableCell>
                    {metarData.windSpeedMps ?? "-"} m/s
                   </TableCell>
                 </TableRow>
-
-                {/* <TableRow sx={{ backgroundColor: "#f5f7fa" }}>
-                  <TableCell sx={{ fontWeight: "bold" }}>Sikt:</TableCell>
-                  <TableCell>
-                    {metarData.visibility.value} {metarData.visibility.unit}
-                  </TableCell>
-                </TableRow> */}
 
                 <TableRow>
                   <TableCell sx={{ fontWeight: "bold" }}>Temperature:</TableCell>

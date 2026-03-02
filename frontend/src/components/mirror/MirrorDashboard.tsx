@@ -77,9 +77,6 @@ function MirrorDashboard() {
                 <WeatherWidget icao="ESSA"/>
               </DraggableWrapper>
             );
-          //if (id === 3) return <Watch key={3} />;
-          // if (id === 2) return <MockWidget2 key={2} />;
-          // if (id === 3) return <MockWidget3 key={3} />;
         })}
       </Box>
     </>
