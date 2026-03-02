@@ -10,13 +10,10 @@ public class FlightConfiguration : IEntityTypeConfiguration<Flight>
     {
         builder.HasKey(f => f.Id);
 
-        builder.Property(f => f.Id)
-            .ValueGeneratedOnAdd();
+        builder.Property(f => f.Id).ValueGeneratedOnAdd();
 
-        builder.Property(f => f.Gate)
-            .HasMaxLength(10);
+        builder.Property(f => f.Gate).HasMaxLength(10);
 
-        builder.Property(f => f.Status)
-            .HasMaxLength(50);
+        builder.Property(f => f.Status).HasMaxLength(50);
     }
 }

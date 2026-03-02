@@ -4,6 +4,9 @@ namespace DashyBoard.Application.Common.Interfaces.External;
 
 public interface ISwedaviaWaitTimeApiService
 {
-    Task<IEnumerable<WaitTimeDto>> GetWaitTimesAsync(string airport, DateOnly? date = null, CancellationToken cancellationToken = default);
-
+    Task<IEnumerable<WaitTimeDto>> GetWaitTimesAsync(
+        string airport,
+        DateOnly? date = null,
+        CancellationToken cancellationToken = default
+    );
 }

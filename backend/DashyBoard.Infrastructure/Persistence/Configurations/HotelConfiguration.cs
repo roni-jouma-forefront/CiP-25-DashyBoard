@@ -10,13 +10,10 @@ public class HotelConfiguration : IEntityTypeConfiguration<Hotel>
     {
         builder.HasKey(h => h.Id);
 
-        builder.Property(h => h.Id)
-            .ValueGeneratedOnAdd();
+        builder.Property(h => h.Id).ValueGeneratedOnAdd();
 
-        builder.Property(h => h.Name)
-            .HasMaxLength(200);
+        builder.Property(h => h.Name).HasMaxLength(200);
 
-        builder.Property(h => h.IcaoCode)
-            .HasMaxLength(10);
+        builder.Property(h => h.IcaoCode).HasMaxLength(10);
     }
 }
