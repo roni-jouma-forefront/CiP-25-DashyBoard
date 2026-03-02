@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import Watch from "./components/base/watch";
 
 function App() {
-  return (
+  return ( 
     <>
       <h1>DashyBoard</h1>
       <Watch location="Stockholm" timeZone="UTC"></Watch>
