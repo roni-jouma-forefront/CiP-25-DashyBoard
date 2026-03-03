@@ -25,7 +25,12 @@ public class MessagesController : ControllerBase
         [FromQuery] int? bookingId
     )
     {
-        var result = await _mediator.Send(new GetMessagesForMirrorQuery());
+        var query = new GetMessagesForMirrorQuery
+        {
+            HotelId = hotelId,
+            BookingId = bookingId
+        };
+        var result = await _mediator.Send(query);
         return Ok(result);
     }
 
