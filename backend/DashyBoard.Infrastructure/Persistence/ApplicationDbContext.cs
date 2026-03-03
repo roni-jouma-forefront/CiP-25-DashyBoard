@@ -1,8 +1,8 @@
+using System.Reflection;
 using DashyBoard.Application.Common.Interfaces;
 using DashyBoard.Domain.Common;
 using DashyBoard.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace DashyBoard.Infrastructure.Persistence;
 
@@ -11,9 +11,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     private static readonly TimeZoneInfo SwedenTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-    {
-    }
+        : base(options) { }
 
     public DbSet<Hotel> Hotels => Set<Hotel>();
     public DbSet<Room> Rooms => Set<Room>();

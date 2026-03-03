@@ -19,7 +19,8 @@ public abstract class SwedaviaApiServiceBase
 
     protected async Task<TResponse> SendApiRequestAsync<TResponse>(
         string endpoint,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         using var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
         request.Headers.Add("Ocp-Apim-Subscription-Key", _apiKey);
@@ -35,7 +36,10 @@ public abstract class SwedaviaApiServiceBase
         catch (HttpRequestException ex)
         {
             Logger.LogError(ex, "HTTP request failed for endpoint: {Endpoint}", endpoint);
-            throw new InvalidOperationException($"Failed to communicate with Swedavia API: {ex.Message}", ex);
+            throw new InvalidOperationException(
+                $"Failed to communicate with Swedavia API: {ex.Message}",
+                ex
+            );
         }
         catch (TaskCanceledException ex)
         {
@@ -50,34 +54,46 @@ public abstract class SwedaviaApiServiceBase
                 "Swedavia API returned error {StatusCode} for endpoint {Endpoint}: {ErrorContent}",
                 response.StatusCode,
                 endpoint,
-                errorContent);
+                errorContent
+            );
 
             throw new HttpRequestException(
-                $"Swedavia API returned {response.StatusCode}: {errorContent}");
+                $"Swedavia API returned {response.StatusCode}: {errorContent}"
+            );
         }
 
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
 
         try
         {
-            var result = JsonSerializer.Deserialize<TResponse>(content, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            var result = JsonSerializer.Deserialize<TResponse>(
+                content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            );
 
             if (result == null)
             {
-                Logger.LogWarning("Deserialization returned null for endpoint: {Endpoint}", endpoint);
+                Logger.LogWarning(
+                    "Deserialization returned null for endpoint: {Endpoint}",
+                    endpoint
+                );
                 throw new InvalidOperationException("Failed to deserialize API response");
             }
 
-            Logger.LogDebug("Successfully received and deserialized response from {Endpoint}", endpoint);
+            Logger.LogDebug(
+                "Successfully received and deserialized response from {Endpoint}",
+                endpoint
+            );
             return result;
         }
         catch (JsonException ex)
         {
-            Logger.LogError(ex, "Failed to deserialize response from {Endpoint}. Content: {Content}",
-                endpoint, content);
+            Logger.LogError(
+                ex,
+                "Failed to deserialize response from {Endpoint}. Content: {Content}",
+                endpoint,
+                content
+            );
             throw new InvalidOperationException("Failed to parse API response", ex);
         }
     }

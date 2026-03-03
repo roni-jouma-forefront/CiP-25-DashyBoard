@@ -4,6 +4,7 @@ namespace DashyBoard.Domain.Entities;
 
 public class Guest : BaseAuditableEntity
 {
-    public int Id { get; set; }
-    public required string FullName { get; set; }
+    public Guid Id { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
 }

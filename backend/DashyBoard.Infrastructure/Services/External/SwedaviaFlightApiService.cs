@@ -12,20 +12,23 @@ public class SwedaviaFlightApiService : SwedaviaApiServiceBase, ISwedaviaFlightA
     public SwedaviaFlightApiService(
         HttpClient httpClient,
         IConfiguration configuration,
-        ILogger<SwedaviaFlightApiService> logger)
+        ILogger<SwedaviaFlightApiService> logger
+    )
         : base(
             httpClient,
             configuration["Swedavia:FlightInfoApiKey"]
-                ?? throw new InvalidOperationException("Swedavia FlightInfo API key is not configured"),
-            logger)
-    {
-    }
+                ?? throw new InvalidOperationException(
+                    "Swedavia FlightInfo API key is not configured"
+                ),
+            logger
+        ) { }
 
     public async Task<IEnumerable<FlightInfoDto>> GetArrivalsAsync(
         string flightId,
         string airportIATA,
         DateOnly date,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         return await GetFlightsAsync("arrivals", flightId, airportIATA, date, cancellationToken);
     }
@@ -34,7 +37,8 @@ public class SwedaviaFlightApiService : SwedaviaApiServiceBase, ISwedaviaFlightA
         string flightId,
         string airportIATA,
         DateOnly date,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         return await GetFlightsAsync("departures", flightId, airportIATA, date, cancellationToken);
     }
@@ -44,7 +48,8 @@ public class SwedaviaFlightApiService : SwedaviaApiServiceBase, ISwedaviaFlightA
         string flightId,
         string airportIATA,
         DateOnly date,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var dateString = date.ToString("yyyy-MM-dd");
         var airportCode = airportIATA.ToUpperInvariant();
@@ -54,56 +59,80 @@ public class SwedaviaFlightApiService : SwedaviaApiServiceBase, ISwedaviaFlightA
             "Fetching {FlightType} for airport {Airport} on {Date}",
             flightType,
             airportCode,
-            dateString);
+            dateString
+        );
 
-        var flightInfoResponse = await SendApiRequestAsync<FlightInfoResponse>(endpoint, cancellationToken);
-        var allFlights = MapToFlightInfoDtos(flightInfoResponse?.Flights ?? new List<FlightInfoApiModel>());
+        var flightInfoResponse = await SendApiRequestAsync<FlightInfoResponse>(
+            endpoint,
+            cancellationToken
+        );
+        var allFlights = MapToFlightInfoDtos(
+            flightInfoResponse?.Flights ?? new List<FlightInfoApiModel>()
+        );
 
         // Filter by flightId if provided
         if (!string.IsNullOrWhiteSpace(flightId))
         {
             var upperFlightId = flightId.ToUpperInvariant();
-            var filteredFlights = allFlights.Where(f => f.FlightId.ToUpperInvariant() == upperFlightId).ToList();
+            var filteredFlights = allFlights
+                .Where(f => f.FlightId.ToUpperInvariant() == upperFlightId)
+                .ToList();
 
             Logger.LogInformation(
                 "Filtered {TotalCount} {FlightType} to {FilteredCount} matching flight ID {FlightId}",
                 allFlights.Count(),
                 flightType,
                 filteredFlights.Count,
-                flightId);
+                flightId
+            );
 
             return filteredFlights;
         }
 
-        Logger.LogInformation("Retrieved {Count} {FlightType} for {Airport}",
-            allFlights.Count(), flightType, airportCode);
+        Logger.LogInformation(
+            "Retrieved {Count} {FlightType} for {Airport}",
+            allFlights.Count(),
+            flightType,
+            airportCode
+        );
 
         return allFlights;
     }
 
-    private static IEnumerable<FlightInfoDto> MapToFlightInfoDtos(IEnumerable<FlightInfoApiModel> apiModels)
+    private static IEnumerable<FlightInfoDto> MapToFlightInfoDtos(
+        IEnumerable<FlightInfoApiModel> apiModels
+    )
     {
         return apiModels.Select(flight => new FlightInfoDto
         {
             FlightId = flight.FlightId ?? string.Empty,
             DepartureAirportIcao = flight.FlightLegIdentifier?.DepartureAirportIcao,
             ArrivalAirportIcao = flight.FlightLegIdentifier?.ArrivalAirportIcao,
-            LocationAndStatus = flight.LocationAndStatus != null ? new LocationAndStatusDto
-            {
-                Terminal = flight.LocationAndStatus.Terminal,
-                Gate = flight.LocationAndStatus.Gate,
-                FlightLegStatusEnglish = flight.LocationAndStatus.FlightLegStatusEnglish
-            } : null,
-            ArrivalTime = flight.ArrivalTime != null ? new FlightTimeDto
-            {
-                EstimatedUtc = flight.ArrivalTime.EstimatedUtc,
-                ScheduledUtc = flight.ArrivalTime.ScheduledUtc
-            } : null,
-            DepartureTime = flight.DepartureTime != null ? new FlightTimeDto
-            {
-                EstimatedUtc = flight.DepartureTime.EstimatedUtc,
-                ScheduledUtc = flight.DepartureTime.ScheduledUtc
-            } : null
+            LocationAndStatus =
+                flight.LocationAndStatus != null
+                    ? new LocationAndStatusDto
+                    {
+                        Terminal = flight.LocationAndStatus.Terminal,
+                        Gate = flight.LocationAndStatus.Gate,
+                        FlightLegStatusEnglish = flight.LocationAndStatus.FlightLegStatusEnglish,
+                    }
+                    : null,
+            ArrivalTime =
+                flight.ArrivalTime != null
+                    ? new FlightTimeDto
+                    {
+                        EstimatedUtc = flight.ArrivalTime.EstimatedUtc,
+                        ScheduledUtc = flight.ArrivalTime.ScheduledUtc,
+                    }
+                    : null,
+            DepartureTime =
+                flight.DepartureTime != null
+                    ? new FlightTimeDto
+                    {
+                        EstimatedUtc = flight.DepartureTime.EstimatedUtc,
+                        ScheduledUtc = flight.DepartureTime.ScheduledUtc,
+                    }
+                    : null,
         });
     }
 }
