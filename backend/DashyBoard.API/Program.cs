@@ -31,6 +31,27 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    
+    // Only setup directories for SQLite (skip for InMemory in tests)
+    if (context.Database.IsSqlite())
+    {
+        var connectionString = context.Database.GetConnectionString();
+        if (connectionString != null)
+        {
+            var builder2 = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder(connectionString);
+            var dbPath = builder2.DataSource;
+            var dbDir = Path.GetDirectoryName(dbPath);
+            if (!string.IsNullOrEmpty(dbDir))
+            {
+                Directory.CreateDirectory(dbDir);
+            }
+        }
+
+        // Ensure data directory exists
+        var dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "data");
+        Directory.CreateDirectory(dataDirectory);
+    }
+
     var connectionString = context.Database.GetConnectionString();
     if (connectionString != null)
     {
@@ -63,3 +84,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
