@@ -13,12 +13,16 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
         _context = context;
 
         RuleFor(x => x.Content)
-            .NotEmpty().WithMessage("Content krävs")
-            .MaximumLength(500).WithMessage("Content får max vara 500 tecken");
+            .NotEmpty()
+            .WithMessage("Content krï¿½vs")
+            .MaximumLength(500)
+            .WithMessage("Content fï¿½r max vara 500 tecken");
 
         RuleFor(x => x.ExpiresAt)
-            .NotEmpty().WithMessage("ExpiresAt krävs")
-            .GreaterThan(DateTime.UtcNow).WithMessage("ExpiresAt måste vara i framtiden");
+            .NotEmpty()
+            .WithMessage("ExpiresAt krï¿½vs")
+            .GreaterThan(DateTime.UtcNow)
+            .WithMessage("ExpiresAt mï¿½ste vara i framtiden");
 
         RuleFor(x => x.HotelId)
             .MustAsync(HotelExists)
@@ -33,13 +37,15 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
 
     private async Task<bool> HotelExists(int? hotelId, CancellationToken cancellationToken)
     {
-        if (!hotelId.HasValue) return true;
+        if (!hotelId.HasValue)
+            return true;
         return await _context.Hotels.AnyAsync(h => h.Id == hotelId.Value, cancellationToken);
     }
 
     private async Task<bool> BookingExists(int? bookingId, CancellationToken cancellationToken)
     {
-        if (!bookingId.HasValue) return true;
+        if (!bookingId.HasValue)
+            return true;
         return await _context.Bookings.AnyAsync(b => b.Id == bookingId.Value, cancellationToken);
     }
 }

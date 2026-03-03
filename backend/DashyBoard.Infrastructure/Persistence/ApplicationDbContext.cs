@@ -8,7 +8,9 @@ namespace DashyBoard.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    private static readonly TimeZoneInfo SwedenTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+    private static readonly TimeZoneInfo SwedenTimeZone = TimeZoneInfo.FindSystemTimeZoneById(
+        "W. Europe Standard Time"
+    );
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
@@ -31,7 +33,15 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         var utcNow = DateTime.UtcNow;
         var swedenNow = TimeZoneInfo.ConvertTimeFromUtc(utcNow, SwedenTimeZone);
-        var truncatedNow = new DateTime(swedenNow.Year, swedenNow.Month, swedenNow.Day, swedenNow.Hour, swedenNow.Minute, swedenNow.Second, DateTimeKind.Unspecified);
+        var truncatedNow = new DateTime(
+            swedenNow.Year,
+            swedenNow.Month,
+            swedenNow.Day,
+            swedenNow.Hour,
+            swedenNow.Minute,
+            swedenNow.Second,
+            DateTimeKind.Unspecified
+        );
 
         foreach (var entry in ChangeTracker.Entries<BaseEntity>())
         {
@@ -48,4 +58,3 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         return await base.SaveChangesAsync(cancellationToken);
     }
 }
-   

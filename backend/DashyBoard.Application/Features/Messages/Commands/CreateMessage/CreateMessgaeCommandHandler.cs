@@ -38,7 +38,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
             BookingId = request.BookingId,
             Content = request.Content,
             ExpiresAt = request.ExpiresAt ?? truncatedNow.AddDays(1),
-            IsActive = true
+            IsActive = true,
         };
 
         _context.Messages.Add(message);

@@ -13,8 +13,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+            var descriptor = services.SingleOrDefault(d =>
+                d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>)
+            );
 
             if (descriptor != null)
             {
@@ -27,7 +28,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             });
 
             services.AddScoped<IApplicationDbContext>(provider =>
-                provider.GetRequiredService<ApplicationDbContext>());
+                provider.GetRequiredService<ApplicationDbContext>()
+            );
 
             var sp = services.BuildServiceProvider();
             using var scope = sp.CreateScope();

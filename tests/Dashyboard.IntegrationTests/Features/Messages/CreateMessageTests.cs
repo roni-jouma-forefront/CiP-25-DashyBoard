@@ -1,10 +1,10 @@
 using System.Net;
 using System.Net.Http.Json;
-using Dashyboard.IntegrationTests.Testing;
 using DashyBoard.Application.Common.Models;
 using DashyBoard.Application.Features.Messages.Commands.CreateMessage;
 using DashyBoard.Domain.Entities;
 using DashyBoard.Infrastructure.Persistence;
+using Dashyboard.IntegrationTests.Testing;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -42,16 +42,12 @@ public class CreateMessageTests
         {
             Id = 1,
             Name = "Test Hotel",
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
         _context.Hotels.Add(hotel);
         await _context.SaveChangesAsync();
 
-        var command = new CreateMessageCommand
-        {
-            HotelId = 1,
-            Content = "Frukosten stänger 10:00"
-        };
+        var command = new CreateMessageCommand { HotelId = 1, Content = "Frukosten stï¿½nger 10:00" };
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/Messages", command);
@@ -69,14 +65,19 @@ public class CreateMessageTests
     public async Task CreateMessage_WithBookingId_ShouldReturnSuccess()
     {
         // Arrange
-        var guest = new Guest { Id = 1, FullName = "Rikardo", CreatedAt = DateTime.UtcNow };
+        var guest = new Guest
+        {
+            Id = 1,
+            FullName = "Rikardo",
+            CreatedAt = DateTime.UtcNow,
+        };
         var booking = new Booking
         {
             Id = 1,
             GuestId = 1,
             CheckIn = DateTime.UtcNow.AddDays(-1),
             CheckOut = DateTime.UtcNow.AddDays(1),
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
         _context.Guests.Add(guest);
@@ -86,7 +87,7 @@ public class CreateMessageTests
         var command = new CreateMessageCommand
         {
             BookingId = 1,
-            Content = "Ditt flyg åker om 2 timmar"
+            Content = "Ditt flyg ï¿½ker om 2 timmar",
         };
 
         // Act

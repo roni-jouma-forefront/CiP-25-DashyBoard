@@ -1,5 +1,5 @@
-using DashyBoard.Domain.Entities;
 using System.Collections.Generic;
+using DashyBoard.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DashyBoard.Application.Common.Interfaces;

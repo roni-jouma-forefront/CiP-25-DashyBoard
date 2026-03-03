@@ -39,7 +39,9 @@ using (var scope = app.Services.CreateScope())
         var connectionString = context.Database.GetConnectionString();
         if (connectionString != null)
         {
-            var builder2 = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder(connectionString);
+            var builder2 = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder(
+                connectionString
+            );
             var dbPath = builder2.DataSource;
             var dbDir = Path.GetDirectoryName(dbPath);
             if (!string.IsNullOrEmpty(dbDir))

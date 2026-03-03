@@ -25,13 +25,15 @@ public class GetMessagesForMirrorQueryValidator : AbstractValidator<GetMessagesF
 
     private async Task<bool> HotelExists(int? hotelId, CancellationToken cancellationToken)
     {
-        if (!hotelId.HasValue) return true;
+        if (!hotelId.HasValue)
+            return true;
         return await _context.Hotels.AnyAsync(h => h.Id == hotelId.Value, cancellationToken);
     }
 
     private async Task<bool> BookingExists(int? bookingId, CancellationToken cancellationToken)
     {
-        if (!bookingId.HasValue) return true;
+        if (!bookingId.HasValue)
+            return true;
         return await _context.Bookings.AnyAsync(b => b.Id == bookingId.Value, cancellationToken);
     }
 }
