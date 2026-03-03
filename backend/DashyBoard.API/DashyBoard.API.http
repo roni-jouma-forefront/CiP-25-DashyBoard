@@ -1,6 +1,49 @@
-@DashyBoard.API_HostAddress = http://localhost:5244
+@DashyBoard.API_HostAddress = http://localhost:5000
 
-GET {{DashyBoard.API_HostAddress}}/weatherforecast/
+### ARRIVALS ###
+
+# Get arrivals for today by airport (ARN = Stockholm Arlanda)
+GET {{DashyBoard.API_HostAddress}}/api/arrivals/airport/ARN
+Accept: application/json
+
+###
+
+# Get specific flight arrival at airport
+GET {{DashyBoard.API_HostAddress}}/api/arrivals/airport/ARN/flight/SK536
+Accept: application/json
+
+###
+
+# Get arrivals for a specific date at airport
+GET {{DashyBoard.API_HostAddress}}/api/arrivals/airport/ARN/2026-02-19
+Accept: application/json
+
+###
+
+### DEPARTURES ###
+
+# Get departures for today by airport
+GET {{DashyBoard.API_HostAddress}}/api/departure/airport/ARN
+Accept: application/json
+
+###
+
+# Get specific flight departure at airport
+GET {{DashyBoard.API_HostAddress}}/api/departure/airport/ARN/flight/SK537
+Accept: application/json
+
+###
+
+# Get departures for a specific date at airport
+GET {{DashyBoard.API_HostAddress}}/api/departure/airport/ARN/2026-02-19
+Accept: application/json
+
+###
+
+### WAIT TIMES ###
+
+# Get current wait times for airport
+GET {{DashyBoard.API_HostAddress}}/api/waittimes/ARN
 Accept: application/json
 
 ###

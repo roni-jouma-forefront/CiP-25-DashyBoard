@@ -3,9 +3,7 @@ namespace Dashyboard.UnitTests.Domain;
 public class Tests
 {
     [SetUp]
-    public void Setup()
-    {
-    }
+    public void Setup() { }
 
     [Test]
     public void Test1()

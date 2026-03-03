@@ -128,6 +128,18 @@ sqlite3 backend/data/DashyBoard_Dev.db
 SELECT * FROM Hotels;
 ```
 
+### Seeding Test Data
+
+- Seed script: [backend/scripts/seed.sql](backend/scripts/seed.sql)
+- Database file (dev): `backend/data/DashyBoard_Dev.db`
+
+```bash
+docker cp backend/scripts/seed.sql dashyboard-api:/app/seed.sql
+docker compose exec dashyboard-api sh -c "sqlite3 /app/data/DashyBoard_Dev.db '.read /app/seed.sql'"
+```
+
+If you change the seed file, rerun the `docker cp` step before seeding again.
+
 ### How Database Schema is Created
 
 The application uses **Entity Framework Core's `EnsureCreated()`** method which automatically creates the database schema from entity classes on startup. No migrations needed for development.
@@ -164,16 +176,46 @@ The frontend development server includes a proxy to the backend API at `/api/*`.
 **1. Docker Build and Test** ([docker-build.yml](.github/workflows/docker-build.yml))
 
 - Triggers on: Push/PR to `main` or `dev` branches
-- Builds all Docker services
-- Tests that frontend and backend start correctly
-- Validates container health
+  - **Backend Build & Test**
+    - Restores .NET dependencies
+    - Checks code formatting with CSharpier
+    - Builds backend in Release mode
+    - Runs unit tests
+    - Runs integration tests
+    - Builds backend Docker image
+  - **Frontend Build & Test**
+    - Installs npm dependencies
+    - Runs ESLint
+    - Builds frontend
+    - Builds frontend Docker image
+      -🎨 Code Formatting
 
-**2. Docker Publish** ([docker-publish.yml](.github/workflows/docker-publish.yml))
+### CSharpier (Backend)
 
-- Triggers on: Push to `main` or `dev` branches
-- Publishes Docker images to GitHub Container Registry
-- Tags images with branch name and commit SHA
-- Separate jobs for frontend and backend
+CSharpier is configured and enforced in the CI pipeline to ensure consistent code formatting.
+
+**Configuration**: [.csharpierrc.json](.csharpierrc.json)
+
+**Local Usage:**
+
+```bash
+# Install dotnet tools
+dotnet tool restore
+
+# Check formatting (CI uses this)
+dotnet csharpier --check .
+
+# Auto-format all C# files
+dotnet csharpier .
+```
+
+**VS Code Integration:**
+
+Install the "CSharpier - Code formatter" extension for format-on-save support.
+
+**Pipeline Enforcement:**
+
+The CI pipeline will fail if code is not properly formatted. Always run `dotnet csharpier .` before committing.
 
 ---
 
@@ -181,18 +223,42 @@ The frontend development server includes a proxy to the backend API at `/api/*`.
 
 ```
 CiP-25-DashyBoard/
+├── .config/
+│   └── dotnet-tools.json      # .NET tools (CSharpier)
 ├── .github/workflows/         # CI/CD pipelines
 ├── backend/
 │   ├── DashyBoard.API/        # Web API (Controllers, Middleware)
 │   ├── DashyBoard.Application/# Business logic, DTOs, Features
 │   ├── DashyBoard.Domain/     # Entities, Domain models
-│   └── DashyBoard.Infrastructure/ # DbContext, Repositories, EF Core
+│   ├── DashyBoard.Infrastructure/ # DbContext, Repositories, EF Core
+│   ├── data/                  # SQLite database files
+│   └── scripts/               # Database seed scripts
 ├── frontend/
 │   ├── src/                   # React components and pages
 │   ├── Dockerfile             # Frontend Docker configuration
 │   └── nginx.conf             # Nginx configuration for production
+├── tests/
+│   ├── Dashyboard.UnitTests/  # Unit tests
+│   └── Dashyboard.IntegrationTests/ # Integration tests
+├── .csharpierrc.json          # CSharpier configuration
 ├── docker-compose.yml         # Multi-container orchestration
-└── Dockerfile                 # Backend Docker configuration
+└── DashyBoard.sln             # Solution file
+```
+
+CiP-25-DashyBoard/
+├── .github/workflows/ # CI/CD pipelines
+├── backend/
+│ ├── DashyBoard.API/ # Web API (Controllers, Middleware)
+│ ├── DashyBoard.Application/# Business logic, DTOs, Features
+│ ├── DashyBoard.Domain/ # Entities, Domain models
+│ └── DashyBoard.Infrastructure/ # DbContext, Repositories, EF Core
+├── frontend/
+│ ├── src/ # React components and pages
+│ ├── Dockerfile # Frontend Docker configuration
+│ └── nginx.conf # Nginx configuration for production
+├── docker-compose.yml # Multi-container orchestration
+└── Dockerfile # Backend Docker configuration
+
 ```
 
 ---
@@ -220,3 +286,4 @@ CiP-25-DashyBoard/
 - Nginx (production frontend server)
 
 ---
+```

@@ -25,7 +25,7 @@ public class Result<T> : Result
         return new Result<T> { Succeeded = true, Data = data };
     }
 
-    public new static Result<T> Failure(params string[] errors)
+    public static new Result<T> Failure(params string[] errors)
     {
         return new Result<T> { Succeeded = false, Errors = errors };
     }

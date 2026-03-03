@@ -4,8 +4,8 @@ namespace DashyBoard.Domain.Entities;
 
 public class Admin : BaseAuditableEntity
 {
-    public int Id { get; set; }
-    public int? HotelId { get; set; }
+    public Guid Id { get; set; }
+    public Guid? HotelId { get; set; }
     public string? Username { get; set; }
     public string? PasswordHash { get; set; }
     public string? FullName { get; set; }

@@ -8,7 +8,18 @@ public class AdminConfiguration : IEntityTypeConfiguration<Admin>
 {
     public void Configure(EntityTypeBuilder<Admin> builder)
     {
-        builder.HasOne<Hotel>()
+        builder.HasKey(a => a.Id);
+
+        builder.Property(a => a.Id).ValueGeneratedOnAdd();
+
+        builder.Property(a => a.Username).HasMaxLength(100);
+
+        builder.Property(a => a.FullName).HasMaxLength(200);
+
+        builder.Property(a => a.Role).HasMaxLength(50);
+
+        builder
+            .HasOne<Hotel>()
             .WithMany()
             .HasForeignKey(a => a.HotelId)
             .OnDelete(DeleteBehavior.SetNull);

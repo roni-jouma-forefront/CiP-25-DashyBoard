@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.2.11415.280 d18.0
+VisualStudioVersion = 18.2.11415.280
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{AC900DFC-6CC7-4A6E-8B70-F88D20428FB2}"
 EndProject
@@ -18,6 +18,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dashyboard.IntegrationTests", "tests\Dashyboard.IntegrationTests\Dashyboard.IntegrationTests.csproj", "{5D984755-CC23-4913-B01D-02FF23C822D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dashyboard.UnitTests", "tests\Dashyboard.UnitTests\Dashyboard.UnitTests.csproj", "{9FA23559-AFB0-4E16-AAAC-538964B1F65C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FB890DEE-C0A7-4AA2-80F6-D2B300EBDEA4}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
