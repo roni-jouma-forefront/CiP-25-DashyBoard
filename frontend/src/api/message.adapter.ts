@@ -7,7 +7,7 @@ export const mapMessageFromApi = (msg: MessageBackend): MessageUI => {
     title: msg.title,
     content: msg.content,
     status: msg.isActive ? "posted" : "pending",
-    PostDateTime:
+    postDateTime:
       msg.postDate && msg.postTime
         ? `Posted: ${msg.postDate} - ${msg.postDate}`
         : null,

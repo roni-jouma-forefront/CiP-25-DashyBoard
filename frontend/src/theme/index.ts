@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import type { RoomStatus, StatusColor, MsgStatus } from "./types";
+import type { RoomStatus, StatusColor, MsgStatus } from "../types/theme.types";
 
 const roomStatusColors: Record<RoomStatus, StatusColor> = {
   available: {

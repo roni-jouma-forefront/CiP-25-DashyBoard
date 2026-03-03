@@ -1,4 +1,4 @@
-import type { RoomStatus, StatusColor, MsgStatus } from "./types";
+import type { RoomStatus, StatusColor, MsgStatus } from "../types/theme.types";
 
 declare module "@mui/material/styles" {
   interface Palette {
