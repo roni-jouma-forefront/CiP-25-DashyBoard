@@ -13,6 +13,13 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
         builder.Property(b => b.Id).ValueGeneratedOnAdd();
 
         builder
+            .Property(b => b.BookingStatus)
+            .HasColumnName("Status")
+            .HasConversion<string>()
+            .HasMaxLength(50)
+            .IsRequired();
+
+        builder
             .HasOne<Room>()
             .WithMany()
             .HasForeignKey(b => b.RoomId)
