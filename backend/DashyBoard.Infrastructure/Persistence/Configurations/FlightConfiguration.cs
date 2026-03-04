@@ -21,6 +21,5 @@ public class FlightConfiguration : IEntityTypeConfiguration<Flight>
             .HasConversion<string>()
             .HasMaxLength(50)
             .IsRequired();
-
     }
 }
