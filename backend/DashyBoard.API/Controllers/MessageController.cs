@@ -21,8 +21,8 @@ public class MessagesController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(List<MessageDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<MessageDto>>> GetAll(
-        [FromQuery] int? hotelId,
-        [FromQuery] int? bookingId
+        [FromQuery] Guid? hotelId,
+        [FromQuery] Guid? bookingId
     )
     {
         var query = new GetMessagesForMirrorQuery { HotelId = hotelId, BookingId = bookingId };
@@ -31,9 +31,9 @@ public class MessagesController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Result<int>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<Guid>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<Result<int>>> Create([FromBody] CreateMessageCommand command)
+    public async Task<ActionResult<Result<Guid>>> Create([FromBody] CreateMessageCommand command)
     {
         var result = await _mediator.Send(command);
 

@@ -5,6 +5,6 @@ namespace DashyBoard.Application.Features.Messages.Queries.GetMessagesForMirror;
 
 public class GetMessagesForMirrorQuery : IRequest<List<MessageDto>>
 {
-    public int? HotelId { get; set; }
-    public int? BookingId { get; set; }
+    public Guid? HotelId { get; set; }
+    public Guid? BookingId { get; set; }
 }

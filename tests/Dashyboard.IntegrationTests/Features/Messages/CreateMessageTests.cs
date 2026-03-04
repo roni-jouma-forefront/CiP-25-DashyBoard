@@ -38,16 +38,21 @@ public class CreateMessageTests
     public async Task CreateMessage_WithHotelId_ShouldReturnSuccess()
     {
         // Arrange
+        var hotelId = Guid.NewGuid();
         var hotel = new Hotel
         {
-            Id = 1,
+            Id = hotelId,
             Name = "Test Hotel",
             CreatedAt = DateTime.UtcNow,
         };
         _context.Hotels.Add(hotel);
         await _context.SaveChangesAsync();
 
-        var command = new CreateMessageCommand { HotelId = 1, Content = "Frukosten st�nger 10:00" };
+        var command = new CreateMessageCommand
+        {
+            HotelId = hotelId,
+            Content = "Frukosten stänger 10:00",
+        };
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/Messages", command);
@@ -55,26 +60,30 @@ public class CreateMessageTests
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = await response.Content.ReadFromJsonAsync<Result<int>>();
+        var result = await response.Content.ReadFromJsonAsync<Result<Guid>>();
         result.Should().NotBeNull();
         result!.Succeeded.Should().BeTrue();
-        result.Data.Should().BeGreaterThan(0);
+        result.Data.Should().NotBe(Guid.Empty);
     }
 
     [Test]
     public async Task CreateMessage_WithBookingId_ShouldReturnSuccess()
     {
         // Arrange
+        var guestId = Guid.NewGuid();
+        var bookingId = Guid.NewGuid();
+
         var guest = new Guest
         {
-            Id = 1,
-            FullName = "Rikardo",
+            Id = guestId,
+            FirstName = "Rikardo",
+            LastName = "Persson",
             CreatedAt = DateTime.UtcNow,
         };
         var booking = new Booking
         {
-            Id = 1,
-            GuestId = 1,
+            Id = bookingId,
+            GuestId = guestId,
             CheckIn = DateTime.UtcNow.AddDays(-1),
             CheckOut = DateTime.UtcNow.AddDays(1),
             CreatedAt = DateTime.UtcNow,
@@ -86,8 +95,8 @@ public class CreateMessageTests
 
         var command = new CreateMessageCommand
         {
-            BookingId = 1,
-            Content = "Ditt flyg �ker om 2 timmar",
+            BookingId = bookingId,
+            Content = "Ditt flyg åker om 2 timmar",
         };
 
         // Act
@@ -96,8 +105,33 @@ public class CreateMessageTests
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = await response.Content.ReadFromJsonAsync<Result<int>>();
+        var result = await response.Content.ReadFromJsonAsync<Result<Guid>>();
         result!.Succeeded.Should().BeTrue();
-        result.Data.Should().BeGreaterThan(0);
+        result.Data.Should().NotBe(Guid.Empty);
     }
+
+    [Test]
+    public async Task CreateMessage_WithUnknownIds_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var command = new CreateMessageCommand
+        {
+            HotelId = Guid.NewGuid(),
+            BookingId = Guid.NewGuid(),
+            Content = "Hej",
+            ExpiresAt = DateTime.UtcNow.AddHours(1),
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/Messages", command);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var result = await response.Content.ReadFromJsonAsync<Result<Guid>>();
+        result.Should().NotBeNull();
+        result!.Succeeded.Should().BeFalse();
+        result.Errors.Should().Contain(x => x.Contains("Hotel med angivet ID finns inte"));
+    }
+
 }

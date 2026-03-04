@@ -23,14 +23,14 @@ public class GetMessagesForMirrorQueryValidator : AbstractValidator<GetMessagesF
             .WithMessage("Booking med angivet ID finns inte");
     }
 
-    private async Task<bool> HotelExists(int? hotelId, CancellationToken cancellationToken)
+    private async Task<bool> HotelExists(Guid? hotelId, CancellationToken cancellationToken)
     {
         if (!hotelId.HasValue)
             return true;
         return await _context.Hotels.AnyAsync(h => h.Id == hotelId.Value, cancellationToken);
     }
 
-    private async Task<bool> BookingExists(int? bookingId, CancellationToken cancellationToken)
+    private async Task<bool> BookingExists(Guid? bookingId, CancellationToken cancellationToken)
     {
         if (!bookingId.HasValue)
             return true;

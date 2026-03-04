@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DashyBoard.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

@@ -57,6 +57,7 @@ public class GetMessagesForMirrorQueryHandler
                 Content = m.Content ?? string.Empty,
                 ExpiresAt = m.ExpiresAt,
                 IsActive = m.IsActive,
+                CreatedAt = m.CreatedAt,
             })
             .ToListAsync(cancellationToken);
 
