@@ -133,5 +133,4 @@ public class CreateMessageTests
         result!.Succeeded.Should().BeFalse();
         result.Errors.Should().Contain(x => x.Contains("Hotel med angivet ID finns inte"));
     }
-
 }
