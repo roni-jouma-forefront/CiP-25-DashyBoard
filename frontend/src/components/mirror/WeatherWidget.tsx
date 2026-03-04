@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -6,52 +5,37 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useQuery } from "@tanstack/react-query";
+import { GetWeather, type MetarData} from '../base/GetWeather'
 
 interface WeatherProps {
   icao: string; 
 }
 
-type MetarData = {
-  icao?: string;
-  observed?: string;
-  station?: {
-    name?: string;
-    location?: string;
-  };
-  temperature?: {
-    celsius?: number;
-    fahrenheit?: number;
-  };
-  humidity?: number;
-  windSpeedMps?: number;
-  conditions?: string | null;
-};
+function WeatherWidget( { icao }: WeatherProps) {
+  const { data: metarData, isLoading, error} = useQuery<MetarData> ({
+    queryKey: ["weather", icao],
+    queryFn: () => GetWeather(icao),
+    enabled: !!icao,
+  })
 
-function WeatherWidget({ icao }: WeatherProps) {
-  const [metarData, setMetarData] = useState<MetarData | null>(null);
+  console.log("VÄDERDATA SOM HÄMTATS: ", metarData)
 
+  if (error) return <p>Fel: {(error).message}</p>;
+  if (isLoading) return <p>Laddar väder...</p>;
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const response = await fetch(`http://localhost:5000/api/CheckWx/${icao}`);
-        const json = await response.json();
-        const item: MetarData | null = Array.isArray(json) ? (json[0] ?? null) : (json ?? null);
-
-        console.log("raw json:", json);
-        console.log("selected item:", item);
-
-        setMetarData(item);
-      } catch (err) {
-        console.error(err);
-        setMetarData(null);
-      }
-    };
-
-    load();
-  }, [icao]);
-
-console.log("this is", metarData);
+function getWeatherIconClass(conditions: string | null) {
+  if (!conditions){
+    return "wi-na"
+  }
+  const c = conditions.toLowerCase();
+  if (c.includes("sun") || c.includes("clear")) return "wi-day-sunny";
+  if (c.includes("rain")) return "wi-rain";
+  if (c.includes("snow")) return "wi-snow";
+  if (c.includes("cloud")) return "wi-cloudy";
+  if (c.includes("storm")) return "wi-thunderstorm";
+  return "wi-na";
+}
 
   return (
     <>
@@ -130,7 +114,9 @@ console.log("this is", metarData);
                   <TableCell sx={{ fontWeight: "bold" }}>Conditions:</TableCell>
                   <TableCell
                     sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                  >
+                  ><i className={ `wi ${getWeatherIconClass(metarData.conditions)}`}
+              ></i>
+              <i className={"wi-cloudy"}></i>
                     {metarData.conditions ?? "-"}
                   </TableCell>
                 </TableRow>
