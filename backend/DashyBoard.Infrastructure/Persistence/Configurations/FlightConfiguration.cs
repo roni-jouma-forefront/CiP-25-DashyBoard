@@ -15,5 +15,12 @@ public class FlightConfiguration : IEntityTypeConfiguration<Flight>
         builder.Property(f => f.Gate).HasMaxLength(10);
 
         builder.Property(f => f.Status).HasMaxLength(50);
+        builder
+            .Property(f => f.Type)
+            .HasColumnName("FlightType")
+            .HasConversion<string>()
+            .HasMaxLength(50)
+            .IsRequired();
+
     }
 }
