@@ -3,7 +3,7 @@ using DashyBoard.Application.Features.CheckWx.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DashyBoard.API.Controllers;
+namespace DashyBoard.API.Controllers.ExternalControllers;
 
 [ApiController]
 [Route("api/[controller]")]

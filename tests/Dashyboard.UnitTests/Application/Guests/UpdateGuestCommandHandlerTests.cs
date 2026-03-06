@@ -8,13 +8,16 @@ namespace Dashyboard.UnitTests.Application.Guests;
 public class UpdateGuestCommandHandlerTests
 {
     private Mock<IRepository<Guest>> _repositoryMock;
+    private Mock<IDateTime> _dateTimeMock;
     private UpdateGuestCommandHandler _handler;
 
     [SetUp]
     public void SetUp()
     {
         _repositoryMock = new Mock<IRepository<Guest>>();
-        _handler = new UpdateGuestCommandHandler(_repositoryMock.Object);
+        _dateTimeMock = new Mock<IDateTime>();
+        _dateTimeMock.Setup(x => x.CetNow).Returns(new DateTime(2026, 3, 5, 12, 0, 0));
+        _handler = new UpdateGuestCommandHandler(_repositoryMock.Object, _dateTimeMock.Object);
     }
 
     [Test]
@@ -40,7 +43,10 @@ public class UpdateGuestCommandHandlerTests
 
         // Assert
         Assert.That(result.Succeeded, Is.True);
-        Assert.That(result.Data, Is.EqualTo(guestId));
+        Assert.That(result.Data, Is.Not.Null);
+        Assert.That(result.Data!.Id, Is.EqualTo(guestId));
+        Assert.That(result.Data.FirstName, Is.EqualTo("Alice"));
+        Assert.That(result.Data.LastName, Is.EqualTo("Smith"));
     }
 
     [Test]
@@ -60,6 +66,7 @@ public class UpdateGuestCommandHandlerTests
 
         // Assert
         Assert.That(result.Succeeded, Is.False);
+        Assert.That(result.Data, Is.Null);
         Assert.That(result.Errors, Is.Not.Empty);
     }
 
