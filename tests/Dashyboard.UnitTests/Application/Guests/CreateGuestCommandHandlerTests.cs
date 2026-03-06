@@ -1,4 +1,5 @@
 using DashyBoard.Application.Common.Interfaces;
+using DashyBoard.Application.DTOs;
 using DashyBoard.Application.Features.Commands.CreateGuest;
 using DashyBoard.Domain.Entities;
 using Moq;
@@ -38,7 +39,10 @@ public class CreateGuestCommandHandlerTests
 
         // Assert
         Assert.That(result.Succeeded, Is.True);
-        Assert.That(result.Data, Is.Not.EqualTo(Guid.Empty));
+        Assert.That(result.Data, Is.Not.Null);
+        Assert.That(result.Data!.Id, Is.Not.EqualTo(Guid.Empty));
+        Assert.That(result.Data.FirstName, Is.EqualTo("Alice"));
+        Assert.That(result.Data.LastName, Is.EqualTo("Smith"));
     }
 
     [Test]

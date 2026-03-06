@@ -6,5 +6,5 @@ public class Room : BaseAuditableEntity
 {
     public Guid Id { get; set; }
     public Guid HotelId { get; set; }
-    public string? RoomNumber { get; set; }
+    public required string RoomNumber { get; set; }
 }
