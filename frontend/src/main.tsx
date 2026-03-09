@@ -10,6 +10,7 @@ import Room from "./pages/Room";
 import MirrorDndProvider from "./components/mirror/MirrorDndProvider.tsx";
 
 import { BrowserRouter, Routes, Route } from "react-router";
+import BookingsPage from "./pages/admin/Bookings.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
@@ -18,6 +19,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/admin" element={<App />}>
           <Route index element={<AdminHome />} />
           <Route path="rooms" element={<RoomAdminPage />} />
+          <Route path="bookings" element={<BookingsPage />} />
           <Route path="rooms/:id" element={<RoomDetailsPage />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>

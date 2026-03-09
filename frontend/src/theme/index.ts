@@ -1,25 +1,43 @@
 import { createTheme } from "@mui/material/styles";
-import type { RoomStatus, StatusColor } from "./types";
+import type { RoomStatus, StatusColor, MsgStatus } from "../types/theme.types";
 
 const roomStatusColors: Record<RoomStatus, StatusColor> = {
   available: {
-    background: "#E3F2FD",
-    text: "#0D47A1",
-    border: "#90CAF9",
+    background: "#DCFCE7",
+    text: "#166534",
+    border: "#22C55E",
   },
   occupied: {
-    background: "#FCE4EC",
-    text: "#880E4F",
-    border: "#F48FB1",
+    background: "#FEE2E2",
+    text: "#991B1B",
+    border: "#EF4444",
+  },
+};
+
+const msgStatusColors: Record<MsgStatus, StatusColor> = {
+  posted: {
+    background: "#DCFCE7",
+    text: "#166534",
+    border: "#22C55E",
+  },
+  pending: {
+    background: "#FEF3C7",
+    text: "#92400E",
+    border: "#F59E0B",
+  },
+  delete: {
+    background: "#FEE2E2",
+    text: "#991B1B",
+    border: "#EF4444",
   },
 };
 
 export const theme = createTheme({
   palette: {
     primary: {
-      light: "#5E92F3",
-      main: "#1B3F8B",
-      dark: "#0D2461",
+      main: "#2563EB",
+      dark: "#1D4ED8",
+      light: "#DBEAFE",
       contrastText: "#FFFFFF",
     },
     secondary: {
@@ -29,20 +47,26 @@ export const theme = createTheme({
       contrastText: "#FFFFFF",
     },
     background: {
-      default: "#F0F4F9",
+      default: "#F8FAFC",
       paper: "#FFFFFF",
     },
     text: {
-      primary: "#0D1B2A",
-      secondary: "#4A6080",
+      primary: "#0F172A",
+      secondary: "#475569",
     },
     divider: "#C8D8E8",
 
     roomStatus: roomStatusColors,
+    msgStatus: msgStatusColors,
 
+    topbar: {
+      background: "#0B1220",
+      text: "#CBD5E1",
+      activeBackground: "#1B3F8B",
+    },
     sidebar: {
-      background: "#0A1929",
-      text: "#B0BEC5",
+      background: "#172036",
+      text: "#CBD5E1",
       activeBackground: "#1B3F8B",
     },
   },
@@ -72,3 +96,7 @@ export const theme = createTheme({
 export { type RoomStatus };
 export const getRoomStatusColor = (status: RoomStatus): StatusColor =>
   roomStatusColors[status];
+
+export { type MsgStatus };
+export const getMsgStatusColor = (status: MsgStatus): StatusColor =>
+  msgStatusColors[status];

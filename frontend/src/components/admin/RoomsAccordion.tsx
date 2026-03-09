@@ -9,19 +9,9 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { NavLink } from "react-router";
-
-type RoomStatus = "available" | "occupied";
-type Title = "Mrs" | "Miss" | "MS" | "Mr" | null;
-
-type Room = {
-  id: string;
-  number: number;
-  status: RoomStatus;
-  title: Title | null;
-  guestFirstName: string | null;
-  guestLastName: string | null;
-  flight: string | null;
-};
+import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
+import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
+import type { Room } from "../../types/types";
 
 const mockRooms: Room[] = [
   {
@@ -35,7 +25,25 @@ const mockRooms: Room[] = [
   },
   {
     id: "2",
-    number: 112,
+    number: 102,
+    status: "occupied",
+    title: "Mx",
+    guestFirstName: "Cookie",
+    guestLastName: "Larsson",
+    flight: "BA777",
+  },
+  {
+    id: "3",
+    number: 103,
+    status: "occupied",
+    title: "Ms",
+    guestFirstName: "Karin",
+    guestLastName: "Karinsson",
+    flight: "BA777",
+  },
+  {
+    id: "4",
+    number: 104,
     status: "available",
     title: null,
     guestFirstName: null,
@@ -43,23 +51,6 @@ const mockRooms: Room[] = [
     flight: null,
   },
 ];
-
-const statusColor: Record<RoomStatus, string> = {
-  occupied: "#f3797e",
-  available: "#7978E9",
-};
-
-const badgeStyle = (status: RoomStatus) => ({
-  display: "inline-block",
-  lineHeight: 1,
-  backgroundColor: statusColor[status],
-  color: "white",
-  py: 0.5,
-  px: 1.5,
-  borderRadius: 3,
-  fontWeight: 600,
-  fontSize: "0.75rem",
-});
 
 export const RoomsAccordion = () => {
   return (
@@ -89,23 +80,38 @@ export const RoomsAccordion = () => {
               justifyContent="space-between"
               width={1}
             >
-              <Typography component="span" sx={{ flex: 1 }}>
-                {room.number}
-              </Typography>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Button component={NavLink} to={`/admin/rooms/${room.id}`}>
-                  Edit Room
-                </Button>
-                <Typography component="span" sx={badgeStyle(room.status)}>
-                  {room.status}
-                </Typography>
+              {room.status === "occupied" ? (
+                <RadioButtonCheckedIcon />
+              ) : (
+                <CircleOutlinedIcon />
+              )}
+              <Stack
+                direction="row"
+                spacing={2}
+                alignItems="center"
+                sx={{ flex: 1 }}
+              >
+                <Typography component="span" fontWeight="600">{room.number}</Typography>
+                {room.status === "occupied" && (
+                  <Typography variant="body2">
+                    {room.guestFirstName} {room.guestLastName}
+                  </Typography>
+                )}
               </Stack>
+              <Button component={NavLink} to={`/admin/rooms/${room.id}`}>
+                Edit Room
+              </Button>
             </Stack>
           </AccordionSummary>
           <AccordionDetails>
-            <Stack direction="row" spacing={2} alignItems="flex-start">
+            <Stack
+              direction="row"
+              spacing={2}
+              alignItems="flex-start"
+              paddingTop={1}
+            >
               <Typography>
-                Name: {room.guestFirstName} {room.guestLastName}
+                Departing Flight: {room.flight}
               </Typography>
             </Stack>
           </AccordionDetails>
