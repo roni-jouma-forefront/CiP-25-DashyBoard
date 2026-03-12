@@ -1,16 +1,19 @@
 import { Box, Typography } from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 import { useQuery } from "@tanstack/react-query";
 import { GetWeather, type MetarData } from "../base/GetWeather";
 
 interface WeatherProps {
   icao: string;
 }
+
+const icaoRowStyling = {
+  display: "flex",
+  justifyContent: "space-between",
+  backgroundColor: "white",
+  p: 2,
+  borderRadius: 2,
+};
 
 function WeatherWidget({ icao }: WeatherProps) {
   const {
@@ -73,62 +76,55 @@ function WeatherWidget({ icao }: WeatherProps) {
             <Typography>Loading weather...</Typography>
           ) : (
             <>
-              <TableContainer component={Paper} sx={{ maxWidth: 700 }}>
-                <Table>
-                  <TableBody>
-                    <TableRow sx={{ backgroundColor: "#f5f7fa" }}>
-                      <TableCell sx={{ fontWeight: "bold", width: "40%" }}>
-                        Airport:
-                      </TableCell>
-                      <TableCell>{metarData.station?.name ?? "-"}</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: "bold" }}>ICAO:</TableCell>
-                      <TableCell>{metarData.icao ?? "-"}</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: "bold" }}>
-                        Wind (m/s):
-                      </TableCell>
-                      <TableCell>{metarData.windSpeedMps ?? "-"} m/s</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: "bold" }}>
-                        Temperature:
-                      </TableCell>
-                      <TableCell>
-                        {metarData.temperature?.celsius ?? "-"}°C /{" "}
-                        {metarData.temperature?.fahrenheit ?? "-"}°F
-                      </TableCell>
-                    </TableRow>
-
-                    <TableRow sx={{ backgroundColor: "#f5f7fa" }}>
-                      <TableCell sx={{ fontWeight: "bold" }}>
-                        Humidity:
-                      </TableCell>
-                      <TableCell>{metarData.humidity ?? "-"}%</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: "bold" }}>
-                        Conditions:
-                      </TableCell>
-                      <TableCell
-                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                      >
-                        <i
-                          className={`wi ${getWeatherIconClass(metarData.conditions)}`}
-                        ></i>
-                        <i className={"wi-cloudy"}></i>
-                        {metarData.conditions ?? "-"}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <Box>
+                <Stack spacing={1} sx={{ borderRadius: 2 }}>
+                  <Typography sx={{ ...icaoRowStyling, gap: 2 }}>
+                    <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M12 22C12 22 20 14.5 20 9C20 5.13401 16.866 2 13 2H11C7.13401 2 4 5.13401 4 9C4 14.5 12 22 12 22Z"
+                        stroke="black"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <circle
+                        cx="12"
+                        cy="9"
+                        r="3"
+                        stroke="black"
+                        strokeWidth="2"
+                      />
+                    </svg>{" "}
+                    {metarData.station?.name ?? "-"}
+                  </Typography>
+                  <Typography sx={{ ...icaoRowStyling, gap: 2 }}>
+                    <strong> Observed: </strong>{" "}
+                    {metarData.observed?.slice(11, 16) ?? "-"} UTC
+                  </Typography>
+                  <Typography sx={icaoRowStyling}>
+                    <strong> Icao: </strong> {metarData.icao ?? "-"}
+                  </Typography>
+                  <Typography sx={icaoRowStyling}>
+                    <strong> Wind: </strong> {metarData.windSpeedMps ?? "-"} m/s
+                  </Typography>
+                  <Typography sx={icaoRowStyling}>
+                    <strong> Temperature: </strong>{" "}
+                    {metarData.temperature?.celsius ?? "-"}°C /{" "}
+                    {metarData.temperature?.fahrenheit ?? "-"}°F
+                  </Typography>
+                  <Typography sx={icaoRowStyling}>
+                    <strong> Humidity: </strong> {metarData.humidity ?? "-"}%
+                  </Typography>
+                  <Typography sx={icaoRowStyling}>
+                    <strong> Conditions: </strong>{" "}
+                    <i
+                      className={`wi ${getWeatherIconClass(metarData.conditions)}`}
+                    ></i>
+                    <i className={"wi-cloudy"}></i>
+                    {metarData.conditions ?? "-"}
+                  </Typography>
+                </Stack>
+              </Box>
             </>
           )}
         </Box>
