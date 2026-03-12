@@ -8,11 +8,14 @@ import SettingsPage from "./pages/admin/Settings";
 import RoomDetailsPage from "./pages/admin/RoomDetails";
 import Room from "./pages/Room";
 import MirrorDndProvider from "./components/mirror/MirrorDndProvider.tsx";
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from "react-router";
 import BookingsPage from "./pages/admin/Bookings.tsx";
 
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById("root")!).render(
+  <QueryClientProvider client={queryClient}>
   <BrowserRouter>
     <StrictMode>
       <Routes>
@@ -27,5 +30,6 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/mirror" element={<MirrorDndProvider />}></Route>
       </Routes>
     </StrictMode>
-  </BrowserRouter>,
+  </BrowserRouter>
+  </QueryClientProvider>
 );
