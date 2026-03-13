@@ -2,13 +2,16 @@ import { useParams } from "react-router";
 import { RoomDetailsForm } from "../../components/admin/forms/RoomDetailsForm";
 import { RoomMessageForm } from "../../components/admin/forms/RoomMessageForm";
 import { Button, Stack, Typography } from "@mui/material";
-import { MessageAccordion } from "../../components/admin/MessageAccordion";
+import { MessageAccordion } from "../../components/admin/messages/MessageAccordion";
 import AlertDialog from "../../components/admin/AlertDialog";
 import React from "react";
+import messageService from "../../components/admin/messages/messageService";
+
 
 export default function Room() {
   const { id } = useParams();
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const initialMessages = messageService();
 
   const handleDialog = () => {
     setDialogOpen(true);
@@ -39,7 +42,7 @@ export default function Room() {
         <RoomDetailsForm />
         <RoomMessageForm />
       </Stack>
-      <MessageAccordion />
+      <MessageAccordion initialMessages={initialMessages}/>
       <AlertDialog open={dialogOpen} onClose={handleClose} />
     </>
   );
