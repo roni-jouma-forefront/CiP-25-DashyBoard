@@ -1,7 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import { useQuery } from "@tanstack/react-query";
-import { GetWeather, type MetarData } from "../base/GetWeather";
+import { GetWeather, type MetarData } from "../../services/api/GetWeather";
+import { useWeather } from "../../hooks";
 
 interface WeatherProps {
   icao: string;
@@ -16,15 +17,7 @@ const icaoRowStyling = {
 };
 
 function WeatherWidget({ icao }: WeatherProps) {
-  const {
-    data: metarData,
-    isLoading,
-    error,
-  } = useQuery<MetarData>({
-    queryKey: ["weather", icao],
-    queryFn: () => GetWeather(icao),
-    enabled: !!icao,
-  });
+  const { data: metarData, error, isLoading } = useWeather({ icao });
 
   if (error) return <p>Error: {error.message}</p>;
   if (isLoading) return <p>Loading weather info...</p>;

@@ -15,12 +15,12 @@ export type MetarData = {
 };
 
 export async function GetWeather(icao: string): Promise<MetarData> {
-  const res = await fetch(
-    `http://localhost:5000/api/CheckWx/${icao.toUpperCase()}`,
-    {
-      headers: { "Content-Type": "application/json" },
-    },
-  );
+  const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
+  console.log("Hämtar väder");
+
+  const res = await fetch(`${apiUrl}/api/CheckWx/${icao.toUpperCase()}`, {
+    headers: { "Content-Type": "application/json" },
+  });
 
   if (!res.ok) {
     throw new Error(`Cound't get weather info for ${icao}`);
