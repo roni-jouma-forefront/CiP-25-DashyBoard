@@ -6,7 +6,6 @@ using DashyBoard.Application.Features.Queries.GetAllGuests;
 using DashyBoard.Application.Features.Queries.GetGuest;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace DashyBoard.API.Controllers;
 
@@ -102,13 +101,21 @@ public class GuestsController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(GuestDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetGuestById(Guid id, CancellationToken cancellationToken)
     {
+        if (id == Guid.Empty)
+            return BadRequest("Guest ID is required.");
+
         try
         {
             var query = new GetGuestQuery(id);
             var result = await _mediator.Send(query, cancellationToken);
+
+            if (result == null)
+                return NotFound($"Guest with ID '{id}' was not found.");
+
             return Ok(result);
         }
         catch (Exception ex)
@@ -131,6 +138,7 @@ public class GuestsController : ControllerBase
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(GuestDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateGuest(
         Guid id,
@@ -173,13 +181,19 @@ public class GuestsController : ControllerBase
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(GuestDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteGuest(Guid id, CancellationToken cancellationToken)
     {
+        if (id == Guid.Empty)
+            return BadRequest("Guest ID is required.");
+
         try
         {
             var command = new DeleteGuestCommand(id);
             var result = await _mediator.Send(command, cancellationToken);
+            if (result == null)
+                return NotFound($"Guest with ID '{id}' was not found.");
             return Ok(result);
         }
         catch (Exception ex)
