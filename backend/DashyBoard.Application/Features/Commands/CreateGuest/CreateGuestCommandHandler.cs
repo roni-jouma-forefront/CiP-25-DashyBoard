@@ -1,14 +1,15 @@
 using DashyBoard.Application.Common.Interfaces;
 using DashyBoard.Application.Common.Models;
+using DashyBoard.Application.DTOs;
 using DashyBoard.Domain.Entities;
 using MediatR;
 
 namespace DashyBoard.Application.Features.Commands.CreateGuest;
 
 public class CreateGuestCommandHandler(IRepository<Guest> repository, IDateTime dateTime)
-    : IRequestHandler<CreateGuestCommand, Result<Guid>>
+    : IRequestHandler<CreateGuestCommand, Result<GuestDto>>
 {
-    public async Task<Result<Guid>> Handle(
+    public async Task<Result<GuestDto>> Handle(
         CreateGuestCommand request,
         CancellationToken cancellationToken
     )
@@ -23,6 +24,13 @@ public class CreateGuestCommandHandler(IRepository<Guest> repository, IDateTime 
 
         await repository.AddAsync(guest, cancellationToken);
 
-        return Result<Guid>.Success(guest.Id);
+        return Result<GuestDto>.Success(
+            new GuestDto
+            {
+                Id = guest.Id,
+                FirstName = guest.FirstName!,
+                LastName = guest.LastName!,
+            }
+        );
     }
 }

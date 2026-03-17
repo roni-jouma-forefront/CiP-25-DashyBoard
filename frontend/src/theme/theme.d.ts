@@ -1,9 +1,15 @@
-import type { RoomStatus, StatusColor } from "./types";
+import type { RoomStatus, StatusColor, MsgStatus } from "../types/theme.types";
 
 declare module "@mui/material/styles" {
   interface Palette {
     roomStatus: Record<RoomStatus, StatusColor>;
+    msgStatus: Record<MsgStatus, StatusColor>;
     sidebar: {
+      background: string;
+      text: string;
+      activeBackground: string;
+    };
+    topbar: {
       background: string;
       text: string;
       activeBackground: string;
@@ -12,7 +18,9 @@ declare module "@mui/material/styles" {
 
   interface PaletteOptions {
     roomStatus?: Partial<Record<RoomStatus, Partial<StatusColor>>>;
+    msgStatus?: Partial<Record<MsgStatus, Partial<StatusColor>>>;
     sidebar?: Partial<Palette["sidebar"]>;
+    topbar?: Partial<Palette["topbar"]>;
   }
 
   interface Theme {
