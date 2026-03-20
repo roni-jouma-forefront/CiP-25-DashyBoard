@@ -1,7 +1,5 @@
 import { Box, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import { useQuery } from "@tanstack/react-query";
-import { GetWeather, type MetarData } from "../../services/api/GetWeather";
 import { useWeather } from "../../hooks";
 
 interface WeatherProps {

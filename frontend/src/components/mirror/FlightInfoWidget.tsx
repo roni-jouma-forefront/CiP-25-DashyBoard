@@ -1,0 +1,92 @@
+import { Stack, Typography, Box } from "@mui/material";
+import { useFlightInfo } from "../../hooks";
+
+interface FlightProps {
+  airport: string;
+  flight: string;
+}
+
+const flightRowStyling = {
+  display: "flex",
+  justifyContent: "space-between",
+  backgroundColor: "white",
+  p: 2,
+  borderRadius: 2,
+};
+
+function FlightInfoWidget({ airport, flight }: FlightProps) {
+  const {
+    data: flightData,
+    error,
+    isLoading,
+  } = useFlightInfo({ airport, flight });
+
+  if (error) return <p>Error: {error.message}</p>;
+  if (isLoading) return <p>Loading weather info...</p>;
+
+  console.log("HÄMTAD DATA, ", flightData);
+
+  return (
+    <Box
+      sx={{
+        position: "relative",
+        p: 2,
+        m: 2,
+        borderRadius: 2,
+        boxShadow: 1,
+        backgroundImage: "url(/images/airportimg.jpg)",
+        backgroundSize: "cover",
+        opacity: 0.9,
+      }}
+    >
+      <Typography
+        variant="h4"
+        sx={{ fontWeight: "bold", marginBottom: "10px", color: "#001e41" }}
+      >
+        Flight Info
+      </Typography>
+
+      {!flightData ? (
+        <Typography>Loading flight info...</Typography>
+      ) : (
+        <Box>
+          <Stack spacing={1} sx={{ borderRadius: 2 }}>
+            <Typography sx={flightRowStyling}>
+              <strong>{flightData.flightId ?? "-"}</strong>
+              <span>
+                {flightData.departureAirportIcao ?? "-"} →{" "}
+                {flightData.arrivalAirportIcao ?? "-"}
+              </span>
+            </Typography>
+
+            <Typography sx={flightRowStyling}>
+              <strong>Gate:</strong>
+              <span>{flightData.locationAndStatus?.gate ?? "-"}</span>
+            </Typography>
+
+            <Typography sx={flightRowStyling}>
+              <strong>Terminal:</strong>
+              <span>{flightData.locationAndStatus?.terminal ?? "-"}</span>
+            </Typography>
+
+            <Typography sx={{ ...flightRowStyling, gap: 3 }}>
+              <strong>Departure (UTC):</strong>
+              <span>
+                {flightData.departureTime?.scheduledUtc?.slice(11, 16) ?? "-"}
+              </span>
+            </Typography>
+
+            <Typography sx={{ ...flightRowStyling, gap: 3 }}>
+              <strong>Flight Status:</strong>
+              <span>
+                {flightData.locationAndStatus?.flightLegStatusEnglish ?? "-"}
+              </span>
+            </Typography>
+          </Stack>
+        </Box>
+      )}
+    </Box>
+  );
+}
+
+export default FlightInfoWidget;

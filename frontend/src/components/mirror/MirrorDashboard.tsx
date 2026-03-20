@@ -7,9 +7,10 @@ import { useDrop } from "react-dnd";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
 import Watch from "../base/watch";
+import FlightInfo from "./FlightInfoWidget";
 
 function MirrorDashboard() {
-  const [order, setOrder] = useState([1, 2]);
+  const [order, setOrder] = useState([1, 2, 3]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -74,7 +75,13 @@ function MirrorDashboard() {
           if (id === 2)
             return (
               <DraggableWrapper key={2} id={2}>
-                <WeatherWidget icao="ESSA"/>
+                <WeatherWidget icao="ESSA" />
+              </DraggableWrapper>
+            );
+          if (id === 3)
+            return (
+              <DraggableWrapper key={3} id={3}>
+                <FlightInfo airport="ARN" flight="SK605" />
               </DraggableWrapper>
             );
         })}
