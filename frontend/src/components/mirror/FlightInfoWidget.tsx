@@ -1,5 +1,7 @@
 import { Stack, Typography, Box } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useFlightInfo } from "../../hooks";
+import { GetAirportNameByIcao } from "../../services/GetAirportNameByIcao";
 
 interface FlightProps {
   airport: string;
@@ -15,16 +17,29 @@ const flightRowStyling = {
 };
 
 function FlightInfoWidget({ airport, flight }: FlightProps) {
+  const [arrivalAirportName, setArrivalAirportName] = useState<string | null>(
+    null,
+  );
+
   const {
     data: flightData,
     error,
     isLoading,
   } = useFlightInfo({ airport, flight });
 
+  console.log("Hämtad flygdata, ", flightData);
+
+  useEffect(() => {
+    const icao = flightData?.arrivalAirportIcao;
+    if (!icao) return;
+
+    GetAirportNameByIcao(icao).then((name) => {
+      setArrivalAirportName(name);
+    });
+  }, [flightData]);
+
   if (error) return <p>Error: {error.message}</p>;
   if (isLoading) return <p>Loading flight info...</p>;
-
-  console.log("HÄMTAD DATA, ", flightData);
 
   return (
     <Box
@@ -52,11 +67,22 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
         <Box>
           <Stack spacing={1} sx={{ borderRadius: 2 }}>
             <Typography sx={flightRowStyling}>
-              <strong>{flightData.flightId ?? "-"}</strong>
-              <span>
-                {flightData.departureAirportIcao ?? "-"} →{" "}
-                {flightData.arrivalAirportIcao ?? "-"}
-              </span>
+              <strong>Flight ID:</strong>
+              <span>{flightData.flightId ?? "-"}</span>
+            </Typography>
+            <Typography
+              sx={{
+                ...flightRowStyling,
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              {" "}
+              <strong>
+                <span>Arlanda</span>
+                <span> → </span>
+                <span>{arrivalAirportName}</span>
+              </strong>
             </Typography>
 
             <Typography sx={flightRowStyling}>
