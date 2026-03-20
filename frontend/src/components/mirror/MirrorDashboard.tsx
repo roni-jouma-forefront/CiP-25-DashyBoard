@@ -81,7 +81,7 @@ function MirrorDashboard() {
           if (id === 3)
             return (
               <DraggableWrapper key={3} id={3}>
-                <FlightInfo airport="ARN" flight="SK605" />
+                <FlightInfo airport="ARN" flight="OS966" />
               </DraggableWrapper>
             );
         })}

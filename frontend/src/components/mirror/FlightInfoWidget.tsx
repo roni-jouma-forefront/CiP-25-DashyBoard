@@ -22,7 +22,7 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
   } = useFlightInfo({ airport, flight });
 
   if (error) return <p>Error: {error.message}</p>;
-  if (isLoading) return <p>Loading weather info...</p>;
+  if (isLoading) return <p>Loading flight info...</p>;
 
   console.log("HÄMTAD DATA, ", flightData);
 
