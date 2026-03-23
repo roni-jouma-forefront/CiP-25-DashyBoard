@@ -66,9 +66,7 @@ public class SwedaviaFlightApiService : SwedaviaApiServiceBase, ISwedaviaFlightA
             endpoint,
             cancellationToken
         );
-        var allFlights = MapToFlightInfoDtos(
-            flightInfoResponse?.Flights ?? new List<FlightInfoApiModel>()
-        );
+        var allFlights = MapToFlightInfoDtos(flightInfoResponse);
 
         // Filter by flightId if provided
         if (!string.IsNullOrWhiteSpace(flightId))
@@ -99,15 +97,20 @@ public class SwedaviaFlightApiService : SwedaviaApiServiceBase, ISwedaviaFlightA
         return allFlights;
     }
 
-    private static IEnumerable<FlightInfoDto> MapToFlightInfoDtos(
-        IEnumerable<FlightInfoApiModel> apiModels
-    )
+    private static IEnumerable<FlightInfoDto> MapToFlightInfoDtos(FlightInfoResponse? response)
     {
-        return apiModels.Select(flight => new FlightInfoDto
+        var flights = response?.Flights ?? new List<FlightInfoApiModel>();
+
+        var homeDepartureSwedish = response?.From?.DepartureAirportSwedish;
+        var homeArrivalSwedish = response?.To?.ArrivalAirportSwedish;
+
+        return flights.Select(flight => new FlightInfoDto
         {
             FlightId = flight.FlightId ?? string.Empty,
             DepartureAirportIcao = flight.FlightLegIdentifier?.DepartureAirportIcao,
+            DepartureAirportSwedish = homeDepartureSwedish ?? flight.DepartureAirportSwedish,
             ArrivalAirportIcao = flight.FlightLegIdentifier?.ArrivalAirportIcao,
+            ArrivalAirportSwedish = homeArrivalSwedish ?? flight.ArrivalAirportSwedish,
             LocationAndStatus =
                 flight.LocationAndStatus != null
                     ? new LocationAndStatusDto

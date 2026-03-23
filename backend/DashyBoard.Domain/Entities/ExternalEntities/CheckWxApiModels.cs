@@ -10,6 +10,8 @@ public class CheckWxApiResponse
 
 public class CheckWxApiData
 {
+    [JsonPropertyName("raw_text")]
+    public string? RawText { get; set; }
     public string? Icao { get; set; }
     public DateTime? Observed { get; set; }
     public CheckWxStationApi? Station { get; set; }

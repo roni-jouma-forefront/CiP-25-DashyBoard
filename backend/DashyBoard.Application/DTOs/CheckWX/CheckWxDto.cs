@@ -8,7 +8,7 @@ namespace DashyBoard.Application.DTOs.CheckWX
         public TemperatureDto? Temperature { get; set; }
         public int? Humidity { get; set; }
         public int? WindSpeedMps { get; set; }
-        public List<WeatherDto>? Conditions { get; set; }
+        public ParsedWeatherDto? Weather { get; set; }
     }
 
     public class StationDto
@@ -23,11 +23,11 @@ namespace DashyBoard.Application.DTOs.CheckWX
         public int? Fahrenheit { get; set; }
     }
 
-    public class WeatherDto
+    public class ParsedWeatherDto
     {
-        public string Code { get; set; } = string.Empty;
-        public string? Text { get; set; }
-        public string? Intensity { get; set; }
-        public string? Type { get; set; }
+        public string? Snow { get; set; }
+        public string? Rain { get; set; }
+        public string? Fog { get; set; }
+        public string? Cloud { get; set; }
     }
 }

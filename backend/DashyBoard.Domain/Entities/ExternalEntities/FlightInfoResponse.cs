@@ -10,12 +10,16 @@ public class FlightInfoResponse
 public class AirportInfoApiModel
 {
     public string? ArrivalAirportIcao { get; set; }
+    public string? ArrivalAirportSwedish { get; set; }
     public string? DepartureAirportIcao { get; set; }
+    public string? DepartureAirportSwedish { get; set; }
 }
 
 public class FlightInfoApiModel
 {
     public string? FlightId { get; set; }
+    public string? DepartureAirportSwedish { get; set; } // Top-level on arrival flights
+    public string? ArrivalAirportSwedish { get; set; } // Top-level on departure flights
     public LocationAndStatusApiModel? LocationAndStatus { get; set; }
     public FlightTimeApiModel? ArrivalTime { get; set; } // For arrivals
     public FlightTimeApiModel? DepartureTime { get; set; } // For departures
