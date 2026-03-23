@@ -107,7 +107,9 @@ public class SwedaviaFlightApiService : SwedaviaApiServiceBase, ISwedaviaFlightA
         {
             FlightId = flight.FlightId ?? string.Empty,
             DepartureAirportIcao = flight.FlightLegIdentifier?.DepartureAirportIcao,
+            DepartureAirportSwedish = flight.FlightLegIdentifier?.DepartureAirportSwedish,
             ArrivalAirportIcao = flight.FlightLegIdentifier?.ArrivalAirportIcao,
+            ArrivalAirportSwedish = flight.FlightLegIdentifier?.ArrivalAirportSwedish,
             LocationAndStatus =
                 flight.LocationAndStatus != null
                     ? new LocationAndStatusDto

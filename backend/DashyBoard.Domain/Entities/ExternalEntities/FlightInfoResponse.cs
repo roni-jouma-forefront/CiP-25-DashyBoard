@@ -25,7 +25,9 @@ public class FlightInfoApiModel
 public class FlightLegIdentifierApiModel
 {
     public string? DepartureAirportIcao { get; set; }
+    public string? DepartureAirportSwedish { get; set; }
     public string? ArrivalAirportIcao { get; set; }
+    public string? ArrivalAirportSwedish { get; set; }
 }
 
 public class LocationAndStatusApiModel

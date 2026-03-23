@@ -95,7 +95,10 @@ public class CheckWxApiService : ICheckWxApiService
 
     private static readonly string[] CloudPriority = ["OVC", "BKN", "SCT", "FEW", "CLR", "SKC"];
 
-    private static ParsedWeatherDto? ParseWeather(string? rawText, List<CheckWxConditionApi>? conditions)
+    private static ParsedWeatherDto? ParseWeather(
+        string? rawText,
+        List<CheckWxConditionApi>? conditions
+    )
     {
         string? snow = null;
         string? rain = null;
@@ -108,17 +111,23 @@ public class CheckWxApiService : ICheckWxApiService
             {
                 if (WeatherTokenRegex.IsMatch(token))
                 {
-                    if (token.Contains("SN")) snow = token;
-                    if (token.Contains("RA") || token.Contains("DZ")) rain = token;
-                    if (token.Contains("FG") || token.Contains("BR")) fog = token;
+                    if (token.Contains("SN"))
+                        snow = token;
+                    if (token.Contains("RA") || token.Contains("DZ"))
+                        rain = token;
+                    if (token.Contains("FG") || token.Contains("BR"))
+                        fog = token;
                 }
 
                 var cloudMatch = CloudTokenRegex.Match(token);
                 if (cloudMatch.Success)
                 {
                     var cover = cloudMatch.Groups[1].Value;
-                    if (dominantCloud == null ||
-                        Array.IndexOf(CloudPriority, cover) < Array.IndexOf(CloudPriority, dominantCloud))
+                    if (
+                        dominantCloud == null
+                        || Array.IndexOf(CloudPriority, cover)
+                            < Array.IndexOf(CloudPriority, dominantCloud)
+                    )
                     {
                         dominantCloud = cover;
                     }
@@ -131,15 +140,24 @@ public class CheckWxApiService : ICheckWxApiService
             foreach (var c in conditions)
             {
                 var code = c.Code ?? string.Empty;
-                if (code.Contains("SN")) snow = code;
-                if (code.Contains("RA") || code.Contains("DZ")) rain = code;
-                if (code.Contains("FG") || code.Contains("BR")) fog = code;
+                if (code.Contains("SN"))
+                    snow = code;
+                if (code.Contains("RA") || code.Contains("DZ"))
+                    rain = code;
+                if (code.Contains("FG") || code.Contains("BR"))
+                    fog = code;
             }
         }
 
         if (snow == null && rain == null && fog == null && dominantCloud == null)
             return null;
 
-        return new ParsedWeatherDto { Snow = snow, Rain = rain, Fog = fog, Cloud = dominantCloud };
+        return new ParsedWeatherDto
+        {
+            Snow = snow,
+            Rain = rain,
+            Fog = fog,
+            Cloud = dominantCloud,
+        };
     }
 }
