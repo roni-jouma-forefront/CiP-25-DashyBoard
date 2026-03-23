@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text.RegularExpressions;
 using DashyBoard.Application.Common.Interfaces.External;
 using DashyBoard.Application.DTOs.CheckWX;
 using DashyBoard.Domain.Entities.ExternalEntities;
@@ -78,13 +79,85 @@ public class CheckWxApiService : ICheckWxApiService
                     : null,
             Humidity = data.Humidity,
             WindSpeedMps = data.Wind?.Speed?.Mps,
-            Conditions = data
-                .Conditions?.Select(c => new WeatherDto
-                {
-                    Code = c.Code ?? string.Empty,
-                    Text = c.Text,
-                })
-                .ToList(),
+            Weather = ParseWeather(data.RawText, data.Conditions),
         });
+    }
+
+    private static readonly Regex WeatherTokenRegex = new(
+        @"^(-|\+|VC|RE)?(BC|BL|DR|FZ|MI|PR|SH|TS)?(RA|SN|DZ|GR|GS|IC|PE|BR|FG|DS|DU|FC|FU|HZ|PO|SA)+$",
+        RegexOptions.Compiled
+    );
+
+    private static readonly Regex CloudTokenRegex = new(
+        @"^(SKC|CLR|FEW|SCT|BKN|OVC)(\d{3})(CB|TCU)?$",
+        RegexOptions.Compiled
+    );
+
+    private static readonly string[] CloudPriority = ["OVC", "BKN", "SCT", "FEW", "CLR", "SKC"];
+
+    private static ParsedWeatherDto? ParseWeather(
+        string? rawText,
+        List<CheckWxConditionApi>? conditions
+    )
+    {
+        string? snow = null;
+        string? rain = null;
+        string? fog = null;
+        string? dominantCloud = null;
+
+        if (!string.IsNullOrWhiteSpace(rawText))
+        {
+            foreach (var token in rawText.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (WeatherTokenRegex.IsMatch(token))
+                {
+                    if (token.Contains("SN"))
+                        snow = token;
+                    if (token.Contains("RA") || token.Contains("DZ"))
+                        rain = token;
+                    if (token.Contains("FG") || token.Contains("BR"))
+                        fog = token;
+                }
+
+                var cloudMatch = CloudTokenRegex.Match(token);
+                if (cloudMatch.Success)
+                {
+                    var cover = cloudMatch.Groups[1].Value;
+                    if (
+                        dominantCloud == null
+                        || Array.IndexOf(CloudPriority, cover)
+                            < Array.IndexOf(CloudPriority, dominantCloud)
+                    )
+                    {
+                        dominantCloud = cover;
+                    }
+                }
+            }
+        }
+
+        if (snow == null && rain == null && fog == null && conditions != null)
+        {
+            foreach (var c in conditions)
+            {
+                var code = c.Code ?? string.Empty;
+                if (code.Contains("SN"))
+                    snow = code;
+                if (code.Contains("RA") || code.Contains("DZ"))
+                    rain = code;
+                if (code.Contains("FG") || code.Contains("BR"))
+                    fog = code;
+            }
+        }
+
+        if (snow == null && rain == null && fog == null && dominantCloud == null)
+            return null;
+
+        return new ParsedWeatherDto
+        {
+            Snow = snow,
+            Rain = rain,
+            Fog = fog,
+            Cloud = dominantCloud,
+        };
     }
 }

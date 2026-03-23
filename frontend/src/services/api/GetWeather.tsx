@@ -1,3 +1,10 @@
+export type Weather = {
+  snow?: string;
+  rain?: string;
+  fog?: string;
+  cloud?: "SKC" | "CLR" | "FEW" | "SCT" | "BKN" | "OVC";
+};
+
 export type MetarData = {
   icao: string;
   observed: string;
@@ -11,7 +18,7 @@ export type MetarData = {
   };
   humidity: number;
   windSpeedMps: number;
-  conditions: string | null;
+  weather: Weather | null;
 };
 
 export async function GetWeather(icao: string): Promise<MetarData> {

@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import { useWeather } from "../../hooks";
+import type { Weather } from "../../services/api/GetWeather";
 
 interface WeatherProps {
   icao: string;
@@ -20,17 +21,34 @@ function WeatherWidget({ icao }: WeatherProps) {
   if (error) return <p>Error: {error.message}</p>;
   if (isLoading) return <p>Loading weather info...</p>;
 
-  function getWeatherIconClass(conditions: string | null) {
-    if (!conditions) {
-      return "wi-na";
+  function getWeatherIconClass(weather: Weather | null): string {
+    if (!weather) return "wi-day-sunny";
+    if (weather.snow) return "wi-snow";
+    if (weather.rain) return "wi-rain";
+    if (weather.fog) return "wi-fog";
+    switch (weather.cloud) {
+      case "OVC": return "wi-cloudy";
+      case "BKN": return "wi-cloudy";
+      case "SCT": return "wi-day-cloudy";
+      case "FEW": return "wi-day-cloudy";
+      default:    return "wi-day-sunny";
     }
-    const c = conditions.toLowerCase();
-    if (c.includes("sun") || c.includes("clear")) return "wi-day-sunny";
-    if (c.includes("rain")) return "wi-rain";
-    if (c.includes("snow")) return "wi-snow";
-    if (c.includes("cloud")) return "wi-cloudy";
-    if (c.includes("storm")) return "wi-thunderstorm";
-    return "wi-na";
+  }
+
+  function getWeatherLabel(weather: Weather | null): string {
+    if (!weather) return "Clear";
+    if (weather.snow) return `Snow (${weather.snow})`;
+    if (weather.rain) return `Rain (${weather.rain})`;
+    if (weather.fog) return `Fog (${weather.fog})`;
+    switch (weather.cloud) {
+      case "OVC": return "Overcast";
+      case "BKN": return "Broken clouds";
+      case "SCT": return "Scattered clouds";
+      case "FEW": return "Few clouds";
+      case "CLR":
+      case "SKC": return "Clear";
+      default:    return "Clear";
+    }
   }
 
   return (
@@ -109,10 +127,9 @@ function WeatherWidget({ icao }: WeatherProps) {
                   <Typography sx={icaoRowStyling}>
                     <strong> Conditions: </strong>{" "}
                     <i
-                      className={`wi ${getWeatherIconClass(metarData.conditions)}`}
+                      className={`wi ${getWeatherIconClass(metarData.weather)}`}
                     ></i>
-                    <i className={"wi-cloudy"}></i>
-                    {metarData.conditions ?? "-"}
+                    {getWeatherLabel(metarData.weather)}
                   </Typography>
                 </Stack>
               </Box>
