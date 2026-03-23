@@ -1,7 +1,9 @@
 export type FlightData = {
   flightId: string;
   departureAirportIcao: string;
+  departureAirportSwedish: string;
   arrivalAirportIcao: string;
+  arrivalAirportSwedish: string;
   locationAndStatus: {
     terminal: string;
     gate: string;

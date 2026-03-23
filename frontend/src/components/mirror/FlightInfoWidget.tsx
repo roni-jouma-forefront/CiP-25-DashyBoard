@@ -1,7 +1,5 @@
 import { Stack, Typography, Box } from "@mui/material";
-import { useEffect, useState } from "react";
 import { useFlightInfo } from "../../hooks";
-import { GetAirportNameByIcao } from "../../services/GetAirportNameByIcao";
 
 interface FlightProps {
   airport: string;
@@ -17,10 +15,6 @@ const flightRowStyling = {
 };
 
 function FlightInfoWidget({ airport, flight }: FlightProps) {
-  const [arrivalAirportName, setArrivalAirportName] = useState<string | null>(
-    null,
-  );
-
   const {
     data: flightData,
     error,
@@ -28,15 +22,6 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
   } = useFlightInfo({ airport, flight });
 
   console.log("Hämtad flygdata, ", flightData);
-
-  useEffect(() => {
-    const icao = flightData?.arrivalAirportIcao;
-    if (!icao) return;
-
-    GetAirportNameByIcao(icao).then((name) => {
-      setArrivalAirportName(name);
-    });
-  }, [flightData]);
 
   if (error) return <p>Error: {error.message}</p>;
   if (isLoading) return <p>Loading flight info...</p>;
@@ -79,9 +64,9 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
             >
               {" "}
               <strong>
-                <span>Arlanda</span>
+                <span>{flightData.departureAirportSwedish ?? "-"}</span>
                 <span> → </span>
-                <span>{arrivalAirportName}</span>
+                <span>{flightData.arrivalAirportSwedish ?? "-"}</span>
               </strong>
             </Typography>
 
