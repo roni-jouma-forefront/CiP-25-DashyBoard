@@ -1,9 +1,7 @@
 import { Box } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useDrop } from "react-dnd";
+import { theme } from "../../theme/index.ts";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
 import Watch from "../base/watch";
@@ -28,56 +26,56 @@ function MirrorDashboard() {
     <>
       <Box
         sx={{
-          flexGrow: 1,
+          position: "relative",
+          width: "100%",
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        <AppBar
-          position="fixed"
+        <Box
           sx={{
-            background: "rgb(0, 45, 135))",
-            top: 0,
-            left: 0,
-            right: 0,
-            display: "flex",
-            justifyContent: "row",
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            maxWidth: "100%",
+            padding: 0,
           }}
         >
-          <Toolbar>
-            <Typography variant="h6" component="div">
-              Room 123
-            </Typography>
-          </Toolbar>
-        </AppBar>
-      </Box>
-
-      <Box
-        ref={drop as unknown as React.RefObject<HTMLDivElement>}
-        sx={{
-          borderImage: "linear-gradient(45deg, #f06, #09f) 1",
-          paddingRight: { xs: "1rem", sm: "3rem", md: "10rem" },
-          backgroundColor: isOver ? "rgba(0,0,0,0.1)" : "transparent",
-          display: "flex",
-          alignContent: "flex-start",
-        }}
-      >
-        {order.map((id) => {
-          if (id === 1)
-            return (
-              <DraggableWrapper key={1} id={1}>
-                <Watch
-                  key={1}
-                  location="Stockholm"
-                  timeZone="Europe/Stockholm"
-                />
-              </DraggableWrapper>
-            );
-          if (id === 2)
-            return (
-              <DraggableWrapper key={2} id={2}>
-                <WeatherWidget icao="ESSA"/>
-              </DraggableWrapper>
-            );
-        })}
+          <Box
+            ref={drop as unknown as React.RefObject<HTMLDivElement>}
+            sx={{
+              border: `25px solid ${theme.palette.topbar.background}`,
+              boxShadow: `inset 0 0 0 4px ${theme.palette.secondary.dark}`,
+              outelineOffset: "-24px",
+              paddingRight: { xs: "1rem", sm: "3rem", md: "10rem" },
+              backgroundColor: isOver ? "rgba(0,0,0,0.1)" : "transparent",
+              display: "flex",
+              flexWrap: "wrap",
+              alignContent: "flex-start",
+              paddingBottom: { xs: "10rem", sm: "20rem", md: "30rem" },
+            }}
+          >
+            {order.map((id) => {
+              if (id === 1)
+                return (
+                  <DraggableWrapper key={1} id={1}>
+                    <Watch
+                      key={1}
+                      location="Stockholm"
+                      timeZone="Europe/Stockholm"
+                    />
+                  </DraggableWrapper>
+                );
+              if (id === 2)
+                return (
+                  <DraggableWrapper key={2} id={2}>
+                    <WeatherWidget icao="ESSA" />
+                  </DraggableWrapper>
+                );
+            })}
+          </Box>
+        </Box>
       </Box>
     </>
   );
