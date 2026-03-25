@@ -1,9 +1,7 @@
 import { Box } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useDrop } from "react-dnd";
+import { theme } from "../../theme/index.ts";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
 import Watch from "../base/watch";
@@ -28,11 +26,14 @@ function MirrorDashboard() {
     <>
       <Box
         sx={{
-          flexGrow: 1,
+          position: "relative",
+          width: "100%",
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        <AppBar
-          position="fixed"
+        <Box
           sx={{
             position: "relative",
             width: "100%",
@@ -69,12 +70,6 @@ function MirrorDashboard() {
               if (id === 2)
                 return (
                   <DraggableWrapper key={2} id={2}>
-                    <WeatherWidget icao="ESSA" />
-                  </DraggableWrapper>
-                );
-              if (id === 3)
-                return (
-                  <DraggableWrapper key={3} id={3}>
                     <WeatherWidget icao="ESSA" />
                   </DraggableWrapper>
                 );
