@@ -77,8 +77,10 @@ function MirrorDashboard() {
                 );
             })}
           </Box>
-          <ArrivalsWidget />
-          <DeparturesWidget />
+          <div>
+            <ArrivalsWidget />
+            <DeparturesWidget />
+          </div>
         </Box>
       </Box>
     </>
