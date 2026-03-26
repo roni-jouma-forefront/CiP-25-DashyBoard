@@ -6,7 +6,7 @@ import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
 import Watch from "../base/watch";
 import ArrivalFlightsWidget from "./ArrivalFlightsWidget.tsx";
-import DeparturesFlightsWidget from "./DepartureFlightsWidget.tsx";
+import DepartureFlightsWidget from "./DepartureFlightsWidget.tsx";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2]);
@@ -49,7 +49,7 @@ function MirrorDashboard() {
             sx={{
               border: `25px solid ${theme.palette.topbar.background}`,
               boxShadow: `inset 0 0 0 4px ${theme.palette.secondary.dark}`,
-              outelineOffset: "-24px",
+              outlineOffset: "-24px",
               paddingRight: { xs: "1rem", sm: "3rem", md: "10rem" },
               backgroundColor: isOver ? "rgba(0,0,0,0.1)" : "transparent",
               display: "flex",
@@ -77,10 +77,8 @@ function MirrorDashboard() {
                 );
             })}
           </Box>
-          <div>
-            <ArrivalFlightsWidget />
-            <DeparturesFlightsWidget />
-          </div>
+          <ArrivalFlightsWidget />
+          <DepartureFlightsWidget />
         </Box>
       </Box>
     </>
