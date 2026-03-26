@@ -5,6 +5,7 @@ import { theme } from "../../theme/index.ts";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
 import Watch from "../base/watch";
+import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2]);
@@ -74,6 +75,7 @@ function MirrorDashboard() {
                   </DraggableWrapper>
                 );
             })}
+            <DeparturesWidget />
           </Box>
         </Box>
       </Box>
