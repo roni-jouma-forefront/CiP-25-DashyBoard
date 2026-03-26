@@ -69,10 +69,13 @@ export default function ArrivalsWidget() {
         backgroundImage: "url(/images/arrivals.jpg)",
         backgroundSize: "cover",
         opacity: 0.9,
-        width: 340,
-        borderRadius: 3,
-        p: 2,
+        width: 250,
         color: "#000000",
+        position: "relative",
+        p: 2,
+        m: 2,
+        borderRadius: 2,
+        boxShadow: 1,
       }}
     >
       <Box sx={{ mb: 2 }}>
