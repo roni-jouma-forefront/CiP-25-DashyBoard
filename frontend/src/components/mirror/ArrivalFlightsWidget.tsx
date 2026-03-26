@@ -121,7 +121,7 @@ export default function ArrivalsWidget() {
 
                 <Box sx={{ textAlign: "right" }}>
                   <Typography sx={{ fontSize: "0.8rem" }}>
-                    {arrival.arrivalTime?.estimatedUtc ?? "-"}
+                    {formatTime(arrival.arrivalTime?.scheduledUtc) ?? "-"}
                   </Typography>
                   <Typography
                     sx={{
