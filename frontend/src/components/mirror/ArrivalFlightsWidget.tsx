@@ -1,6 +1,6 @@
 // import { useState, useEffect } from "react";
 import { Box, Typography, Paper, Stack, Chip } from "@mui/material";
-import { useDepartureFlights } from "../../hooks";
+import { useArrivalFlights } from "../../hooks";
 
 const STATUS = {
   LANDED: { label: "Landed", color: "success" },
@@ -46,36 +46,33 @@ function getStatus(statusText: string) {
   return STATUS.ON_TIME;
 }
 
-export default function departuresWidget() {
+export default function ArrivalsWidget() {
   const today = new Date().toLocaleDateString("en-GB", {
     month: "long",
     day: "numeric",
   });
 
   const {
-    data: departures = [],
+    data: arrivals = [],
     error,
     isLoading,
-  } = useDepartureFlights({
+  } = useArrivalFlights({
     airport: "ARN",
   });
 
   if (error) return <p>Error: {error.message}</p>;
-  if (isLoading) return <p>Loading departures info...</p>;
+  if (isLoading) return <p>Loading arrivals info...</p>;
 
   return (
     <Box
       sx={{
-        backgroundImage: "url(/images/departures.jpg)",
+        backgroundImage: "url(/images/arrivals.jpg)",
         backgroundSize: "cover",
         opacity: 0.9,
-        width: 250,
-        color: "#000000",
-        position: "relative",
+        width: 340,
+        borderRadius: 3,
         p: 2,
-        m: 2,
-        borderRadius: 2,
-        boxShadow: 1,
+        color: "#000000",
       }}
     >
       <Box sx={{ mb: 2 }}>
@@ -87,13 +84,17 @@ export default function departuresWidget() {
           }}
         >
           <Typography sx={{ fontSize: "1.4rem", fontWeight: 700 }}>
-            Departures
+            Arrivals
           </Typography>
           <Typography sx={{ fontWeight: 700 }}>{today}</Typography>
         </Box>
+
+        <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
+          <Typography sx={{ fontSize: "0.8rem" }}>Stockholm Arlanda</Typography>
+        </Box>
       </Box>
       <Stack spacing={1.2}>
-        {departures.slice(0, 5).map((arrival) => {
+        {arrivals.slice(0, 5).map((arrival) => {
           const status = getStatus(
             arrival.locationAndStatus.flightLegStatusEnglish,
           );
@@ -120,7 +121,7 @@ export default function departuresWidget() {
 
                 <Box sx={{ textAlign: "right" }}>
                   <Typography sx={{ fontSize: "0.8rem" }}>
-                    {formatTime(arrival.departureTime.scheduledUtc) ?? "-"}
+                    {arrival.arrivalTime?.estimatedUtc ?? "-"}
                   </Typography>
                   <Typography
                     sx={{

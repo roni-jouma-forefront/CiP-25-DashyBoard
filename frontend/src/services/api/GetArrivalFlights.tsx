@@ -1,4 +1,4 @@
-export type DepartureData = {
+export type ArrivalsData = {
   flightId: string;
   departureAirportIcao: string;
   departureAirportSwedish: string;
@@ -9,17 +9,18 @@ export type DepartureData = {
     gate: string | null;
     flightLegStatusEnglish: string;
   };
-  departureTime: {
+  arrivalTime: {
     estimatedUtc: string | null;
     scheduledUtc: string;
   };
+  departureTime: string | null;
 };
 
 export async function GetArrivalFlights(
   airport: string,
-): Promise<DepartureData[]> {
+): Promise<ArrivalsData[]> {
   const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
-  console.log("Fetching departures");
+  console.log("Fetching arrivals");
   const today = new Date().toISOString().split("T")[0];
 
   const res = await fetch(
@@ -31,12 +32,12 @@ export async function GetArrivalFlights(
   );
 
   if (!res.ok) {
-    throw new Error(`Cound't get info for departure flights`);
+    throw new Error(`Cound't get info for arrival flights`);
   }
 
   const json = await res.json();
-  const deaprturesFiltered = (json as DepartureData[]).filter(
+  const arrivalsFiltered = (json as ArrivalsData[]).filter(
     (flight) => flight.locationAndStatus.flightLegStatusEnglish !== "Deleted",
   );
-  return deaprturesFiltered;
+  return arrivalsFiltered;
 }

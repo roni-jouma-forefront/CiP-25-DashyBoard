@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetArrivalFlights, type DepartureData } from "../services/api/GetDepartureFlights";
+import { GetArrivalFlights, type ArrivalsData } from "../services/api/GetArrivalFlights";
 
-interface DepartureFlightsProps {
+interface ArrivalFlightsProps {
     airport?: string
 }
 
-export const useDepartureFlights = ({airport = "ARN"}: DepartureFlightsProps = {}) => {
-    return useQuery<DepartureData[]>({
+export const useArrivalFlights = ({airport = "ARN"}: ArrivalFlightsProps = {}) => {
+    return useQuery<ArrivalsData[]>({
     queryKey: ["arrivals", airport],
     queryFn: () => GetArrivalFlights(airport),
     enabled: Boolean(airport),
