@@ -75,10 +75,13 @@ export default function ArrivalsWidget() {
         backgroundImage: "url(/images/arrivals.jpg)",
         backgroundSize: "cover",
         opacity: 0.9,
-        width: 340,
-        borderRadius: 3,
-        p: 2,
+        width: 250,
         color: "#000000",
+        position: "relative",
+        p: 2,
+        m: 2,
+        borderRadius: 2,
+        boxShadow: 1,
       }}
     >
       <Box sx={{ mb: 2 }}>
@@ -93,10 +96,6 @@ export default function ArrivalsWidget() {
             Arrivals
           </Typography>
           <Typography sx={{ fontWeight: 700 }}>{today}</Typography>
-        </Box>
-
-        <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
-          <Typography sx={{ fontSize: "0.8rem" }}>Stockholm Arlanda</Typography>
         </Box>
       </Box>
       <Stack spacing={1.2}>

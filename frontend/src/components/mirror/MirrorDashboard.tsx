@@ -10,7 +10,7 @@ import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
 import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 
 function MirrorDashboard() {
-  const [order, setOrder] = useState([1, 2, 3]);
+  const [order, setOrder] = useState([1, 2, 3, 4, 5]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -50,7 +50,7 @@ function MirrorDashboard() {
             sx={{
               border: `25px solid ${theme.palette.topbar.background}`,
               boxShadow: `inset 0 0 0 4px ${theme.palette.secondary.dark}`,
-              outelineOffset: "-24px",
+              outlineOffset: "-24px",
               paddingRight: { xs: "1rem", sm: "3rem", md: "10rem" },
               backgroundColor: isOver ? "rgba(0,0,0,0.1)" : "transparent",
               display: "flex",
@@ -82,10 +82,20 @@ function MirrorDashboard() {
                     <FlightInfo airport="ARN" flight="OS966" />
                   </DraggableWrapper>
                 );
+              if (id === 4)
+                return (
+                  <DraggableWrapper key={4} id={4}>
+                    <ArrivalsWidget />
+                  </DraggableWrapper>
+                );
+              if (id === 5)
+                return (
+                  <DraggableWrapper key={5} id={5}>
+                    <DeparturesWidget />
+                  </DraggableWrapper>
+                );
             })}
           </Box>
-          <ArrivalsWidget />
-          <DeparturesWidget />
         </Box>
       </Box>
     </>
