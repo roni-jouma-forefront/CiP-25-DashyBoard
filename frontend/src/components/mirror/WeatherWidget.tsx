@@ -27,11 +27,16 @@ function WeatherWidget({ icao }: WeatherProps) {
     if (weather.rain) return "wi-rain";
     if (weather.fog) return "wi-fog";
     switch (weather.cloud) {
-      case "OVC": return "wi-cloudy";
-      case "BKN": return "wi-cloudy";
-      case "SCT": return "wi-day-cloudy";
-      case "FEW": return "wi-day-cloudy";
-      default:    return "wi-day-sunny";
+      case "OVC":
+        return "wi-cloudy";
+      case "BKN":
+        return "wi-cloudy";
+      case "SCT":
+        return "wi-day-cloudy";
+      case "FEW":
+        return "wi-day-cloudy";
+      default:
+        return "wi-day-sunny";
     }
   }
 
@@ -41,13 +46,19 @@ function WeatherWidget({ icao }: WeatherProps) {
     if (weather.rain) return `Rain (${weather.rain})`;
     if (weather.fog) return `Fog (${weather.fog})`;
     switch (weather.cloud) {
-      case "OVC": return "Overcast";
-      case "BKN": return "Broken clouds";
-      case "SCT": return "Scattered clouds";
-      case "FEW": return "Few clouds";
+      case "OVC":
+        return "Overcast";
+      case "BKN":
+        return "Broken clouds";
+      case "SCT":
+        return "Scattered clouds";
+      case "FEW":
+        return "Few clouds";
       case "CLR":
-      case "SKC": return "Clear";
-      default:    return "Clear";
+      case "SKC":
+        return "Clear";
+      default:
+        return "Clear";
     }
   }
 
@@ -74,12 +85,23 @@ function WeatherWidget({ icao }: WeatherProps) {
         />
 
         <Box sx={{ position: "relative" }}>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: "bold", marginBottom: "10px" }}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            Weather
-          </Typography>
+            <Typography
+              sx={{
+                fontSize: "1.4rem",
+                fontWeight: 700,
+                mb: 1,
+              }}
+            >
+              Weather
+            </Typography>
+          </Box>
 
           {!metarData ? (
             <Typography>Loading weather...</Typography>

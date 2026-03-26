@@ -5,9 +5,11 @@ import { theme } from "../../theme/index.ts";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
 import Watch from "../base/watch";
+import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
+import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 
 function MirrorDashboard() {
-  const [order, setOrder] = useState([1, 2]);
+  const [order, setOrder] = useState([1, 2, 4]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -75,6 +77,8 @@ function MirrorDashboard() {
                 );
             })}
           </Box>
+          <ArrivalsWidget />
+          <DeparturesWidget />
         </Box>
       </Box>
     </>
