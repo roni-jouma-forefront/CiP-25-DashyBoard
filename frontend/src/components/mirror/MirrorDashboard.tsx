@@ -6,6 +6,8 @@ import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
 import Watch from "../base/watch";
 import FlightInfo from "./FlightInfoWidget";
+import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
+import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3]);
@@ -76,10 +78,10 @@ function MirrorDashboard() {
                 );
               if (id === 3)
                 return (
-              <DraggableWrapper key={3} id={3}>
-                <FlightInfo airport="ARN" flight="OS966" />
-              </DraggableWrapper>
-            );
+                  <DraggableWrapper key={3} id={3}>
+                    <FlightInfo airport="ARN" flight="OS966" />
+                  </DraggableWrapper>
+                );
             })}
           </Box>
           <ArrivalsWidget />
