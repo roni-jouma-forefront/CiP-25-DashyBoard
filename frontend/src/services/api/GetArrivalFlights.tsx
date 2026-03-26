@@ -24,7 +24,7 @@ export async function GetArrivalFlights(
   const today = new Date().toISOString().split("T")[0];
 
   const res = await fetch(
-    `${apiUrl}/api/Departure/airport/${airport}/${today}`,
+    `${apiUrl}/api/Arrivals/airport/${airport}/${today}`,
 
     {
       headers: { "Content-Type": "application/json" },
@@ -32,7 +32,7 @@ export async function GetArrivalFlights(
   );
 
   if (!res.ok) {
-    throw new Error(`Cound't get info for arrival flights`);
+    throw new Error(`Couldn't get info for arrival flights`);
   }
 
   const json = await res.json();
