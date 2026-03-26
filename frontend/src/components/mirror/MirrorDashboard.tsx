@@ -9,7 +9,7 @@ import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
 import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 
 function MirrorDashboard() {
-  const [order, setOrder] = useState([1, 2, 4]);
+  const [order, setOrder] = useState([1, 2]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
