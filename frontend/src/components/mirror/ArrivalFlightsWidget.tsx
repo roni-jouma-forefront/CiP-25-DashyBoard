@@ -2,7 +2,9 @@
 import { Box, Typography, Paper, Stack, Chip } from "@mui/material";
 import { useArrivalFlights } from "../../hooks";
 
-const STATUS = {
+type ChipColor = "success" | "info" | "warning" | "primary";
+
+const STATUS: Record<string, { label: string; color: ChipColor }> = {
   LANDED: { label: "Landed", color: "success" },
   ON_TIME: { label: "On Time", color: "info" },
   DELAYED: { label: "Delayed", color: "warning" },
@@ -139,7 +141,7 @@ export default function ArrivalsWidget() {
                 <Chip
                   size="small"
                   label={arrival.locationAndStatus.flightLegStatusEnglish}
-                  color={status.color as any}
+                  color={status.color}
                   sx={{ fontSize: "0.65rem", height: 20 }}
                 />
               </Box>
