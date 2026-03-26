@@ -7,7 +7,7 @@ interface DepartureFlightsProps {
 
 export const useDepartureFlights = ({airport = "ARN"}: DepartureFlightsProps = {}) => {
     return useQuery<DepartureData[]>({
-    queryKey: ["arrivals", airport],
+    queryKey: ["departures", airport],
     queryFn: () => GetDepartureFlights(airport),
     enabled: Boolean(airport),
     staleTime: 5*60*1000,

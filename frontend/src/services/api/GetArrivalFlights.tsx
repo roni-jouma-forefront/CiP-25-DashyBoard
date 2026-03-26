@@ -39,5 +39,6 @@ export async function GetArrivalFlights(
   const arrivalsFiltered = (json as ArrivalsData[]).filter(
     (flight) => flight.locationAndStatus.flightLegStatusEnglish !== "Deleted",
   );
+  console.log("arrivals ", arrivalsFiltered);
   return arrivalsFiltered;
 }

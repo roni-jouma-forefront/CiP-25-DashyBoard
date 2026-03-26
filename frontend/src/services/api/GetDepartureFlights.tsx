@@ -11,7 +11,7 @@ export type DepartureData = {
   };
   departureTime: {
     estimatedUtc: string | null;
-    scheduledUtc: string;
+    scheduledUtc: string | null;
   };
 };
 
@@ -35,8 +35,9 @@ export async function GetDepartureFlights(
   }
 
   const json = await res.json();
-  const deaprturesFiltered = (json as DepartureData[]).filter(
+  const departuresFiltered = (json as DepartureData[]).filter(
     (flight) => flight.locationAndStatus.flightLegStatusEnglish !== "Deleted",
   );
-  return deaprturesFiltered;
+  console.log("DEPART ", departuresFiltered);
+  return departuresFiltered;
 }

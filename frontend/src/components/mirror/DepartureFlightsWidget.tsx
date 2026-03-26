@@ -93,13 +93,13 @@ export default function departuresWidget() {
         </Box>
       </Box>
       <Stack spacing={1.2}>
-        {departures.slice(0, 5).map((departure) => {
+        {departures.slice(0, 5).map((arrival) => {
           const status = getStatus(
-            departure.locationAndStatus.flightLegStatusEnglish,
+            arrival.locationAndStatus.flightLegStatusEnglish,
           );
           return (
             <Paper
-              key={departure.flightId}
+              key={arrival.flightId}
               sx={{
                 p: 1.2,
                 borderRadius: 2,
@@ -110,17 +110,17 @@ export default function departuresWidget() {
               <Stack direction="row" justifyContent="space-between">
                 <Box>
                   <Typography sx={{ fontWeight: 700, fontSize: "0.9rem" }}>
-                    {departure.flightId}
+                    {arrival.flightId}
                   </Typography>
                   <Typography sx={{ fontSize: "0.75rem", color: "#555" }}>
-                    {departure.departureAirportSwedish} to{" "}
-                    {departure.departureAirportSwedish}
+                    {arrival.departureAirportSwedish} to{" "}
+                    {arrival.arrivalAirportSwedish}
                   </Typography>
                 </Box>
 
                 <Box sx={{ textAlign: "right" }}>
                   <Typography sx={{ fontSize: "0.8rem" }}>
-                    {formatTime(departure.departureTime?.scheduledUtc) ?? "-"}
+                    {formatTime(arrival.departureTime?.scheduledUtc) ?? "-"}
                   </Typography>
                   <Typography
                     sx={{
@@ -129,7 +129,7 @@ export default function departuresWidget() {
                       color: "#3b82f6",
                     }}
                   >
-                    {departure.locationAndStatus.terminal ?? "-"}
+                    {arrival.locationAndStatus.terminal ?? "-"}
                   </Typography>
                 </Box>
               </Stack>
@@ -137,7 +137,7 @@ export default function departuresWidget() {
               <Box sx={{ mt: 0.5 }}>
                 <Chip
                   size="small"
-                  label={departure.locationAndStatus.flightLegStatusEnglish}
+                  label={arrival.locationAndStatus.flightLegStatusEnglish}
                   color={status.color as any}
                   sx={{ fontSize: "0.65rem", height: 20 }}
                 />
