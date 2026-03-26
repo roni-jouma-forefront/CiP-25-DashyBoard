@@ -30,7 +30,6 @@ export async function GetArrivalFlights(
 
   const res = await fetch(
     `${apiUrl}/api/Arrivals/airport/${airport}/${today}`,
-
     {
       headers: { "Content-Type": "application/json" },
     },
@@ -44,6 +43,5 @@ export async function GetArrivalFlights(
   const arrivalsFiltered = (json as ArrivalsData[]).filter(
     (flight) => flight.locationAndStatus?.flightLegStatusEnglish !== "Deleted",
   );
-  console.log("arrivals ", arrivalsFiltered);
   return arrivalsFiltered;
 }

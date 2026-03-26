@@ -13,6 +13,7 @@ const icaoRowStyling = {
   backgroundColor: "white",
   p: 2,
   borderRadius: 2,
+  opacity: 0.9,
 };
 
 function WeatherWidget({ icao }: WeatherProps) {
