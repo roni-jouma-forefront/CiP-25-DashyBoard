@@ -7,11 +7,11 @@ export type ArrivalsData = {
   locationAndStatus: {
     terminal: string | null;
     gate: string | null;
-    flightLegStatusEnglish: string;
+    flightLegStatusEnglish: string | null;
   };
   arrivalTime: {
     estimatedUtc: string | null;
-    scheduledUtc: string;
+    scheduledUtc: string | null;
   };
   departureTime: string | null;
 };
@@ -21,7 +21,12 @@ export async function GetArrivalFlights(
 ): Promise<ArrivalsData[]> {
   const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
   console.log("Fetching arrivals");
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("sv-SE", {
+    timeZone: "Europe/Stockholm",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
 
   const res = await fetch(
     `${apiUrl}/api/Arrivals/airport/${airport}/${today}`,
@@ -37,7 +42,7 @@ export async function GetArrivalFlights(
 
   const json = await res.json();
   const arrivalsFiltered = (json as ArrivalsData[]).filter(
-    (flight) => flight.locationAndStatus.flightLegStatusEnglish !== "Deleted",
+    (flight) => flight.locationAndStatus?.flightLegStatusEnglish !== "Deleted",
   );
   console.log("arrivals ", arrivalsFiltered);
   return arrivalsFiltered;

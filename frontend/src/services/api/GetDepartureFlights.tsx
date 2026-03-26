@@ -36,7 +36,7 @@ export async function GetDepartureFlights(
 
   const json = await res.json();
   const departuresFiltered = (json as DepartureData[]).filter(
-    (flight) => flight.locationAndStatus.flightLegStatusEnglish !== "Deleted",
+    (flight) => flight.locationAndStatus?.flightLegStatusEnglish !== "Deleted",
   );
   console.log("DEPART ", departuresFiltered);
   return departuresFiltered;

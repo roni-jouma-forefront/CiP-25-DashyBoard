@@ -37,7 +37,11 @@ function formatTime(utc: string | null | undefined) {
   });
 }
 
-function getStatus(statusText: string) {
+function getStatus(statusText: string | null | undefined) {
+  if (!statusText) {
+    return STATUS.ON_TIME;
+  }
+
   const normalized = statusText.toLowerCase();
 
   if (normalized.includes("on time")) return STATUS.ON_TIME;
@@ -97,9 +101,9 @@ export default function ArrivalsWidget() {
       </Box>
       <Stack spacing={1.2}>
         {arrivals.slice(0, 5).map((arrival) => {
-          const status = getStatus(
-            arrival.locationAndStatus.flightLegStatusEnglish,
-          );
+          const statusText =
+            arrival.locationAndStatus?.flightLegStatusEnglish ?? "Unknown";
+          const status = getStatus(statusText);
           return (
             <Paper
               key={arrival.flightId}
@@ -132,7 +136,7 @@ export default function ArrivalsWidget() {
                       color: "#3b82f6",
                     }}
                   >
-                    {arrival.locationAndStatus.terminal ?? "-"}
+                    {arrival.locationAndStatus?.terminal ?? "-"}
                   </Typography>
                 </Box>
               </Stack>
@@ -140,7 +144,7 @@ export default function ArrivalsWidget() {
               <Box sx={{ mt: 0.5 }}>
                 <Chip
                   size="small"
-                  label={arrival.locationAndStatus.flightLegStatusEnglish}
+                  label={statusText}
                   color={status.color}
                   sx={{ fontSize: "0.65rem", height: 20 }}
                 />
