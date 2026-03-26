@@ -1,3 +1,3 @@
 export { useWeather } from "./useWeather";
 
-export { useArrivalFlights } from "./useArrivalFlights"
+export { useDepartureFlights } from "./useDepartureFlights"

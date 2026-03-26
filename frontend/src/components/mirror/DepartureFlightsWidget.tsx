@@ -1,6 +1,6 @@
 // import { useState, useEffect } from "react";
 import { Box, Typography, Paper, Stack, Chip } from "@mui/material";
-import { useArrivalFlights } from "../../hooks";
+import { useDepartureFlights } from "../../hooks";
 
 const STATUS = {
   LANDED: { label: "Landed", color: "success" },
@@ -46,27 +46,27 @@ function getStatus(statusText: string) {
   return STATUS.ON_TIME;
 }
 
-export default function ArrivalsWidget() {
+export default function departuresWidget() {
   const today = new Date().toLocaleDateString("en-GB", {
     month: "long",
     day: "numeric",
   });
 
   const {
-    data: arrivals = [],
+    data: departures = [],
     error,
     isLoading,
-  } = useArrivalFlights({
+  } = useDepartureFlights({
     airport: "ARN",
   });
 
   if (error) return <p>Error: {error.message}</p>;
-  if (isLoading) return <p>Loading arrivals info...</p>;
+  if (isLoading) return <p>Loading departures info...</p>;
 
   return (
     <Box
       sx={{
-        backgroundImage: "url(/images/arrivals.jpg)",
+        backgroundImage: "url(/images/departures.jpg)",
         backgroundSize: "cover",
         opacity: 0.9,
         width: 250,
@@ -87,17 +87,13 @@ export default function ArrivalsWidget() {
           }}
         >
           <Typography sx={{ fontSize: "1.4rem", fontWeight: 700 }}>
-            Arrivals
+            Departures
           </Typography>
           <Typography sx={{ fontWeight: 700 }}>{today}</Typography>
         </Box>
-
-        <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
-          <Typography sx={{ fontSize: "0.8rem" }}>Stockholm Arlanda</Typography>
-        </Box>
       </Box>
       <Stack spacing={1.2}>
-        {arrivals.slice(0, 5).map((arrival) => {
+        {departures.slice(0, 5).map((arrival) => {
           const status = getStatus(
             arrival.locationAndStatus.flightLegStatusEnglish,
           );
@@ -117,13 +113,14 @@ export default function ArrivalsWidget() {
                     {arrival.flightId}
                   </Typography>
                   <Typography sx={{ fontSize: "0.75rem", color: "#555" }}>
-                    From {arrival.departureAirportSwedish}
+                    {arrival.departureAirportSwedish} to{" "}
+                    {arrival.arrivalAirportSwedish}
                   </Typography>
                 </Box>
 
                 <Box sx={{ textAlign: "right" }}>
                   <Typography sx={{ fontSize: "0.8rem" }}>
-                    {formatTime(arrival.arrivalTime.scheduledUtc) ?? "-"}
+                    {formatTime(arrival.departureTime.scheduledUtc) ?? "-"}
                   </Typography>
                   <Typography
                     sx={{
