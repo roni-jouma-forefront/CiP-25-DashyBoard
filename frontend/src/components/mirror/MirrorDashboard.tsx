@@ -5,9 +5,12 @@ import { theme } from "../../theme/index.ts";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
 import Watch from "../base/watch";
+import FlightInfo from "./FlightInfoWidget";
+import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
+import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 
 function MirrorDashboard() {
-  const [order, setOrder] = useState([1, 2]);
+  const [order, setOrder] = useState([1, 2, 3, 4, 5]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -71,6 +74,24 @@ function MirrorDashboard() {
                 return (
                   <DraggableWrapper key={2} id={2}>
                     <WeatherWidget icao="ESSA" />
+                  </DraggableWrapper>
+                );
+              if (id === 3)
+                return (
+                  <DraggableWrapper key={3} id={3}>
+                    <FlightInfo airport="ARN" flight="OS966" />
+                  </DraggableWrapper>
+                );
+              if (id === 4)
+                return (
+                  <DraggableWrapper key={4} id={4}>
+                    <ArrivalsWidget />
+                  </DraggableWrapper>
+                );
+              if (id === 5)
+                return (
+                  <DraggableWrapper key={5} id={5}>
+                    <DeparturesWidget />
                   </DraggableWrapper>
                 );
             })}
