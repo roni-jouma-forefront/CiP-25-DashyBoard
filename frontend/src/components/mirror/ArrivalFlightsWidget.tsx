@@ -67,7 +67,12 @@ export default function ArrivalsWidget() {
   });
 
   if (error) return <p>Error: {error.message}</p>;
-  if (isLoading) return <p>Loading arrivals info...</p>;
+  if (isLoading)
+    return (
+      <Typography sx={{ m: 3, opacity: 0.9 }}>
+        Loading arrivals info...
+      </Typography>
+    );
 
   return (
     <Box

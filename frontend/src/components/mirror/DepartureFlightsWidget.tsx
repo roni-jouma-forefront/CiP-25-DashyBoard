@@ -45,7 +45,12 @@ export default function DeparturesWidget() {
   });
 
   if (error) return <p>Error: {error.message}</p>;
-  if (isLoading) return <p>Loading departures info...</p>;
+  if (isLoading)
+    return (
+      <Typography sx={{ m: 3, opacity: 0.9 }}>
+        Loading departures info...
+      </Typography>
+    );
 
   return (
     <Box

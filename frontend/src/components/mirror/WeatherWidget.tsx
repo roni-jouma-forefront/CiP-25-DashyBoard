@@ -14,13 +14,19 @@ const icaoRowStyling = {
   p: 2,
   borderRadius: 2,
   opacity: 0.9,
+  fontSize: "0.9rem",
 };
 
 function WeatherWidget({ icao }: WeatherProps) {
   const { data: metarData, error, isLoading } = useWeather({ icao });
 
-  if (error) return <p>Error: {error.message}</p>;
-  if (isLoading) return <p>Loading weather info...</p>;
+  // if (error) return <Typography>Error: {error.message}</Typography>;
+  // if (isLoading)
+  //   return (
+  //     <Typography sx={{ m: 2, opacity: 0.9 }}>
+  //       Loading weather info...
+  //     </Typography>
+  //   );
 
   function getWeatherIconClass(weather: Weather | null): string {
     if (!weather) return "wi-day-sunny";
@@ -97,7 +103,7 @@ function WeatherWidget({ icao }: WeatherProps) {
               sx={{
                 fontSize: "1.4rem",
                 fontWeight: 700,
-                mb: 1,
+                mb: 2,
               }}
             >
               Weather
@@ -105,7 +111,9 @@ function WeatherWidget({ icao }: WeatherProps) {
           </Box>
 
           {!metarData ? (
-            <Typography>Loading weather...</Typography>
+            <Typography sx={{ m: 3, opacity: 0.9 }}>
+              Loading weather...
+            </Typography>
           ) : (
             <>
               <Box>

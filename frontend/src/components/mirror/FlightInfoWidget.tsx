@@ -12,6 +12,8 @@ const flightRowStyling = {
   backgroundColor: "white",
   p: 2,
   borderRadius: 2,
+  opacity: 0.9,
+  fontSize: "0.9rem",
 };
 
 function FlightInfoWidget({ airport, flight }: FlightProps) {
@@ -21,10 +23,13 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
     isLoading,
   } = useFlightInfo({ airport, flight });
 
-  console.log("Hämtad flygdata, ", flightData);
-
-  if (error) return <p>Error: {error.message}</p>;
-  if (isLoading) return <p>Loading flight info...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
+  // if (isLoading)
+  //   return (
+  //     <Typography sx={{ m: 3, opacity: 0.9 }}>
+  //       Loading flight info...
+  //     </Typography>
+  //   );
 
   return (
     <Box
@@ -39,13 +44,17 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
         opacity: 0.9,
       }}
     >
-      <Typography
-        variant="h4"
-        sx={{ fontWeight: "bold", marginBottom: "10px", color: "#001e41" }}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
-        Flight Info
-      </Typography>
-
+        <Typography sx={{ fontSize: "1.4rem", fontWeight: 700, mb: 2 }}>
+          Flight info
+        </Typography>
+      </Box>
       {!flightData ? (
         <Typography>Loading flight info...</Typography>
       ) : (
