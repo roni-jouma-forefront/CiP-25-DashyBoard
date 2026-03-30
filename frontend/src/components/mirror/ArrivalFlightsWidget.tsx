@@ -66,7 +66,7 @@ export default function ArrivalsWidget() {
     airport: "ARN",
   });
 
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <Typography>Error: {error.message}</Typography>;
   if (isLoading)
     return (
       <Typography sx={{ m: 3, opacity: 0.9 }}>
@@ -100,7 +100,10 @@ export default function ArrivalsWidget() {
           <Typography sx={{ fontSize: "1.4rem", fontWeight: 700 }}>
             Arrivals
           </Typography>
-          <Typography sx={{ fontWeight: 700 }}>{today}</Typography>
+
+          <Typography sx={{ fontWeight: 600, fontSize: "0.9rem" }}>
+            {today}
+          </Typography>
         </Box>
       </Box>
       <Stack spacing={1.2}>

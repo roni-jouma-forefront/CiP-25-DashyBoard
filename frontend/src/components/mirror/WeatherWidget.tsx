@@ -12,6 +12,7 @@ const icaoRowStyling = {
   justifyContent: "space-between",
   backgroundColor: "white",
   p: 2,
+  gap: 4,
   borderRadius: 2,
   opacity: 0.9,
   fontSize: "0.9rem",
@@ -28,7 +29,9 @@ function WeatherWidget({ icao }: WeatherProps) {
   //     </Typography>
   //   );
 
-  function getWeatherIconClass(weather: Weather | null): string {
+  function getWeatherIconClass() {
+    const weather = metarData?.weather;
+
     if (!weather) return "wi-day-sunny";
     if (weather.snow) return "wi-snow";
     if (weather.rain) return "wi-rain";
@@ -47,7 +50,9 @@ function WeatherWidget({ icao }: WeatherProps) {
     }
   }
 
-  function getWeatherLabel(weather: Weather | null): string {
+  function getWeatherLabel() {
+    const weather = metarData?.weather;
+
     if (!weather) return "Clear";
     if (weather.snow) return `Snow (${weather.snow})`;
     if (weather.rain) return `Rain (${weather.rain})`;
@@ -68,6 +73,8 @@ function WeatherWidget({ icao }: WeatherProps) {
         return "Clear";
     }
   }
+
+  console.log("HÄR ÄR DATAN", metarData);
 
   return (
     <>
@@ -92,34 +99,32 @@ function WeatherWidget({ icao }: WeatherProps) {
         />
 
         <Box sx={{ position: "relative" }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "1.4rem",
-                fontWeight: 700,
-                mb: 2,
-              }}
-            >
-              Weather
-            </Typography>
-          </Box>
-
           {!metarData ? (
             <Typography sx={{ m: 3, opacity: 0.9 }}>
               Loading weather...
             </Typography>
           ) : (
             <>
-              <Box>
-                <Stack spacing={1} sx={{ borderRadius: 2 }}>
-                  <Typography sx={{ ...icaoRowStyling, gap: 2 }}>
-                    <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
+              <Box sx={{ mb: 2 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography sx={{ fontSize: "1.4rem", fontWeight: 700 }}>
+                    Weather
+                  </Typography>
+                </Box>
+                <Typography
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box sx={{ display: "flex", justifyContent: "start" }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                       <path
                         d="M12 22C12 22 20 14.5 20 9C20 5.13401 16.866 2 13 2H11C7.13401 2 4 5.13401 4 9C4 14.5 12 22 12 22Z"
                         stroke="black"
@@ -135,8 +140,17 @@ function WeatherWidget({ icao }: WeatherProps) {
                         strokeWidth="2"
                       />
                     </svg>{" "}
-                    {metarData.station?.name ?? "-"}
-                  </Typography>
+                    <Typography sx={{ ml: "0.2rem", fontSize: "0.9rem" }}>
+                      {metarData.station?.name ?? "-"}
+                    </Typography>
+                  </Box>
+                </Typography>
+                <i className={`wi ` + getWeatherIconClass()}></i>
+                <div>{getWeatherLabel()}</div>
+              </Box>
+
+              <Box>
+                <Stack spacing={1} sx={{ borderRadius: 2 }}>
                   <Typography sx={{ ...icaoRowStyling, gap: 2 }}>
                     <strong> Observed: </strong>{" "}
                     {metarData.observed?.slice(11, 16) ?? "-"} UTC
@@ -155,13 +169,13 @@ function WeatherWidget({ icao }: WeatherProps) {
                   <Typography sx={icaoRowStyling}>
                     <strong> Humidity: </strong> {metarData.humidity ?? "-"}%
                   </Typography>
-                  <Typography sx={icaoRowStyling}>
+                  {/* <Typography sx={icaoRowStyling}>
                     <strong> Conditions: </strong>{" "}
                     <i
                       className={`wi ${getWeatherIconClass(metarData.weather)}`}
                     ></i>
                     {getWeatherLabel(metarData.weather)}
-                  </Typography>
+                  </Typography> */}
                 </Stack>
               </Box>
             </>

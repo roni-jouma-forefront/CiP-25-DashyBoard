@@ -44,7 +44,7 @@ export default function DeparturesWidget() {
     airport: "ARN",
   });
 
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <Typography>Error: {error.message}</Typography>;
   if (isLoading)
     return (
       <Typography sx={{ m: 3, opacity: 0.9 }}>
