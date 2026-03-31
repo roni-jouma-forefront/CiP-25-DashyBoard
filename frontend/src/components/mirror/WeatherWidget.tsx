@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import { useWeather } from "../../hooks";
-import type { Weather } from "../../services/api/GetWeather";
 
 interface WeatherProps {
   icao: string;
@@ -10,12 +9,14 @@ interface WeatherProps {
 const icaoRowStyling = {
   display: "flex",
   justifyContent: "space-between",
-  backgroundColor: "white",
   p: 2,
   gap: 4,
   borderRadius: 2,
+  border: "2px solid grey",
   opacity: 0.9,
   fontSize: "0.9rem",
+  color: "white",
+  backgroundColor: "black",
 };
 
 function WeatherWidget({ icao }: WeatherProps) {
@@ -84,7 +85,10 @@ function WeatherWidget({ icao }: WeatherProps) {
           p: 2,
           m: 2,
           borderRadius: 2,
+          border: "5px solid white",
           boxShadow: 1,
+          color: "white",
+          backgroundColor: "black",
         }}
       >
         <Box
@@ -116,6 +120,10 @@ function WeatherWidget({ icao }: WeatherProps) {
                   <Typography sx={{ fontSize: "1.4rem", fontWeight: 700 }}>
                     Weather
                   </Typography>
+
+                  <Box>
+                    <i className={`icons wi ` + getWeatherIconClass()}></i>
+                  </Box>
                 </Box>
                 <Typography
                   sx={{
@@ -127,7 +135,7 @@ function WeatherWidget({ icao }: WeatherProps) {
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                       <path
                         d="M12 22C12 22 20 14.5 20 9C20 5.13401 16.866 2 13 2H11C7.13401 2 4 5.13401 4 9C4 14.5 12 22 12 22Z"
-                        stroke="black"
+                        stroke="white"
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -136,7 +144,7 @@ function WeatherWidget({ icao }: WeatherProps) {
                         cx="12"
                         cy="9"
                         r="3"
-                        stroke="black"
+                        stroke="white"
                         strokeWidth="2"
                       />
                     </svg>{" "}
@@ -145,8 +153,6 @@ function WeatherWidget({ icao }: WeatherProps) {
                     </Typography>
                   </Box>
                 </Typography>
-                <i className={`wi ` + getWeatherIconClass()}></i>
-                <div>{getWeatherLabel()}</div>
               </Box>
 
               <Box>
@@ -154,9 +160,6 @@ function WeatherWidget({ icao }: WeatherProps) {
                   <Typography sx={{ ...icaoRowStyling, gap: 2 }}>
                     <strong> Observed: </strong>{" "}
                     {metarData.observed?.slice(11, 16) ?? "-"} UTC
-                  </Typography>
-                  <Typography sx={icaoRowStyling}>
-                    <strong> Icao: </strong> {metarData.icao ?? "-"}
                   </Typography>
                   <Typography sx={icaoRowStyling}>
                     <strong> Wind: </strong> {metarData.windSpeedMps ?? "-"} m/s
@@ -168,6 +171,10 @@ function WeatherWidget({ icao }: WeatherProps) {
                   </Typography>
                   <Typography sx={icaoRowStyling}>
                     <strong> Humidity: </strong> {metarData.humidity ?? "-"}%
+                  </Typography>
+                  <Typography sx={icaoRowStyling}>
+                    <strong>Conditions: </strong>
+                    {getWeatherLabel()}
                   </Typography>
                   {/* <Typography sx={icaoRowStyling}>
                     <strong> Conditions: </strong>{" "}

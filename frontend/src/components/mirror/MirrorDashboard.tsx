@@ -43,6 +43,7 @@ function MirrorDashboard() {
             height: "100%",
             maxWidth: "100%",
             padding: 0,
+            backgroundColor: "grey",
           }}
         >
           <Box

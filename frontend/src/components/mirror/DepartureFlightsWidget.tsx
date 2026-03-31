@@ -122,15 +122,6 @@ export default function DeparturesWidget() {
                   </Typography>
                 </Box>
               </Stack>
-
-              <Box sx={{ mt: 0.5 }}>
-                <Chip
-                  size="small"
-                  label={statusText}
-                  color={status.color}
-                  sx={{ fontSize: "0.65rem", height: 20 }}
-                />
-              </Box>
             </Paper>
           );
         })}

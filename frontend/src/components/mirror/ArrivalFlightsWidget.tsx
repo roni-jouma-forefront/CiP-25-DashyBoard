@@ -11,23 +11,6 @@ const STATUS: Record<string, { label: string; color: ChipColor }> = {
   BOARDING: { label: "Boarding", color: "primary" },
 };
 
-// function Clock() {
-//   const [time, setTime] = useState(new Date());
-//   useEffect(() => {
-//     const t = setInterval(() => setTime(new Date()), 1000);
-//     return () => clearInterval(t);
-//   }, []);
-
-//   return (
-//     <Typography sx={{ fontSize: "0.75rem", opacity: 0.8 }}>
-//       {time.toLocaleTimeString("sv-SE", {
-//         hour: "2-digit",
-//         minute: "2-digit",
-//       })}
-//     </Typography>
-//   );
-// }
-
 function formatTime(utc: string | null | undefined) {
   if (!utc) return "-";
   return new Date(utc).toLocaleTimeString("sv-SE", {
@@ -147,15 +130,6 @@ export default function ArrivalsWidget() {
                   </Typography>
                 </Box>
               </Stack>
-
-              <Box sx={{ mt: 0.5 }}>
-                <Chip
-                  size="small"
-                  label={statusText}
-                  color={status.color}
-                  sx={{ fontSize: "0.65rem", height: 20 }}
-                />
-              </Box>
             </Paper>
           );
         })}
