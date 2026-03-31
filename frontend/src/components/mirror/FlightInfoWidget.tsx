@@ -9,11 +9,12 @@ interface FlightProps {
 const flightRowStyling = {
   display: "flex",
   justifyContent: "space-between",
-  backgroundColor: "white",
+  backgroundColor: "black",
   p: 2,
   borderRadius: 2,
   opacity: 0.9,
   fontSize: "0.9rem",
+  border: "2px solid grey",
 };
 
 function FlightInfoWidget({ airport, flight }: FlightProps) {
@@ -38,10 +39,10 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
         p: 2,
         m: 2,
         borderRadius: 2,
+        border: "5px solid white",
         boxShadow: 1,
-        backgroundImage: "url(/images/airportimg.jpg)",
-        backgroundSize: "cover",
-        opacity: 0.9,
+        color: "white",
+        backgroundColor: "black",
       }}
     >
       {!flightData ? (
