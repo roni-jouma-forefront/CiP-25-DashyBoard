@@ -43,14 +43,14 @@ function MirrorDashboard() {
             height: "100%",
             maxWidth: "100%",
             padding: 0,
-            backgroundColor: "grey",
+            backgroundColor: "black",
           }}
         >
           <Box
             ref={drop as unknown as React.RefObject<HTMLDivElement>}
             sx={{
-              border: `25px solid ${theme.palette.topbar.background}`,
-              boxShadow: `inset 0 0 0 4px ${theme.palette.secondary.dark}`,
+              border: `25px solid white`,
+              boxShadow: `inset 0 0 0 4px grey`,
               outlineOffset: "-24px",
               paddingRight: { xs: "1rem", sm: "3rem", md: "10rem" },
               backgroundColor: isOver ? "rgba(0,0,0,0.1)" : "transparent",

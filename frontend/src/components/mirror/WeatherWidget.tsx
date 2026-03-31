@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import { useWeather } from "../../hooks";
+import { widgetTheme } from "../../theme";
 
 interface WeatherProps {
   icao: string;
@@ -12,10 +13,10 @@ const icaoRowStyling = {
   p: 2,
   gap: 4,
   borderRadius: 2,
-  border: "2px solid grey",
+  border: `2px solid ${widgetTheme.palette.primary.main}`,
   opacity: 0.9,
   fontSize: "0.9rem",
-  color: "white",
+  color: `${widgetTheme.palette.primary.main}`,
   backgroundColor: "black",
 };
 
@@ -85,15 +86,21 @@ function WeatherWidget({ icao }: WeatherProps) {
           p: 2,
           m: 2,
           borderRadius: 2,
-          border: "5px solid white",
+          border: `5px solid ${widgetTheme.palette.primary.main}`,
           boxShadow: 1,
-          color: "white",
-          backgroundColor: "black",
+          color: `${widgetTheme.palette.primary.main}`,
+          backgroundColor: `${widgetTheme.palette.primary.dark}`,
         }}
       >
         <Box sx={{ position: "relative" }}>
           {!metarData ? (
-            <Typography sx={{ m: 3, opacity: 0.9 }}>
+            <Typography
+              sx={{
+                m: 3,
+                opacity: 0.9,
+                color: `${widgetTheme.palette.primary.main}`,
+              }}
+            >
               Loading weather...
             </Typography>
           ) : (

@@ -1,5 +1,6 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { useDepartureFlights } from "../../hooks";
+import { widgetTheme } from "../../theme";
 
 function formatTime(utc: string | null | undefined) {
   if (!utc) return "-";
@@ -27,7 +28,13 @@ export default function DeparturesWidget() {
   if (error) return <Typography>Error: {error.message}</Typography>;
   if (isLoading)
     return (
-      <Typography sx={{ m: 3, opacity: 0.9 }}>
+      <Typography
+        sx={{
+          m: 3,
+          opacity: 0.9,
+          color: `${widgetTheme.palette.primary.main}`,
+        }}
+      >
         Loading departures info...
       </Typography>
     );
@@ -39,10 +46,10 @@ export default function DeparturesWidget() {
         p: 2,
         m: 2,
         borderRadius: 2,
-        border: "5px solid white",
+        border: `5px solid ${widgetTheme.palette.primary.main}`,
         boxShadow: 1,
-        color: "white",
-        backgroundColor: "black",
+        color: `${widgetTheme.palette.primary.main}`,
+        backgroundColor: `${widgetTheme.palette.primary.dark}`,
       }}
     >
       <Box sx={{ mb: 2 }}>
@@ -67,9 +74,9 @@ export default function DeparturesWidget() {
               sx={{
                 p: 1.2,
                 borderRadius: 2,
-                bgcolor: "rgba(0, 0, 0, 0.9)",
-                color: "#ffffff",
-                border: "2px solid grey",
+                bgcolor: `${widgetTheme.palette.primary.dark}`,
+                color: `${widgetTheme.palette.primary.main}`,
+                border: `2px solid ${widgetTheme.palette.primary.main}`,
               }}
             >
               <Stack direction="row" justifyContent="space-between">
@@ -77,7 +84,12 @@ export default function DeparturesWidget() {
                   <Typography sx={{ fontWeight: 700, fontSize: "0.9rem" }}>
                     {departure.flightId}
                   </Typography>
-                  <Typography sx={{ fontSize: "0.75rem", color: "#ffffff" }}>
+                  <Typography
+                    sx={{
+                      fontSize: "0.75rem",
+                      color: `${widgetTheme.palette.primary.main}`,
+                    }}
+                  >
                     {departure.departureAirportSwedish} to{" "}
                     {departure.arrivalAirportSwedish}
                   </Typography>

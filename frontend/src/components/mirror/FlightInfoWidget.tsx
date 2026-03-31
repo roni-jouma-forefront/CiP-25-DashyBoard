@@ -1,5 +1,6 @@
 import { Stack, Typography, Box } from "@mui/material";
 import { useFlightInfo } from "../../hooks";
+import { widgetTheme } from "../../theme";
 
 interface FlightProps {
   airport: string;
@@ -9,12 +10,12 @@ interface FlightProps {
 const flightRowStyling = {
   display: "flex",
   justifyContent: "space-between",
-  backgroundColor: "black",
+  backgroundColor: `${widgetTheme.palette.primary.dark}`,
   p: 2,
   borderRadius: 2,
   opacity: 0.9,
   fontSize: "0.9rem",
-  border: "2px solid grey",
+  border: `2px solid ${widgetTheme.palette.primary.light}`,
 };
 
 function FlightInfoWidget({ airport, flight }: FlightProps) {
@@ -39,14 +40,16 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
         p: 2,
         m: 2,
         borderRadius: 2,
-        border: "5px solid white",
+        border: `5px solid ${widgetTheme.palette.primary.main}`,
         boxShadow: 1,
-        color: "white",
+        color: `${widgetTheme.palette.primary.main}`,
         backgroundColor: "black",
       }}
     >
       {!flightData ? (
-        <Typography>Loading flight info...</Typography>
+        <Typography sx={{ color: `${widgetTheme.palette.primary.main}` }}>
+          Loading flight info...
+        </Typography>
       ) : (
         <>
           <Box>
