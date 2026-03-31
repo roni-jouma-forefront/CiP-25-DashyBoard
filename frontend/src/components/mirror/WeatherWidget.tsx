@@ -172,13 +172,6 @@ function WeatherWidget({ icao }: WeatherProps) {
                     <strong>Conditions: </strong>
                     {getWeatherLabel()}
                   </Typography>
-                  {/* <Typography sx={icaoRowStyling}>
-                    <strong> Conditions: </strong>{" "}
-                    <i
-                      className={`wi ${getWeatherIconClass(metarData.weather)}`}
-                    ></i>
-                    {getWeatherLabel(metarData.weather)}
-                  </Typography> */}
                 </Stack>
               </Box>
             </>
