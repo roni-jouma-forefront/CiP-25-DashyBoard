@@ -91,17 +91,6 @@ function WeatherWidget({ icao }: WeatherProps) {
           backgroundColor: "black",
         }}
       >
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: "url(/images/weatherimg.jpg)",
-            backgroundSize: "cover",
-            opacity: 0.9,
-            borderRadius: "inherit",
-          }}
-        />
-
         <Box sx={{ position: "relative" }}>
           {!metarData ? (
             <Typography sx={{ m: 3, opacity: 0.9 }}>
