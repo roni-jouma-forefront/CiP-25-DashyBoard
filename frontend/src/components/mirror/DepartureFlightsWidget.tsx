@@ -1,14 +1,5 @@
-import { Box, Typography, Paper, Stack, Chip } from "@mui/material";
+import { Box, Typography, Paper, Stack } from "@mui/material";
 import { useDepartureFlights } from "../../hooks";
-
-type ChipColor = "success" | "info" | "warning" | "primary";
-
-const STATUS: Record<string, { label: string; color: ChipColor }> = {
-  LANDED: { label: "Landed", color: "success" },
-  ON_TIME: { label: "On Time", color: "info" },
-  DELAYED: { label: "Delayed", color: "warning" },
-  BOARDING: { label: "Boarding", color: "primary" },
-};
 
 function formatTime(utc: string | null | undefined) {
   if (!utc) return "-";
@@ -17,17 +8,6 @@ function formatTime(utc: string | null | undefined) {
     minute: "2-digit",
     timeZone: "Europe/Stockholm",
   });
-}
-
-function getStatus(statusText: string) {
-  const normalized = statusText.toLowerCase();
-
-  if (normalized.includes("on time")) return STATUS.ON_TIME;
-  if (normalized.includes("landed")) return STATUS.LANDED;
-  if (normalized.includes("delay")) return STATUS.DELAYED;
-  if (normalized.includes("boarding")) return STATUS.BOARDING;
-
-  return STATUS.ON_TIME;
 }
 
 export default function DeparturesWidget() {
@@ -55,16 +35,14 @@ export default function DeparturesWidget() {
   return (
     <Box
       sx={{
-        backgroundImage: "url(/images/departures.jpg)",
-        backgroundSize: "cover",
-        opacity: 0.9,
-        width: 250,
-        color: "#000000",
         position: "relative",
         p: 2,
         m: 2,
         borderRadius: 2,
+        border: "5px solid white",
         boxShadow: 1,
+        color: "white",
+        backgroundColor: "black",
       }}
     >
       <Box sx={{ mb: 2 }}>
@@ -83,17 +61,15 @@ export default function DeparturesWidget() {
       </Box>
       <Stack spacing={1.2}>
         {departures.slice(0, 5).map((departure) => {
-          const statusText =
-            departure.locationAndStatus?.flightLegStatusEnglish ?? "Unknown";
-          const status = getStatus(statusText);
           return (
             <Paper
               key={departure.flightId}
               sx={{
                 p: 1.2,
                 borderRadius: 2,
-                bgcolor: "rgba(255,255,255,0.9)",
-                color: "#111",
+                bgcolor: "rgba(0, 0, 0, 0.9)",
+                color: "#ffffff",
+                border: "2px solid grey",
               }}
             >
               <Stack direction="row" justifyContent="space-between">
@@ -101,7 +77,7 @@ export default function DeparturesWidget() {
                   <Typography sx={{ fontWeight: 700, fontSize: "0.9rem" }}>
                     {departure.flightId}
                   </Typography>
-                  <Typography sx={{ fontSize: "0.75rem", color: "#555" }}>
+                  <Typography sx={{ fontSize: "0.75rem", color: "#ffffff" }}>
                     {departure.departureAirportSwedish} to{" "}
                     {departure.arrivalAirportSwedish}
                   </Typography>
