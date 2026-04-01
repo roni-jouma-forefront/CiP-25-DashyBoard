@@ -25,13 +25,13 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
     isLoading,
   } = useFlightInfo({ airport, flight });
 
-  // if (error) return <Typography>Error: {error.message}</Typography>;
-  // if (isLoading)
-  //   return (
-  //     <Typography sx={{ m: 3, opacity: 0.9 }}>
-  //       Loading flight info...
-  //     </Typography>
-  //   );
+  if (error) return <Typography>Error: {error.message}</Typography>;
+  if (isLoading)
+    return (
+      <Typography sx={{ m: 3, opacity: 0.9 }}>
+        Loading flight info...
+      </Typography>
+    );
 
   return (
     <Box

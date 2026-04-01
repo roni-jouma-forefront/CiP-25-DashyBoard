@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
 import { useDrop } from "react-dnd";
-import { theme } from "../../theme/index.ts";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
 import Watch from "../base/watch";
