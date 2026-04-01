@@ -23,13 +23,13 @@ const icaoRowStyling = {
 function WeatherWidget({ icao }: WeatherProps) {
   const { data: metarData, error, isLoading } = useWeather({ icao });
 
-  // if (error) return <Typography>Error: {error.message}</Typography>;
-  // if (isLoading)
-  //   return (
-  //     <Typography sx={{ m: 2, opacity: 0.9 }}>
-  //       Loading weather info...
-  //     </Typography>
-  //   );
+  if (error) return <Typography>Error: {error.message}</Typography>;
+  if (isLoading)
+    return (
+      <Typography sx={{ m: 2, opacity: 0.9 }}>
+        Loading weather info...
+      </Typography>
+    );
 
   function getWeatherIconClass() {
     const weather = metarData?.weather;
