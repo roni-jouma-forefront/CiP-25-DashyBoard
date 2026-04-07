@@ -1,5 +1,5 @@
-# Build stage
-FROM node:20-alpine AS build
+# Development image
+FROM node:20-alpine
 WORKDIR /app
 
 # Copy package files
@@ -11,24 +11,8 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the application
-RUN npm run build
+# Expose Vite dev server
+EXPOSE 3000
 
-# Production stage
-FROM nginx:alpine AS production
-WORKDIR /usr/share/nginx/html
-
-# Remove default nginx static assets
-RUN rm -rf ./*
-
-# Copy built assets from build stage
-COPY --from=build /app/dist .
-
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start Vite in dev mode and listen on all interfaces
+CMD ["npm", "run", "dev", "--", "--host"]
