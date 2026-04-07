@@ -73,7 +73,8 @@ function MirrorDashboard() {
               if (id === 2)
                 return (
                   <DraggableWrapper key={2} id={2}>
-                    <WeatherWidget icao="ESSA" />
+                    {/*För att se de olika layouterna för pilot eller "vamlig" gäst byt boolen nedan. (false = vanlig gäst) */}
+                    <WeatherWidget icao="ESSA" pilotVersion={false} />
                   </DraggableWrapper>
                 );
               if (id === 3)

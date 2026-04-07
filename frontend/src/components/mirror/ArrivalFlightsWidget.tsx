@@ -1,4 +1,3 @@
-// import { useState, useEffect } from "react";
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { useArrivalFlights } from "../../hooks";
 import { widgetTheme } from "../../theme/index.ts";
@@ -26,7 +25,12 @@ export default function ArrivalsWidget() {
     airport: "ARN",
   });
 
-  if (error) return <Typography>Error: {error.message}</Typography>;
+  if (error)
+    return (
+      <Typography sx={{ m: 3, opacity: 0.9, color: "white" }}>
+        Error: {error.message}
+      </Typography>
+    );
   if (isLoading)
     return (
       <Typography sx={{ m: 3, opacity: 0.9, color: "white" }}>

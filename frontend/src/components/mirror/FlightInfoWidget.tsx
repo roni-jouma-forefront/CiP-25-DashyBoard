@@ -13,7 +13,6 @@ const flightRowStyling = {
   backgroundColor: `${widgetTheme.palette.primary.dark}`,
   p: 2,
   borderRadius: 2,
-  opacity: 0.9,
   fontSize: "0.9rem",
   border: `2px solid ${widgetTheme.palette.primary.light}`,
 };
@@ -25,7 +24,12 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
     isLoading,
   } = useFlightInfo({ airport, flight });
 
-  if (error) return <Typography>Error: {error.message}</Typography>;
+  if (error)
+    return (
+      <Typography sx={{ m: 3, opacity: 0.9, color: "white" }}>
+        Error: {error.message}
+      </Typography>
+    );
   if (isLoading)
     return (
       <Typography sx={{ m: 3, opacity: 0.9 }}>
@@ -46,11 +50,7 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
         backgroundColor: "black",
       }}
     >
-      {!flightData ? (
-        <Typography sx={{ color: `${widgetTheme.palette.primary.main}` }}>
-          Loading flight info...
-        </Typography>
-      ) : (
+      {flightData && (
         <>
           <Box>
             <Box
