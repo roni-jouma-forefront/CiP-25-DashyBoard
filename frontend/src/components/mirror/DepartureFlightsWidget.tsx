@@ -76,7 +76,7 @@ export default function DeparturesWidget() {
                 borderRadius: 2,
                 bgcolor: `${widgetTheme.palette.primary.dark}`,
                 color: `${widgetTheme.palette.primary.main}`,
-                border: `2px solid ${widgetTheme.palette.primary.main}`,
+                border: `2px solid ${widgetTheme.palette.primary.light}`,
               }}
             >
               <Stack direction="row" justifyContent="space-between">

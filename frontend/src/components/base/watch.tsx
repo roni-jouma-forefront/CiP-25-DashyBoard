@@ -61,9 +61,7 @@ export default function Watch({ timeZone, location }: WatchProps) {
             />
             <circle cx="12" cy="9" r="3" stroke="white" strokeWidth="2" />
           </svg>
-          <Typography sx={{ variant: "h2", fontWeight: "700" }}>
-            {location}
-          </Typography>
+          <Typography sx={{ variant: "h2" }}>{location}</Typography>
         </Box>
       </Box>
     </Box>

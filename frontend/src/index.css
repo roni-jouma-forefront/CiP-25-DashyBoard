@@ -55,7 +55,10 @@ button:focus-visible {
 }
 
 .icons {
-  font-size: 3rem;
-  padding-top: 1rem;
+  font-size: 4rem;
   color: white;
+}
+
+.iconSolo {
+  font-size: 6rem;
 }
