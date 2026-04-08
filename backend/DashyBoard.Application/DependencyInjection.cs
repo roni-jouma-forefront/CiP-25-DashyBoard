@@ -1,4 +1,5 @@
 using System.Reflection;
+using DashyBoard.Application.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,7 @@ public static class DependencyInjection
         services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly())
         );
+        services.AddHostedService<TimedTriggerService>();
 
         return services;
     }

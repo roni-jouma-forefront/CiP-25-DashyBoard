@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace DashyBoard.Application.Features.Commands.UpdateGuest;
+namespace DashyBoard.Application.Features.Commands.Guests.UpdateGuest;
 
 public class UpdateGuestCommandValidator : AbstractValidator<UpdateGuestCommand>
 {

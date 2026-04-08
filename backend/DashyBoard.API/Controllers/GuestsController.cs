@@ -1,9 +1,9 @@
 using DashyBoard.Application.DTOs;
-using DashyBoard.Application.Features.Commands.CreateGuest;
-using DashyBoard.Application.Features.Commands.DeleteGuest;
-using DashyBoard.Application.Features.Commands.UpdateGuest;
-using DashyBoard.Application.Features.Queries.GetAllGuests;
-using DashyBoard.Application.Features.Queries.GetGuest;
+using DashyBoard.Application.Features.Commands.Guests.CreateGuest;
+using DashyBoard.Application.Features.Commands.Guests.DeleteGuest;
+using DashyBoard.Application.Features.Commands.Guests.UpdateGuest;
+using DashyBoard.Application.Features.Queries.Guests.GetAllGuests;
+using DashyBoard.Application.Features.Queries.Guests.GetGuest;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

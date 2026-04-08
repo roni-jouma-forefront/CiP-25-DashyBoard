@@ -3,7 +3,7 @@ using DashyBoard.Application.DTOs;
 using DashyBoard.Domain.Entities;
 using MediatR;
 
-namespace DashyBoard.Application.Features.Queries.GetAllGuests;
+namespace DashyBoard.Application.Features.Queries.Guests.GetAllGuests;
 
 public class GetAllGuestsQueryHandler(IRepository<Guest> repository)
     : IRequestHandler<GetAllGuestsQuery, List<GuestDto>>

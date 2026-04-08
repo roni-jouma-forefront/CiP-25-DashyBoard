@@ -4,7 +4,7 @@ using DashyBoard.Application.DTOs;
 using DashyBoard.Domain.Entities;
 using MediatR;
 
-namespace DashyBoard.Application.Features.Commands.UpdateGuest;
+namespace DashyBoard.Application.Features.Commands.Guests.UpdateGuest;
 
 public class UpdateGuestCommandHandler(IRepository<Guest> repository, IDateTime dateTime)
     : IRequestHandler<UpdateGuestCommand, Result<GuestDto>>

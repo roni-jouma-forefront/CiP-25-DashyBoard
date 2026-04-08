@@ -3,7 +3,7 @@ using DashyBoard.Application.Common.Models;
 using DashyBoard.Domain.Entities;
 using MediatR;
 
-namespace DashyBoard.Application.Features.Commands.DeleteGuest;
+namespace DashyBoard.Application.Features.Commands.Guests.DeleteGuest;
 
 public class DeleteGuestCommandHandler(IRepository<Guest> repository)
     : IRequestHandler<DeleteGuestCommand, Result<Guid>>
