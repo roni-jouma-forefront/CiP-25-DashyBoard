@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace DashyBoard.Application.Features.Commands.UpdateRoom;
+namespace DashyBoard.Application.Features.Commands.Rooms.UpdateRoom;
 
 public class UpdateRoomCommandValidator : AbstractValidator<UpdateRoomCommand>
 {

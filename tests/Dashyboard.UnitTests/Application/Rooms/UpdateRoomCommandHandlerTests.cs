@@ -1,5 +1,5 @@
 using DashyBoard.Application.Common.Interfaces;
-using DashyBoard.Application.Features.Commands.UpdateRoom;
+using DashyBoard.Application.Features.Commands.Rooms.UpdateRoom;
 using DashyBoard.Domain.Entities;
 using Moq;
 

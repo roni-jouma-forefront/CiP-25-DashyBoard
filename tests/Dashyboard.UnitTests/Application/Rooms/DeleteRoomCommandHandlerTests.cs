@@ -1,5 +1,5 @@
 using DashyBoard.Application.Common.Interfaces;
-using DashyBoard.Application.Features.Commands.DeleteRoom;
+using DashyBoard.Application.Features.Commands.Rooms.DeleteRoom;
 using DashyBoard.Domain.Entities;
 using Moq;
 

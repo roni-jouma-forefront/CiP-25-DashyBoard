@@ -4,7 +4,7 @@ using DashyBoard.Application.DTOs;
 using DashyBoard.Domain.Entities;
 using MediatR;
 
-namespace DashyBoard.Application.Features.Commands.UpdateRoom;
+namespace DashyBoard.Application.Features.Commands.Rooms.UpdateRoom;
 
 public class UpdateRoomCommandHandler(IRepository<Room> repository, IDateTime dateTime)
     : IRequestHandler<UpdateRoomCommand, Result<RoomDto>>

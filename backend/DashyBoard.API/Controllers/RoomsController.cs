@@ -1,9 +1,9 @@
 using DashyBoard.Application.DTOs;
-using DashyBoard.Application.Features.Commands.CreateRoom;
-using DashyBoard.Application.Features.Commands.DeleteRoom;
-using DashyBoard.Application.Features.Commands.UpdateRoom;
+using DashyBoard.Application.Features.Commands.Rooms.CreateRoom;
+using DashyBoard.Application.Features.Commands.Rooms.DeleteRoom;
+using DashyBoard.Application.Features.Commands.Rooms.UpdateRoom;
 using DashyBoard.Application.Features.Queries.Rooms.GetAllRooms;
-using DashyBoard.Application.Features.Queries.GetRoom;
+using DashyBoard.Application.Features.Queries.Rooms.GetRoom;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

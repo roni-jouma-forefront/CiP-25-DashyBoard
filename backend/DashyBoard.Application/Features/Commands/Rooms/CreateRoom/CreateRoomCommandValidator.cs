@@ -2,7 +2,7 @@ using DashyBoard.Application.Common.Interfaces;
 using DashyBoard.Domain.Entities;
 using FluentValidation;
 
-namespace DashyBoard.Application.Features.Commands.CreateRoom;
+namespace DashyBoard.Application.Features.Commands.Rooms.CreateRoom;
 
 public class CreateRoomCommandValidator : AbstractValidator<CreateRoomCommand>
 {

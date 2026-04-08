@@ -4,7 +4,7 @@ using DashyBoard.Application.DTOs;
 using DashyBoard.Domain.Entities;
 using MediatR;
 
-namespace DashyBoard.Application.Features.Commands.CreateRoom;
+namespace DashyBoard.Application.Features.Commands.Rooms.CreateRoom;
 
 public class CreateRoomCommandHandler(IRepository<Room> repository, IDateTime dateTime)
     : IRequestHandler<CreateRoomCommand, Result<RoomDto>>

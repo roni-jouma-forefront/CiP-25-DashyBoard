@@ -1,6 +1,6 @@
 using DashyBoard.Application.Common.Interfaces;
 using DashyBoard.Application.DTOs;
-using DashyBoard.Application.Features.Commands.CreateGuest;
+using DashyBoard.Application.Features.Commands.Guests.CreateGuest;
 using DashyBoard.Domain.Entities;
 using Moq;
 

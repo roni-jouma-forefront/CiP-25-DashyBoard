@@ -1,5 +1,5 @@
 using DashyBoard.Application.Common.Interfaces;
-using DashyBoard.Application.Features.Commands.UpdateGuest;
+using DashyBoard.Application.Features.Commands.Guests.UpdateGuest;
 using DashyBoard.Domain.Entities;
 using Moq;
 

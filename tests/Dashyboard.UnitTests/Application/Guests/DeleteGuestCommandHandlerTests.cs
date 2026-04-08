@@ -1,5 +1,5 @@
 using DashyBoard.Application.Common.Interfaces;
-using DashyBoard.Application.Features.Commands.DeleteGuest;
+using DashyBoard.Application.Features.Commands.Guests.DeleteGuest;
 using DashyBoard.Domain.Entities;
 using Moq;
 

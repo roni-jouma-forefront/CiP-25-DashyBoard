@@ -3,7 +3,7 @@ using DashyBoard.Application.Common.Models;
 using DashyBoard.Domain.Entities;
 using MediatR;
 
-namespace DashyBoard.Application.Features.Commands.DeleteRoom;
+namespace DashyBoard.Application.Features.Commands.Rooms.DeleteRoom;
 
 public class DeleteRoomCommandHandler(IRepository<Room> repository)
     : IRequestHandler<DeleteRoomCommand, Result<Guid>>
