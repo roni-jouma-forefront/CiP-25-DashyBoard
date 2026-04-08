@@ -26,7 +26,10 @@ public class CreateBookingCommandHandlerTests
 
         _repositoryMock
             .Setup(r =>
-                r.FindAsync(It.IsAny<Expression<Func<Booking, bool>>>(), It.IsAny<CancellationToken>())
+                r.FindAsync(
+                    It.IsAny<Expression<Func<Booking, bool>>>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(new List<Booking>());
 
@@ -91,9 +94,7 @@ public class CreateBookingCommandHandlerTests
             r =>
                 r.AddAsync(
                     It.Is<Booking>(b =>
-                        b.RoomId == roomId
-                        && b.GuestId == guestId
-                        && b.NumberOfGuests == 1
+                        b.RoomId == roomId && b.GuestId == guestId && b.NumberOfGuests == 1
                     ),
                     It.IsAny<CancellationToken>()
                 ),
@@ -117,7 +118,10 @@ public class CreateBookingCommandHandlerTests
 
         _repositoryMock
             .Setup(r =>
-                r.FindAsync(It.IsAny<Expression<Func<Booking, bool>>>(), It.IsAny<CancellationToken>())
+                r.FindAsync(
+                    It.IsAny<Expression<Func<Booking, bool>>>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(new List<Booking> { existing });
 
@@ -155,7 +159,10 @@ public class CreateBookingCommandHandlerTests
 
         _repositoryMock
             .Setup(r =>
-                r.FindAsync(It.IsAny<Expression<Func<Booking, bool>>>(), It.IsAny<CancellationToken>())
+                r.FindAsync(
+                    It.IsAny<Expression<Func<Booking, bool>>>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(new List<Booking> { existing });
 

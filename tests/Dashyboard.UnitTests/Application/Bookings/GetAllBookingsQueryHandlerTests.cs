@@ -132,7 +132,10 @@ public class GetAllBookingsQueryHandlerTests
 
         _repositoryMock
             .Setup(r =>
-                r.FindAsync(It.IsAny<Expression<Func<Booking, bool>>>(), It.IsAny<CancellationToken>())
+                r.FindAsync(
+                    It.IsAny<Expression<Func<Booking, bool>>>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(filtered);
 
@@ -146,7 +149,11 @@ public class GetAllBookingsQueryHandlerTests
         Assert.That(result.First().GuestId, Is.EqualTo(guestId));
         _repositoryMock.Verify(r => r.GetAllAsync(It.IsAny<CancellationToken>()), Times.Never);
         _repositoryMock.Verify(
-            r => r.FindAsync(It.IsAny<Expression<Func<Booking, bool>>>(), It.IsAny<CancellationToken>()),
+            r =>
+                r.FindAsync(
+                    It.IsAny<Expression<Func<Booking, bool>>>(),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }

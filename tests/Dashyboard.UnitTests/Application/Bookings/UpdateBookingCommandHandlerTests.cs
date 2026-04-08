@@ -24,7 +24,10 @@ public class UpdateBookingCommandHandlerTests
 
         _repositoryMock
             .Setup(r =>
-                r.FindAsync(It.IsAny<Expression<Func<Booking, bool>>>(), It.IsAny<CancellationToken>())
+                r.FindAsync(
+                    It.IsAny<Expression<Func<Booking, bool>>>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(new List<Booking>());
 
@@ -208,7 +211,11 @@ public class UpdateBookingCommandHandlerTests
 
         // Assert
         _repositoryMock.Verify(
-            r => r.UpdateAsync(It.Is<Booking>(b => b.Id == bookingId), It.IsAny<CancellationToken>()),
+            r =>
+                r.UpdateAsync(
+                    It.Is<Booking>(b => b.Id == bookingId),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }

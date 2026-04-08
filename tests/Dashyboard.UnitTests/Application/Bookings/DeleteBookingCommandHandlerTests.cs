@@ -90,7 +90,11 @@ public class DeleteBookingCommandHandlerTests
 
         // Assert
         _repositoryMock.Verify(
-            r => r.DeleteAsync(It.Is<Booking>(b => b.Id == bookingId), It.IsAny<CancellationToken>()),
+            r =>
+                r.DeleteAsync(
+                    It.Is<Booking>(b => b.Id == bookingId),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }

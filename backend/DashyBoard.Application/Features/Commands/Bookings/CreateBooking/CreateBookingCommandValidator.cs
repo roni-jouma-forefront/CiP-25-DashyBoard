@@ -10,9 +10,7 @@ public class CreateBookingCommandValidator : AbstractValidator<CreateBookingComm
             .GreaterThan(0)
             .WithMessage("Number of guests must be greater than zero");
 
-        RuleFor(x => x.CheckIn)
-            .NotEmpty()
-            .WithMessage("Check-in date is required");
+        RuleFor(x => x.CheckIn).NotEmpty().WithMessage("Check-in date is required");
 
         RuleFor(x => x.CheckOut)
             .NotEmpty()

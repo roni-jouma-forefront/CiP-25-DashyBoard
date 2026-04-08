@@ -196,11 +196,7 @@ public class BookingsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(
-                ex,
-                "Error occurred while updating booking with ID {BookingId}",
-                id
-            );
+            _logger.LogError(ex, "Error occurred while updating booking with ID {BookingId}", id);
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 "An error occurred while updating the booking."
@@ -236,11 +232,7 @@ public class BookingsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(
-                ex,
-                "Error occurred while deleting booking with ID {BookingId}",
-                id
-            );
+            _logger.LogError(ex, "Error occurred while deleting booking with ID {BookingId}", id);
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 "An error occurred while deleting the booking."
