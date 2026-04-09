@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 using DashyBoard.Application.Common.Interfaces;
-using DashyBoard.Application.Features.Queries.GetRoom;
+using DashyBoard.Application.Features.Queries.Rooms.GetRoom;
 using DashyBoard.Domain.Entities;
 using Moq;
 

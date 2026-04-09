@@ -1,6 +1,6 @@
 using DashyBoard.Application.Common.Interfaces;
 using DashyBoard.Application.DTOs;
-using DashyBoard.Application.Features.Commands.CreateRoom;
+using DashyBoard.Application.Features.Commands.Rooms.CreateRoom;
 using DashyBoard.Domain.Entities;
 using Moq;
 

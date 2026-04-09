@@ -17,5 +17,5 @@ export type AdditionalGuest = {
 };
 
 export type Staff = {
-  name: string
-}
+  name: string;
+};
