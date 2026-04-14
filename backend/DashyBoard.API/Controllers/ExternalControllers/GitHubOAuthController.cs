@@ -1,6 +1,6 @@
+using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
 
 namespace DashyBoard.API.Controllers.ExternalControllers;
 
@@ -38,15 +38,18 @@ public class GitHubOAuthController : ControllerBase
             { "client_id", clientId },
             { "client_secret", clientSecret },
             { "code", form["code"].ToString() },
-            { "redirect_uri", form["redirect_uri"].ToString() }
+            { "redirect_uri", form["redirect_uri"].ToString() },
         };
 
         if (!string.IsNullOrEmpty(form["code_verifier"]))
             formParams["code_verifier"] = form["code_verifier"].ToString();
 
-        var request = new HttpRequestMessage(HttpMethod.Post, "https://github.com/login/oauth/access_token")
+        var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            "https://github.com/login/oauth/access_token"
+        )
         {
-            Content = new FormUrlEncodedContent(formParams)
+            Content = new FormUrlEncodedContent(formParams),
         };
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

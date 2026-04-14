@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
 
 namespace DashyBoard.API.Authentication;
 
@@ -17,7 +17,8 @@ public class GitHubTokenAuthHandler : AuthenticationHandler<AuthenticationScheme
         ILoggerFactory logger,
         UrlEncoder encoder,
         IHttpClientFactory httpClientFactory,
-        IConfiguration configuration)
+        IConfiguration configuration
+    )
         : base(options, logger, encoder)
     {
         _httpClientFactory = httpClientFactory;
@@ -40,7 +41,9 @@ public class GitHubTokenAuthHandler : AuthenticationHandler<AuthenticationScheme
         var client = _httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         client.DefaultRequestHeaders.UserAgent.ParseAdd("DashyBoard/1.0");
-        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json")
+        );
 
         var response = await client.GetAsync("https://api.github.com/user");
         if (!response.IsSuccessStatusCode)
@@ -54,15 +57,25 @@ public class GitHubTokenAuthHandler : AuthenticationHandler<AuthenticationScheme
         if (!string.IsNullOrEmpty(repo))
         {
             var username = user.TryGetProperty("login", out var l) ? l.GetString() : null;
-            var collaboratorResponse = await client.GetAsync($"https://api.github.com/repos/{repo}/collaborators/{username}");
+            var collaboratorResponse = await client.GetAsync(
+                $"https://api.github.com/repos/{repo}/collaborators/{username}"
+            );
             if (!collaboratorResponse.IsSuccessStatusCode)
-                return AuthenticateResult.Fail($"Not a collaborator on the required GitHub repository: {repo}");
+                return AuthenticateResult.Fail(
+                    $"Not a collaborator on the required GitHub repository: {repo}"
+                );
         }
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.TryGetProperty("id", out var id) ? id.ToString() : ""),
-            new Claim(ClaimTypes.Name, user.TryGetProperty("login", out var login) ? login.GetString() ?? "" : ""),
+            new Claim(
+                ClaimTypes.NameIdentifier,
+                user.TryGetProperty("id", out var id) ? id.ToString() : ""
+            ),
+            new Claim(
+                ClaimTypes.Name,
+                user.TryGetProperty("login", out var login) ? login.GetString() ?? "" : ""
+            ),
         };
 
         if (user.TryGetProperty("email", out var email) && email.ValueKind != JsonValueKind.Null)

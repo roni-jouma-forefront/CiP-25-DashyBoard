@@ -15,45 +15,53 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "DashyBoard API",
-        Version = "v1",
-        Description = "API for managing DashyBoard application"
-    });
-    c.AddSecurityDefinition("github", new OpenApiSecurityScheme
-    {
-        Type = SecuritySchemeType.OAuth2,
-        Flows = new OpenApiOAuthFlows
+    c.SwaggerDoc(
+        "v1",
+        new OpenApiInfo
         {
-            AuthorizationCode = new OpenApiOAuthFlow
-            {
-                // Token URL is set dynamically per-request by GitHubTokenUrlFilter
-                AuthorizationUrl = new Uri("https://github.com/login/oauth/authorize"),
-                TokenUrl = new Uri("https://placeholder/oauth/github/token"),
-                Scopes = new Dictionary<string, string>
-                {
-                    { "read:user", "Read GitHub user profile" },
-                    { "user:email", "Read GitHub user email" },
-                    { "repo", "Check repository collaborator access" }
-                }
-            }
+            Title = "DashyBoard API",
+            Version = "v1",
+            Description = "API for managing DashyBoard application",
         }
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+    );
+    c.AddSecurityDefinition(
+        "github",
+        new OpenApiSecurityScheme
         {
-            new OpenApiSecurityScheme
+            Type = SecuritySchemeType.OAuth2,
+            Flows = new OpenApiOAuthFlows
             {
-                Reference = new OpenApiReference
+                AuthorizationCode = new OpenApiOAuthFlow
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "github"
-                }
+                    // Token URL is set dynamically per-request by GitHubTokenUrlFilter
+                    AuthorizationUrl = new Uri("https://github.com/login/oauth/authorize"),
+                    TokenUrl = new Uri("https://placeholder/oauth/github/token"),
+                    Scopes = new Dictionary<string, string>
+                    {
+                        { "read:user", "Read GitHub user profile" },
+                        { "user:email", "Read GitHub user email" },
+                        { "repo", "Check repository collaborator access" },
+                    },
+                },
             },
-            new[] { "read:user" }
         }
-    });
+    );
+    c.AddSecurityRequirement(
+        new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "github",
+                    },
+                },
+                new[] { "read:user" }
+            },
+        }
+    );
     c.DocumentFilter<GitHubTokenUrlFilter>();
 });
 
@@ -71,7 +79,8 @@ builder.Services.AddCors(options =>
 
 // Add GitHub OAuth token validation
 builder.Services.AddHttpClient();
-builder.Services.AddAuthentication("GitHub")
+builder
+    .Services.AddAuthentication("GitHub")
     .AddScheme<AuthenticationSchemeOptions, GitHubTokenAuthHandler>("GitHub", null);
 builder.Services.AddAuthorization();
 
