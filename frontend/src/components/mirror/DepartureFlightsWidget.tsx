@@ -55,6 +55,7 @@ export default function DeparturesWidget() {
         boxShadow: 1,
         color: `${widgetTheme.palette.primary.main}`,
         backgroundColor: `${widgetTheme.palette.primary.dark}`,
+        width: "15em",
       }}
     >
       <Box sx={{ mb: 2 }}>

@@ -47,7 +47,8 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
         border: `5px solid ${widgetTheme.palette.primary.main}`,
         boxShadow: 1,
         color: `${widgetTheme.palette.primary.main}`,
-        backgroundColor: "black",
+        backgroundColor: `${widgetTheme.palette.primary.dark}`,
+        width: "15em",
       }}
     >
       {flightData && (
@@ -61,14 +62,10 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
               }}
             >
               <Typography sx={{ fontSize: "1.4rem", fontWeight: 700, mb: 2 }}>
-                Flight info
+                Flight <span>{flightData.flightId ?? "-"}</span>
               </Typography>
             </Box>
             <Stack spacing={1} sx={{ borderRadius: 2 }}>
-              <Typography sx={flightRowStyling}>
-                <strong>Flight ID:</strong>
-                <span>{flightData.flightId ?? "-"}</span>
-              </Typography>
               <Typography
                 sx={{
                   ...flightRowStyling,

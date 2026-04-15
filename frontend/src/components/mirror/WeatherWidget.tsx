@@ -17,7 +17,7 @@ const icaoRowStyling = {
   border: `2px solid ${widgetTheme.palette.primary.light}`,
   fontSize: "0.9rem",
   color: `${widgetTheme.palette.primary.main}`,
-  backgroundColor: "black",
+  backgroundColor: `${widgetTheme.palette.primary.dark}`,
 };
 
 function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
@@ -181,7 +181,7 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                   border: `5px solid ${widgetTheme.palette.primary.main}`,
                   boxShadow: 1,
                   color: `${widgetTheme.palette.primary.main}`,
-                  backgroundColor: "black",
+                  backgroundColor: `${widgetTheme.palette.primary.dark}`,
                   width: "12em",
                 }}
               >
