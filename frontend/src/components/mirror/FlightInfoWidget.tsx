@@ -26,13 +26,13 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
 
   if (error)
     return (
-      <Typography sx={{ m: 3, opacity: 0.9, color: "white" }}>
+      <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
         Error: {error.message}
       </Typography>
     );
   if (isLoading)
     return (
-      <Typography sx={{ m: 3, opacity: 0.9 }}>
+      <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
         Loading flight info...
       </Typography>
     );

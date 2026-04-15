@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
+import { widgetTheme } from "../../theme";
 
 interface WatchProps {
   timeZone: string;
@@ -33,10 +34,13 @@ export default function Watch({ timeZone, location }: WatchProps) {
         p: 2,
         m: 2,
         borderRadius: 2,
-        border: "5px solid white",
+        border: `5px solid ${widgetTheme.palette.primary.main}`,
         boxShadow: 1,
-        color: "white",
-        backgroundColor: "black",
+        color: `${widgetTheme.palette.primary.main}`,
+        backgroundColor: `${widgetTheme.palette.primary.dark}`,
+        width: "12em",
+        display: "flex", 
+        justifyContent: "center"
       }}
     >
       <Box sx={{ position: "relative" }}>

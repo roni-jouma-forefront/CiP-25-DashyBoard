@@ -27,7 +27,7 @@ export default function DeparturesWidget() {
 
   if (error)
     return (
-      <Typography sx={{ m: 3, opacity: 0.9, color: "white" }}>
+      <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
         Error: {error.message}
       </Typography>
     );

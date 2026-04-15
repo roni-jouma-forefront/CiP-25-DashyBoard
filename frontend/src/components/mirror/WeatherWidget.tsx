@@ -25,13 +25,13 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
 
   if (error)
     return (
-      <Typography sx={{ m: 3, opacity: 0.9, color: "white" }}>
+      <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
         Error: {error.message}
       </Typography>
     );
   if (isLoading)
     return (
-      <Typography sx={{ m: 3, opacity: 0.9, color: "white" }}>
+      <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
         Loading weather info...
       </Typography>
     );
@@ -109,8 +109,8 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                     Weather
                   </Typography>
 
-                  <Box sx={{ mb: 2, display: "flex", alignItems: "top" }}>
-                    <i className={`icons wi ` + getWeatherIconClass()}></i>
+                  <Box sx={{ mb: 2, display: "flex", alignItems: "center" }}>
+                    <i className={`icons wi ${getWeatherIconClass()}`}></i>
                   </Box>
                 </Box>
                 <Typography
@@ -178,10 +178,11 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                   p: 2,
                   m: 2,
                   borderRadius: 2,
-                  border: "5px solid white",
+                  border: `5px solid ${widgetTheme.palette.primary.main}`,
                   boxShadow: 1,
-                  color: "white",
+                  color: `${widgetTheme.palette.primary.main}`,
                   backgroundColor: "black",
+                  width: "12em",
                 }}
               >
                 <Box sx={{ position: "relative" }}>
@@ -193,7 +194,7 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                     }}
                   >
                     <i
-                      className={`icons iconSolo wi ` + getWeatherIconClass()}
+                      className={`icons wi ${getWeatherIconClass()}`}
                     ></i>
                     <Typography
                       sx={{
