@@ -132,6 +132,7 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                 <Stack spacing={1} sx={{ borderRadius: 2 }}>
                   <Typography sx={{ ...icaoRowStyling, gap: 2 }}>
                     <strong> Observed: </strong>{" "}
+                    {/* To display the correct observed time in correct format slice is used*/}
                     {metarData.observed?.slice(11, 16) ?? "-"} UTC
                   </Typography>
                   <Typography sx={icaoRowStyling}>

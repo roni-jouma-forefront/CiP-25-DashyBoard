@@ -57,7 +57,7 @@ export default function Watch({ timeZone, location }: WatchProps) {
           }}
         >
           <LocationPin />
-          <Typography sx={{ variant: "h2" }}>{location}</Typography>
+          <Typography>{location}</Typography>
         </Box>
       </Box>
     </Box>
