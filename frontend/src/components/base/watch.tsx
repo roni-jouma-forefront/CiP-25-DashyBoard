@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { widgetTheme } from "../../theme";
-import LocationPin from "../mirror/LocationPinSVG";
+import LocationPin from "../svg/LocationPinSVG";
 
 interface WatchProps {
   timeZone: string;

@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import { useWeather } from "../../hooks";
 import { widgetTheme } from "../../theme";
-import LocationPin from "./LocationPinSVG";
+import LocationPin from "../svg/LocationPinSVG";
 
 interface WeatherProps {
   icao: string;
