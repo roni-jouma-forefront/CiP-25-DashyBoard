@@ -49,7 +49,10 @@ public class HotelsController : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        if (string.IsNullOrWhiteSpace(createHotelRequest.Name) || string.IsNullOrWhiteSpace(createHotelRequest.IcaoCode))
+        if (
+            string.IsNullOrWhiteSpace(createHotelRequest.Name)
+            || string.IsNullOrWhiteSpace(createHotelRequest.IcaoCode)
+        )
             return BadRequest("Hotel name and ICAO code are required.");
 
         try
@@ -63,7 +66,11 @@ public class HotelsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while creating hotel with name {HotelName}", createHotelRequest.Name);
+            _logger.LogError(
+                ex,
+                "Error occurred while creating hotel with name {HotelName}",
+                createHotelRequest.Name
+            );
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 "An error occurred while creating the hotel."
@@ -80,9 +87,7 @@ public class HotelsController : ControllerBase
     [ProducesResponseType(typeof(List<HotelDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetAllHotels(
-        CancellationToken cancellationToken
-    )
+    public async Task<IActionResult> GetAllHotels(CancellationToken cancellationToken)
     {
         try
         {
@@ -92,10 +97,7 @@ public class HotelsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(
-                ex,
-                "Error occurred while retrieving hotels"
-            );
+            _logger.LogError(ex, "Error occurred while retrieving hotels");
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 "An error occurred while retrieving hotels."
@@ -114,10 +116,7 @@ public class HotelsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetHotelById(
-        Guid hotelId,
-        CancellationToken cancellationToken
-    )
+    public async Task<IActionResult> GetHotelById(Guid hotelId, CancellationToken cancellationToken)
     {
         if (hotelId == Guid.Empty)
             return BadRequest("Hotel ID is required.");
@@ -186,11 +185,7 @@ public class HotelsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(
-                ex,
-                "Error occurred while updating hotel with ID {HotelId}",
-                hotelId
-            );
+            _logger.LogError(ex, "Error occurred while updating hotel with ID {HotelId}", hotelId);
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 "An error occurred while updating the hotel."
@@ -209,10 +204,7 @@ public class HotelsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> DeleteHotel(
-        Guid hotelId,
-        CancellationToken cancellationToken
-    )
+    public async Task<IActionResult> DeleteHotel(Guid hotelId, CancellationToken cancellationToken)
     {
         if (hotelId == Guid.Empty)
             return BadRequest("Hotel ID is required.");
@@ -229,11 +221,7 @@ public class HotelsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(
-                ex,
-                "Error occurred while deleting hotel with ID {HotelId}",
-                hotelId
-            );
+            _logger.LogError(ex, "Error occurred while deleting hotel with ID {HotelId}", hotelId);
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 "An error occurred while deleting the hotel."

@@ -34,10 +34,7 @@ public class CreateHotelCommandHandlerTests
             .Callback<Hotel, CancellationToken>((hotel, _) => addedHotel = hotel)
             .ReturnsAsync((Hotel h, CancellationToken _) => h);
 
-        var command = new CreateHotelCommand(
-            "Midlanda Airport Hotel",
-            "ESNN"
-        );
+        var command = new CreateHotelCommand("Midlanda Airport Hotel", "ESNN");
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -46,10 +43,7 @@ public class CreateHotelCommandHandlerTests
         Assert.That(result.Succeeded, Is.True);
         Assert.That(result.Data, Is.Not.Null);
         Assert.That(result.Data!.Id, Is.Not.EqualTo(Guid.Empty));
-        Assert.That(
-            result.Data.Name,
-            Is.EqualTo("Midlanda Airport Hotel")
-        );
+        Assert.That(result.Data.Name, Is.EqualTo("Midlanda Airport Hotel"));
         Assert.That(result.Data.IcaoCode, Is.EqualTo("ESNN"));
     }
 }

@@ -36,11 +36,7 @@ public class UpdateHotelCommandHandlerTests
             .Setup(r => r.GetByIdAsync(hotelId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingHotel);
 
-        var command = new UpdateHotelCommand(
-            hotelId,
-            "New Hotel Name",
-            "NEW1"
-        );
+        var command = new UpdateHotelCommand(hotelId, "New Hotel Name", "NEW1");
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -63,11 +59,7 @@ public class UpdateHotelCommandHandlerTests
             .Setup(r => r.GetByIdAsync(hotelId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Hotel?)null);
 
-        var command = new UpdateHotelCommand(
-            hotelId,
-            "New Hotel Name",
-            "NEW1"
-        );
+        var command = new UpdateHotelCommand(hotelId, "New Hotel Name", "NEW1");
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -94,11 +86,7 @@ public class UpdateHotelCommandHandlerTests
             .Setup(r => r.GetByIdAsync(hotelId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingHotel);
 
-        var command = new UpdateHotelCommand(
-            hotelId,
-            "New Hotel Name",
-            "NEW1"
-        );
+        var command = new UpdateHotelCommand(hotelId, "New Hotel Name", "NEW1");
 
         // Act
         await _handler.Handle(command, CancellationToken.None);
@@ -120,11 +108,7 @@ public class UpdateHotelCommandHandlerTests
             .Setup(r => r.GetByIdAsync(hotelId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Hotel?)null);
 
-        var command = new UpdateHotelCommand(
-            hotelId,
-            "New Hotel Name",
-            "NEW1"
-        );
+        var command = new UpdateHotelCommand(hotelId, "New Hotel Name", "NEW1");
 
         // Act
         await _handler.Handle(command, CancellationToken.None);

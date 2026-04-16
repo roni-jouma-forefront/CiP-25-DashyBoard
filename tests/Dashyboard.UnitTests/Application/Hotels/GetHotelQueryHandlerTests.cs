@@ -32,7 +32,10 @@ public class GetHotelQueryHandlerTests
 
         _repositoryMock
             .Setup(r =>
-                r.FindAsync(It.IsAny<Expression<Func<Hotel, bool>>>(), It.IsAny<CancellationToken>())
+                r.FindAsync(
+                    It.IsAny<Expression<Func<Hotel, bool>>>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(new List<Hotel> { hotel });
 
@@ -56,7 +59,10 @@ public class GetHotelQueryHandlerTests
 
         _repositoryMock
             .Setup(r =>
-                r.FindAsync(It.IsAny<Expression<Func<Hotel, bool>>>(), It.IsAny<CancellationToken>())
+                r.FindAsync(
+                    It.IsAny<Expression<Func<Hotel, bool>>>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(new List<Hotel>());
 
@@ -77,7 +83,10 @@ public class GetHotelQueryHandlerTests
 
         _repositoryMock
             .Setup(r =>
-                r.FindAsync(It.IsAny<Expression<Func<Hotel, bool>>>(), It.IsAny<CancellationToken>())
+                r.FindAsync(
+                    It.IsAny<Expression<Func<Hotel, bool>>>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(new List<Hotel>());
 

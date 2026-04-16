@@ -13,11 +13,12 @@ public class CreateHotelCommandValidator : AbstractValidator<CreateHotelCommand>
             .WithMessage("Hotel name is required")
             .MaximumLength(50)
             .WithMessage("Hotel name must not exceed 50 characters")
-            .MustAsync(async (name, cancellation) =>
-            {
-                return !await hotelRepository
-                    .AnyAsync(h => h.Name == name, cancellation);
-            })
+            .MustAsync(
+                async (name, cancellation) =>
+                {
+                    return !await hotelRepository.AnyAsync(h => h.Name == name, cancellation);
+                }
+            )
             .WithMessage("Hotel with the same name already exists");
 
         RuleFor(x => x.IcaoCode)

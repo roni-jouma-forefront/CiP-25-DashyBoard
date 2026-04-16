@@ -33,9 +33,7 @@ public class DeleteHotelCommandHandlerTests
             .Setup(r => r.GetByIdAsync(hotelId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(hotel);
 
-        var command = new DeleteHotelCommand(
-            hotelId
-            );
+        var command = new DeleteHotelCommand(hotelId);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -55,9 +53,7 @@ public class DeleteHotelCommandHandlerTests
             .Setup(r => r.GetByIdAsync(hotelId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Hotel?)null);
 
-        var command = new DeleteHotelCommand(
-            hotelId
-        );
+        var command = new DeleteHotelCommand(hotelId);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -83,9 +79,7 @@ public class DeleteHotelCommandHandlerTests
             .Setup(r => r.GetByIdAsync(hotelId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(hotel);
 
-        var command = new DeleteHotelCommand(
-            hotelId
-        );
+        var command = new DeleteHotelCommand(hotelId);
 
         // Act
         await _handler.Handle(command, CancellationToken.None);
@@ -107,9 +101,7 @@ public class DeleteHotelCommandHandlerTests
             .Setup(r => r.GetByIdAsync(hotelId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Hotel?)null);
 
-        var command = new DeleteHotelCommand(
-            hotelId
-        );
+        var command = new DeleteHotelCommand(hotelId);
 
         // Act
         await _handler.Handle(command, CancellationToken.None);

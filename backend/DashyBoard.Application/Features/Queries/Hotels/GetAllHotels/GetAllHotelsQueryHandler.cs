@@ -13,10 +13,7 @@ public class GetAllHotelsQueryHandler(IRepository<Hotel> repository)
         CancellationToken cancellationToken
     )
     {
-        var hotels = await repository.FindAsync(
-            r => true,
-            cancellationToken
-        );
+        var hotels = await repository.FindAsync(r => true, cancellationToken);
 
         return hotels
             .Select(r => new HotelDto

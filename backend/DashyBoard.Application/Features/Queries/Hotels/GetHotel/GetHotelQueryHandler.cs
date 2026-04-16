@@ -11,10 +11,7 @@ public class GetHotelQueryHandler(IRepository<Hotel> repository)
     public async Task<HotelDto?> Handle(GetHotelQuery request, CancellationToken cancellationToken)
     {
         var hotel = (
-            await repository.FindAsync(
-                r => r.Id == request.HotelId,
-                cancellationToken
-            )
+            await repository.FindAsync(r => r.Id == request.HotelId, cancellationToken)
         ).FirstOrDefault();
 
         if (hotel == null)
