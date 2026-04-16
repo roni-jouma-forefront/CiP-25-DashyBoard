@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
 import { useDrop } from "react-dnd";
-import { theme } from "../../theme/index.ts";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
 import Watch from "../base/watch";
 import FlightInfo from "./FlightInfoWidget";
 import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
 import DeparturesWidget from "./DepartureFlightsWidget.tsx";
+import { widgetTheme } from "../../theme/index.ts";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3, 4, 5]);
@@ -43,13 +43,14 @@ function MirrorDashboard() {
             height: "100%",
             maxWidth: "100%",
             padding: 0,
+            backgroundColor: `${widgetTheme.palette.primary.dark}`,
           }}
         >
           <Box
             ref={drop as unknown as React.RefObject<HTMLDivElement>}
             sx={{
-              border: `25px solid ${theme.palette.topbar.background}`,
-              boxShadow: `inset 0 0 0 4px ${theme.palette.secondary.dark}`,
+              border: `25px solid ${widgetTheme.palette.primary.light}`,
+              boxShadow: `inset 0 0 0 4px ${widgetTheme.palette.primary.light}`,
               outlineOffset: "-24px",
               paddingRight: { xs: "1rem", sm: "3rem", md: "10rem" },
               backgroundColor: isOver ? "rgba(0,0,0,0.1)" : "transparent",
@@ -73,7 +74,8 @@ function MirrorDashboard() {
               if (id === 2)
                 return (
                   <DraggableWrapper key={2} id={2}>
-                    <WeatherWidget icao="ESSA" />
+                    {/*För att se de olika layouterna för pilot eller "vamlig" gäst byt boolen nedan. (false = vanlig gäst) */}
+                    <WeatherWidget icao="ESSA" pilotVersion={false} />
                   </DraggableWrapper>
                 );
               if (id === 3)

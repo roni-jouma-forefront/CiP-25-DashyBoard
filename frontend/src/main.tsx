@@ -12,6 +12,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TestRender from "./components/admin/RenderAdminLayout.tsx";
+import "./weather-icons.css";
 
 const queryClient = new QueryClient();
 

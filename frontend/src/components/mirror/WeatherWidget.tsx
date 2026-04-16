@@ -1,28 +1,44 @@
 import { Box, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import { useWeather } from "../../hooks";
-import type { Weather } from "../../services/api/GetWeather";
+import { widgetTheme } from "../../theme";
+import LocationPin from "../svg/LocationPinSVG";
 
 interface WeatherProps {
   icao: string;
+  pilotVersion: boolean;
 }
 
 const icaoRowStyling = {
   display: "flex",
   justifyContent: "space-between",
-  backgroundColor: "white",
   p: 2,
+  gap: 4,
   borderRadius: 2,
-  opacity: 0.9,
+  border: `2px solid ${widgetTheme.palette.primary.light}`,
+  fontSize: "0.9rem",
+  color: `${widgetTheme.palette.primary.main}`,
+  backgroundColor: `${widgetTheme.palette.primary.dark}`,
 };
 
-function WeatherWidget({ icao }: WeatherProps) {
+function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
   const { data: metarData, error, isLoading } = useWeather({ icao });
 
-  if (error) return <p>Error: {error.message}</p>;
-  if (isLoading) return <p>Loading weather info...</p>;
+  if (error)
+    return (
+      <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
+        Error: {error.message}
+      </Typography>
+    );
+  if (isLoading)
+    return (
+      <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
+        Loading weather info...
+      </Typography>
+    );
+  function getWeatherIconClass() {
+    const weather = metarData?.weather;
 
-  function getWeatherIconClass(weather: Weather | null): string {
     if (!weather) return "wi-day-sunny";
     if (weather.snow) return "wi-snow";
     if (weather.rain) return "wi-rain";
@@ -41,7 +57,9 @@ function WeatherWidget({ icao }: WeatherProps) {
     }
   }
 
-  function getWeatherLabel(weather: Weather | null): string {
+  function getWeatherLabel() {
+    const weather = metarData?.weather;
+
     if (!weather) return "Clear";
     if (weather.snow) return `Snow (${weather.snow})`;
     if (weather.rain) return `Rain (${weather.rain})`;
@@ -65,76 +83,57 @@ function WeatherWidget({ icao }: WeatherProps) {
 
   return (
     <>
-      <Box
-        sx={{
-          position: "relative",
-          p: 2,
-          m: 2,
-          borderRadius: 2,
-          boxShadow: 1,
-        }}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: "url(/images/weatherimg.jpg)",
-            backgroundSize: "cover",
-            opacity: 0.9,
-            borderRadius: "inherit",
-          }}
-        />
-
+      {pilotVersion ? (
         <Box sx={{ position: "relative" }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
+          {metarData && (
+            <Box
               sx={{
-                fontSize: "1.4rem",
-                fontWeight: 700,
-                mb: 1,
+                position: "relative",
+                p: 2,
+                m: 2,
+                borderRadius: 2,
+                border: `5px solid ${widgetTheme.palette.primary.main}`,
+                boxShadow: 1,
+                color: `${widgetTheme.palette.primary.main}`,
+                backgroundColor: `${widgetTheme.palette.primary.dark}`,
               }}
             >
-              Weather
-            </Typography>
-          </Box>
+              <Box sx={{ mb: 2 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography sx={{ fontSize: "1.4rem", fontWeight: 700 }}>
+                    Weather
+                  </Typography>
 
-          {!metarData ? (
-            <Typography>Loading weather...</Typography>
-          ) : (
-            <>
+                  <Box sx={{ mb: 2, display: "flex", alignItems: "center" }}>
+                    <i className={`icons wi ${getWeatherIconClass()}`}></i>
+                  </Box>
+                </Box>
+                <Typography
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box sx={{ display: "flex", justifyContent: "start" }}>
+                    <LocationPin />
+                    <Typography sx={{ ml: "0.2rem", fontSize: "0.9rem" }}>
+                      {metarData.station?.name ?? "-"}
+                    </Typography>
+                  </Box>
+                </Typography>
+              </Box>
               <Box>
                 <Stack spacing={1} sx={{ borderRadius: 2 }}>
                   <Typography sx={{ ...icaoRowStyling, gap: 2 }}>
-                    <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M12 22C12 22 20 14.5 20 9C20 5.13401 16.866 2 13 2H11C7.13401 2 4 5.13401 4 9C4 14.5 12 22 12 22Z"
-                        stroke="black"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <circle
-                        cx="12"
-                        cy="9"
-                        r="3"
-                        stroke="black"
-                        strokeWidth="2"
-                      />
-                    </svg>{" "}
-                    {metarData.station?.name ?? "-"}
-                  </Typography>
-                  <Typography sx={{ ...icaoRowStyling, gap: 2 }}>
                     <strong> Observed: </strong>{" "}
+                    {/* To display the correct observed time in correct format slice is used*/}
                     {metarData.observed?.slice(11, 16) ?? "-"} UTC
-                  </Typography>
-                  <Typography sx={icaoRowStyling}>
-                    <strong> Icao: </strong> {metarData.icao ?? "-"}
                   </Typography>
                   <Typography sx={icaoRowStyling}>
                     <strong> Wind: </strong> {metarData.windSpeedMps ?? "-"} m/s
@@ -148,18 +147,76 @@ function WeatherWidget({ icao }: WeatherProps) {
                     <strong> Humidity: </strong> {metarData.humidity ?? "-"}%
                   </Typography>
                   <Typography sx={icaoRowStyling}>
-                    <strong> Conditions: </strong>{" "}
-                    <i
-                      className={`wi ${getWeatherIconClass(metarData.weather)}`}
-                    ></i>
-                    {getWeatherLabel(metarData.weather)}
+                    <strong>Conditions: </strong>
+                    {getWeatherLabel()}
                   </Typography>
                 </Stack>
+              </Box>
+            </Box>
+          )}
+        </Box>
+      ) : (
+        <Box sx={{ position: "relative" }}>
+          {metarData && (
+            <>
+              <Box
+                sx={{
+                  position: "relative",
+                  p: 2,
+                  m: 2,
+                  borderRadius: 2,
+                  border: `5px solid ${widgetTheme.palette.primary.main}`,
+                  boxShadow: 1,
+                  color: `${widgetTheme.palette.primary.main}`,
+                  backgroundColor: `${widgetTheme.palette.primary.dark}`,
+                  width: "12em",
+                }}
+              >
+                <Box sx={{ position: "relative" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <i
+                      className={`icons wi ${getWeatherIconClass()}`}
+                    ></i>
+                    <Typography
+                      sx={{
+                        fontSize: "2.5rem",
+                        fontWeight: "600",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {metarData.temperature?.celsius ?? "-"}°C
+                    </Typography>
+                  </Box>
+
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <Box
+                      sx={{ display: "flex", justifyContent: "center", mt: 1 }}
+                    >
+                      <LocationPin />
+                      <Typography sx={{ ml: "0.2rem", fontVariant: "h2" }}>
+                        {metarData.station?.name ?? "-"}
+                      </Typography>
+                    </Box>
+                  </Typography>
+                </Box>
               </Box>
             </>
           )}
         </Box>
-      </Box>
+      )}
     </>
   );
 }

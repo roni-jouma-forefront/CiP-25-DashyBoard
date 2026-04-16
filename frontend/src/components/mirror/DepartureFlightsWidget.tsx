@@ -1,14 +1,6 @@
-import { Box, Typography, Paper, Stack, Chip } from "@mui/material";
+import { Box, Typography, Paper, Stack } from "@mui/material";
 import { useDepartureFlights } from "../../hooks";
-
-type ChipColor = "success" | "info" | "warning" | "primary";
-
-const STATUS: Record<string, { label: string; color: ChipColor }> = {
-  LANDED: { label: "Landed", color: "success" },
-  ON_TIME: { label: "On Time", color: "info" },
-  DELAYED: { label: "Delayed", color: "warning" },
-  BOARDING: { label: "Boarding", color: "primary" },
-};
+import { widgetTheme } from "../../theme";
 
 function formatTime(utc: string | null | undefined) {
   if (!utc) return "-";
@@ -17,17 +9,6 @@ function formatTime(utc: string | null | undefined) {
     minute: "2-digit",
     timeZone: "Europe/Stockholm",
   });
-}
-
-function getStatus(statusText: string) {
-  const normalized = statusText.toLowerCase();
-
-  if (normalized.includes("on time")) return STATUS.ON_TIME;
-  if (normalized.includes("landed")) return STATUS.LANDED;
-  if (normalized.includes("delay")) return STATUS.DELAYED;
-  if (normalized.includes("boarding")) return STATUS.BOARDING;
-
-  return STATUS.ON_TIME;
 }
 
 export default function DeparturesWidget() {
@@ -44,22 +25,37 @@ export default function DeparturesWidget() {
     airport: "ARN",
   });
 
-  if (error) return <p>Error: {error.message}</p>;
-  if (isLoading) return <p>Loading departures info...</p>;
+  if (error)
+    return (
+      <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
+        Error: {error.message}
+      </Typography>
+    );
+  if (isLoading)
+    return (
+      <Typography
+        sx={{
+          m: 3,
+          opacity: 0.9,
+          color: `${widgetTheme.palette.primary.main}`,
+        }}
+      >
+        Loading departures info...
+      </Typography>
+    );
 
   return (
     <Box
       sx={{
-        backgroundImage: "url(/images/departures.jpg)",
-        backgroundSize: "cover",
-        opacity: 0.9,
-        width: 250,
-        color: "#000000",
         position: "relative",
         p: 2,
         m: 2,
         borderRadius: 2,
+        border: `5px solid ${widgetTheme.palette.primary.main}`,
         boxShadow: 1,
+        color: `${widgetTheme.palette.primary.main}`,
+        backgroundColor: `${widgetTheme.palette.primary.dark}`,
+        width: "15em",
       }}
     >
       <Box sx={{ mb: 2 }}>
@@ -78,17 +74,15 @@ export default function DeparturesWidget() {
       </Box>
       <Stack spacing={1.2}>
         {departures.slice(0, 5).map((departure) => {
-          const statusText =
-            departure.locationAndStatus?.flightLegStatusEnglish ?? "Unknown";
-          const status = getStatus(statusText);
           return (
             <Paper
               key={departure.flightId}
               sx={{
                 p: 1.2,
                 borderRadius: 2,
-                bgcolor: "rgba(255,255,255,0.9)",
-                color: "#111",
+                bgcolor: `${widgetTheme.palette.primary.dark}`,
+                color: `${widgetTheme.palette.primary.main}`,
+                border: `2px solid ${widgetTheme.palette.primary.light}`,
               }}
             >
               <Stack direction="row" justifyContent="space-between">
@@ -96,7 +90,12 @@ export default function DeparturesWidget() {
                   <Typography sx={{ fontWeight: 700, fontSize: "0.9rem" }}>
                     {departure.flightId}
                   </Typography>
-                  <Typography sx={{ fontSize: "0.75rem", color: "#555" }}>
+                  <Typography
+                    sx={{
+                      fontSize: "0.75rem",
+                      color: `${widgetTheme.palette.primary.main}`,
+                    }}
+                  >
                     {departure.departureAirportSwedish} to{" "}
                     {departure.arrivalAirportSwedish}
                   </Typography>
@@ -117,15 +116,6 @@ export default function DeparturesWidget() {
                   </Typography>
                 </Box>
               </Stack>
-
-              <Box sx={{ mt: 0.5 }}>
-                <Chip
-                  size="small"
-                  label={statusText}
-                  color={status.color}
-                  sx={{ fontSize: "0.65rem", height: 20 }}
-                />
-              </Box>
             </Paper>
           );
         })}
