@@ -1,17 +1,14 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { useDepartureFlights } from "../../hooks";
 import { widgetTheme } from "../../theme";
+import formatTime from "./FormatTime";
 
-function formatTime(utc: string | null | undefined) {
-  if (!utc) return "-";
-  return new Date(utc).toLocaleTimeString("sv-SE", {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Europe/Stockholm",
-  });
+interface DepartureProps {
+  airport: string
 }
 
-export default function DeparturesWidget() {
+
+export default function DeparturesWidget({airport}: DepartureProps) {
   const today = new Date().toLocaleDateString("en-GB", {
     month: "long",
     day: "numeric",
@@ -22,7 +19,7 @@ export default function DeparturesWidget() {
     error,
     isLoading,
   } = useDepartureFlights({
-    airport: "ARN",
+    airport: airport,
   });
 
   if (error)
