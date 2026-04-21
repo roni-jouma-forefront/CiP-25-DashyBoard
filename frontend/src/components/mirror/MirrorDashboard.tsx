@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 import { useDrop } from "react-dnd";
 import DraggableWrapper from "./DraggableWrapper";
@@ -12,6 +12,7 @@ import { widgetTheme } from "../../theme/index.ts";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3, 4, 5, 6]);
+  const guestName = "Hozier";
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -47,6 +48,20 @@ function MirrorDashboard() {
             backgroundColor: `${widgetTheme.palette.primary.dark}`,
           }}
         >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              m: 2,
+            }}
+          >
+            <Typography
+              variant="h3"
+              sx={{ color: `${widgetTheme.palette.primary.main}` }}
+            >
+              Welcome {guestName}
+            </Typography>
+          </Box>
           <Box
             ref={drop as unknown as React.RefObject<HTMLDivElement>}
             sx={{
