@@ -93,6 +93,17 @@ export const theme = createTheme({
   },
 });
 
+export const widgetTheme = createTheme({
+  palette: 
+  {
+    primary: {
+      main: "#ffffff",
+      dark: "#000000",
+      light: "#6d6d6d"
+    }
+  }
+})
+
 export { type RoomStatus };
 export const getRoomStatusColor = (status: RoomStatus): StatusColor =>
   roomStatusColors[status];

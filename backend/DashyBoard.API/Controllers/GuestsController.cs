@@ -22,6 +22,20 @@ public class GuestsController : ControllerBase
         _logger = logger;
     }
 
+    private bool IsGuestDataValid(GuestDto guestDto, out string errorMessage)
+    {
+        if (
+            string.IsNullOrWhiteSpace(guestDto.FirstName)
+            || string.IsNullOrWhiteSpace(guestDto.LastName)
+        )
+        {
+            errorMessage = "First name and last name are required.";
+            return false;
+        }
+        errorMessage = string.Empty;
+        return true;
+    }
+
     /// <summary>
     /// Create a new guest
     /// </summary>
@@ -29,16 +43,16 @@ public class GuestsController : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns>Created guest</returns>
     [HttpPost]
-    [ProducesResponseType(typeof(GuestDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GuestDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateGuest([FromBody] GuestDto createGuestDto)
+    public async Task<IActionResult> CreateGuest(
+        [FromBody] GuestDto createGuestDto,
+        CancellationToken cancellationToken
+    )
     {
-        if (
-            string.IsNullOrWhiteSpace(createGuestDto.FirstName)
-            || string.IsNullOrWhiteSpace(createGuestDto.LastName)
-        )
-            return BadRequest("First name and last name are required.");
+        if (!IsGuestDataValid(createGuestDto, out var errorMessage))
+            return BadRequest(errorMessage);
 
         try
         {
@@ -46,12 +60,17 @@ public class GuestsController : ControllerBase
                 FirstName: createGuestDto.FirstName,
                 LastName: createGuestDto.LastName
             );
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            var result = await _mediator.Send(command, cancellationToken);
+            return CreatedAtAction(nameof(GetGuestById), new { id = result.Data!.Id }, result.Data);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while creating guest");
+            _logger.LogError(
+                ex,
+                "Error in {MethodName} with input {Input}",
+                nameof(CreateGuest),
+                createGuestDto
+            );
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 "An error occurred while creating the guest."
@@ -68,7 +87,6 @@ public class GuestsController : ControllerBase
     /// <returns>List of guests</returns>
     [HttpGet]
     [ProducesResponseType(typeof(List<GuestDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllGuests(
         string? firstName,
@@ -84,7 +102,7 @@ public class GuestsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while retrieving guests");
+            _logger.LogError(ex, "Error in {MethodName}", nameof(GetAllGuests));
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 "An error occurred while retrieving the guests."
@@ -120,7 +138,12 @@ public class GuestsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while retrieving guest with ID {GuestId}", id);
+            _logger.LogError(
+                ex,
+                "Error in {MethodName} with ID {GuestId}",
+                nameof(GetGuestById),
+                id
+            );
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 "An error occurred while retrieving the guest."
@@ -146,11 +169,8 @@ public class GuestsController : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        if (
-            string.IsNullOrWhiteSpace(updateGuestDto.FirstName)
-            || string.IsNullOrWhiteSpace(updateGuestDto.LastName)
-        )
-            return BadRequest("First name and last name are required.");
+        if (!IsGuestDataValid(updateGuestDto, out var errorMessage))
+            return BadRequest(errorMessage);
 
         try
         {
@@ -164,7 +184,12 @@ public class GuestsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while updating guest with ID {GuestId}", id);
+            _logger.LogError(
+                ex,
+                "Error in {MethodName} with ID {GuestId}",
+                nameof(UpdateGuest),
+                id
+            );
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 "An error occurred while updating the guest."
@@ -198,7 +223,12 @@ public class GuestsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while deleting guest with ID {GuestId}", id);
+            _logger.LogError(
+                ex,
+                "Error in {MethodName} with ID {GuestId}",
+                nameof(DeleteGuest),
+                id
+            );
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 "An error occurred while deleting the guest."
