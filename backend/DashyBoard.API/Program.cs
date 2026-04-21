@@ -1,15 +1,15 @@
-using DashyBoard.API.Authentication;
 using System.Text;
+using DashyBoard.API.Authentication;
 using DashyBoard.API.Middleware;
 using DashyBoard.Application;
 using DashyBoard.Infrastructure;
 using DashyBoard.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
