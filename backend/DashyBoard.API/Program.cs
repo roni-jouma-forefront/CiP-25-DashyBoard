@@ -1,3 +1,4 @@
+using DashyBoard.API.Converters;
 using DashyBoard.API.Middleware;
 using DashyBoard.Application;
 using DashyBoard.Infrastructure;
@@ -7,7 +8,10 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -51,7 +55,7 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    context.Database.EnsureCreated();
+    context.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline

@@ -6,6 +6,9 @@ namespace DashyBoard.Application.Features.Messages.Commands.CreateMessage;
 
 public class CreateMessageCommandValidator : AbstractValidator<CreateMessageCommand>
 {
+    private static readonly string[] ValidRecurrenceTypes = ["None", "Daily", "Weekly", "Monthly"];
+    private static readonly string[] ValidDayAbbreviations = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
     private readonly IApplicationDbContext _context;
 
     public CreateMessageCommandValidator(IApplicationDbContext context)
@@ -14,15 +17,39 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
 
         RuleFor(x => x.Content)
             .NotEmpty()
-            .WithMessage("Content kr�vs")
+            .WithMessage("Content krävs")
             .MaximumLength(500)
-            .WithMessage("Content f�r max vara 500 tecken");
+            .WithMessage("Content får max vara 500 tecken");
+
+        RuleFor(x => x.PostedBy)
+            .NotEmpty()
+            .WithMessage("PostedBy krävs")
+            .MaximumLength(100)
+            .WithMessage("PostedBy får max vara 100 tecken");
 
         RuleFor(x => x.ExpiresAt)
             .NotEmpty()
-            .WithMessage("ExpiresAt kr�vs")
+            .WithMessage("ExpiresAt krävs")
             .GreaterThan(DateTime.UtcNow)
-            .WithMessage("ExpiresAt m�ste vara i framtiden");
+            .WithMessage("ExpiresAt måste vara i framtiden");
+
+        RuleFor(x => x.RecurrenceType)
+            .Must(t => ValidRecurrenceTypes.Contains(t))
+            .WithMessage("RecurrenceType måste vara None, Daily, Weekly eller Monthly");
+
+        RuleFor(x => x.RecurrenceDays)
+            .NotEmpty()
+            .WithMessage("RecurrenceDays krävs när RecurrenceType är Weekly")
+            .Must(BeValidDays)
+            .WithMessage("RecurrenceDays måste innehålla giltiga dagförkortningar (Mon, Tue, Wed, Thu, Fri, Sat, Sun)")
+            .When(x => x.RecurrenceType == "Weekly");
+
+        RuleFor(x => x.RecurrenceTimeEnd)
+            .NotNull()
+            .WithMessage("RecurrenceTimeEnd krävs när RecurrenceTimeStart är satt")
+            .GreaterThan(x => x.RecurrenceTimeStart)
+            .WithMessage("RecurrenceTimeEnd måste vara efter RecurrenceTimeStart")
+            .When(x => x.RecurrenceTimeStart.HasValue);
 
         RuleFor(x => x.HotelId)
             .MustAsync(HotelExists)
@@ -33,6 +60,18 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
             .MustAsync(BookingExists)
             .When(x => x.BookingId.HasValue)
             .WithMessage("Booking med angivet ID finns inte");
+
+        }
+
+    private static bool BeValidDays(string? days)
+    {
+        if (string.IsNullOrWhiteSpace(days))
+            return false;
+
+        return days
+            .Split(',')
+            .Select(d => d.Trim())
+            .All(d => ValidDayAbbreviations.Contains(d));
     }
 
     private async Task<bool> HotelExists(Guid? hotelId, CancellationToken cancellationToken)
@@ -48,4 +87,4 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
             return true;
         return await _context.Bookings.AnyAsync(b => b.Id == bookingId.Value, cancellationToken);
     }
-}
+    }

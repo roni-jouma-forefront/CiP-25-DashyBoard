@@ -20,22 +20,35 @@ public class UpdateMessageCommandHandler(IRepository<Message> repository)
             return Result<Guid>.Failure("Meddelande ej hittad");
         }
 
-        if (string.IsNullOrWhiteSpace(request.Content))
-        {
-            return Result<Guid>.Failure("Innnehall kravs");
-        }
+        if (request.PostedBy is not null)
+            message.PostedBy = request.PostedBy;
 
-        message.Content = request.Content;
+        if (request.Title is not null)
+            message.Title = request.Title;
+
+        if (request.Content is not null)
+            message.Content = request.Content;
+
+        if (request.PostAt.HasValue)
+            message.PostAt = request.PostAt.Value;
 
         if (request.ExpiresAt.HasValue)
-        {
             message.ExpiresAt = request.ExpiresAt.Value;
-        }
 
         if (request.IsActive.HasValue)
-        {
             message.IsActive = request.IsActive.Value;
-        }
+
+        if (request.RecurrenceType is not null)
+            message.RecurrenceType = request.RecurrenceType;
+
+        if (request.RecurrenceDays is not null)
+            message.RecurrenceDays = request.RecurrenceDays;
+
+        if (request.RecurrenceTimeStart.HasValue)
+            message.RecurrenceTimeStart = request.RecurrenceTimeStart;
+
+        if (request.RecurrenceTimeEnd.HasValue)
+            message.RecurrenceTimeEnd = request.RecurrenceTimeEnd;
 
         await repository.UpdateAsync(message, cancellationToken);
 
