@@ -1,0 +1,11 @@
+GuestFirstName,GuestLastName,RoomNumber,NumberOfGuests,CheckIn,CheckOut,BookingStatus,FlightNumber,FlightType
+John,Doe,101,2,2026-05-01,2026-05-05,Confirmed,SK1234,Arrival
+Jane,Smith,102,1,2026-05-02,2026-05-04,Confirmed,LH2045,Arrival
+Michael,Johnson,103,3,2026-05-10,2026-05-15,Confirmed,SK5678,Arrival
+Emily,Williams,104,2,2026-05-20,2026-05-25,Confirmed,BA789,Arrival
+Robert,Brown,105,4,2026-06-01,2026-06-07,Confirmed,AF1122,Arrival
+Sarah,Davis,106,1,2026-06-05,2026-06-08,Confirmed,SK3344,Departure
+David,Miller,107,2,2026-06-10,2026-06-12,Confirmed,LH5566,Departure
+Lisa,Wilson,108,2,2026-06-15,2026-06-20,Confirmed,SK7788,Arrival
+James,Taylor,109,3,2026-07-01,2026-07-10,Confirmed,KL9900,Arrival
+Amanda,Anderson,110,1,2026-07-05,2026-07-07,Confirmed,SK1122,Departure

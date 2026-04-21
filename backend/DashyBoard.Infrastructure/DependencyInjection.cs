@@ -36,6 +36,7 @@ public static class DependencyInjection
 
         // Services
         services.AddTransient<IDateTime, DateTimeService>();
+        services.AddScoped<IBookingCsvParser, BookingCsvParser>();
 
         // HTTP Clients with Polly retry policies
         services
