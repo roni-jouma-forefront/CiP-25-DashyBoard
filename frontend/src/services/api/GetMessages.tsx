@@ -25,7 +25,9 @@ export async function GetMessages(
   }
 
   const json = await res.json();
-  const MessagesData = json as MessagesData[];
+  const MessagesData = (json as MessagesData[]).filter(
+    (message) => message?.isActive !== false,
+  );
 
   return MessagesData;
 }
