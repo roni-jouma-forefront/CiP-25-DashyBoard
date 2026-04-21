@@ -79,7 +79,10 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    context.Database.Migrate();
+    if (context.Database.IsRelational())
+        context.Database.Migrate();
+    else
+        context.Database.EnsureCreated();
 }
 
 // Configure the HTTP request pipeline
