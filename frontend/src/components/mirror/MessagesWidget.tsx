@@ -69,60 +69,6 @@ export default function MessagesWidget({ hotelId, bookingId }: MessagesProps) {
           </Typography>
         </Box>
       </Box>
-
-      {/* <Stack spacing={1.2}>
-        {messageMocks.map((message) => {
-          return (
-            <Paper
-              sx={{
-                p: 1.2,
-                borderRadius: 2,
-                bgcolor: `${widgetTheme.palette.primary.dark}`,
-                color: `${widgetTheme.palette.primary.main}`,
-                border: `2px solid ${widgetTheme.palette.primary.light}`,
-              }}
-            >
-              <Stack direction="column">
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignContent: "center",
-                  }}
-                >
-                  <Typography sx={{ fontSize: "1.2rem", fontWeight: 700 }}>
-                    {message.title}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      display: "flex",
-                      alignContent: "center",
-                    }}
-                  >
-                    {message.postAt}
-                  </Typography>
-                </Box>
-
-                <Box>
-                  <Typography sx={{ fontSize: "0.9rem", pt: 1 }}>
-                    {message.content}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    fontSize: "0.8rem",
-                    textAlign: "right",
-                    pt: 2,
-                  }}
-                >
-                  <Typography>{message.bookingId}</Typography>
-                </Box>
-              </Stack>
-            </Paper>
-          );
-        })}
-      </Stack> */}
-
       <Box>
         <Stack spacing={1.2}>
           {messagesData?.map((message) => {

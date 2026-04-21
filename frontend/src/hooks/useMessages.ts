@@ -11,7 +11,6 @@ export const useMessages = ({ hotelId, bookingId }: MessagesProps) => {
     queryKey: ["hotelId", hotelId, "bookingId", bookingId],
     queryFn: () => GetMessages( hotelId, bookingId ),
     enabled: Boolean(hotelId),
-    // staleTime: 5*60*1000,
     refetchInterval: 5*60*1000,
     refetchIntervalInBackground: true,
     })
