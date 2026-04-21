@@ -1,7 +1,7 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { useArrivalFlights } from "../../hooks";
 import { widgetTheme } from "../../theme/index.ts";
-import formatTime from "./FormatTime.tsx";
+import formatTime from "../../utils/FormatTime.tsx";
 
 interface ArrivalProps {
   airport: string, 

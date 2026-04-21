@@ -1,7 +1,7 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { useDepartureFlights } from "../../hooks";
 import { widgetTheme } from "../../theme";
-import formatTime from "./FormatTime";
+import formatTime from "../../utils/FormatTime";
 
 interface DepartureProps {
   airport: string
