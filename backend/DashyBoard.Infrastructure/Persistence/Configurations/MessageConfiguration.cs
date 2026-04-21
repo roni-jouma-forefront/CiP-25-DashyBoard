@@ -13,18 +13,18 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
 
         builder.Property(m => m.Id).ValueGeneratedOnAdd();
 
-        builder.Property(m => m.RecurrenceType)
-            .HasDefaultValue("None")
-            .IsRequired();
+        builder.Property(m => m.RecurrenceType).HasDefaultValue("None").IsRequired();
         builder.Property(m => m.PostedBy).HasMaxLength(100);
 
-        builder.Property(m => m.RecurrenceTimeStart)
+        builder
+            .Property(m => m.RecurrenceTimeStart)
             .HasConversion(
                 t => t.HasValue ? t.Value.ToString("HH:mm:ss") : null,
                 s => s != null ? TimeOnly.Parse(s) : (TimeOnly?)null
             );
 
-        builder.Property(m => m.RecurrenceTimeEnd)
+        builder
+            .Property(m => m.RecurrenceTimeEnd)
             .HasConversion(
                 t => t.HasValue ? t.Value.ToString("HH:mm:ss") : null,
                 s => s != null ? TimeOnly.Parse(s) : (TimeOnly?)null

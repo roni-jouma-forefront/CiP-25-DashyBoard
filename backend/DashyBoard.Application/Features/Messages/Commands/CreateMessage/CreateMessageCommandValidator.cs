@@ -7,7 +7,16 @@ namespace DashyBoard.Application.Features.Messages.Commands.CreateMessage;
 public class CreateMessageCommandValidator : AbstractValidator<CreateMessageCommand>
 {
     private static readonly string[] ValidRecurrenceTypes = ["None", "Daily", "Weekly", "Monthly"];
-    private static readonly string[] ValidDayAbbreviations = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    private static readonly string[] ValidDayAbbreviations =
+    [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun",
+    ];
 
     private readonly IApplicationDbContext _context;
 
@@ -41,7 +50,9 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
             .NotEmpty()
             .WithMessage("RecurrenceDays krävs när RecurrenceType är Weekly")
             .Must(BeValidDays)
-            .WithMessage("RecurrenceDays måste innehålla giltiga dagförkortningar (Mon, Tue, Wed, Thu, Fri, Sat, Sun)")
+            .WithMessage(
+                "RecurrenceDays måste innehålla giltiga dagförkortningar (Mon, Tue, Wed, Thu, Fri, Sat, Sun)"
+            )
             .When(x => x.RecurrenceType == "Weekly");
 
         RuleFor(x => x.RecurrenceTimeEnd)
@@ -60,18 +71,14 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
             .MustAsync(BookingExists)
             .When(x => x.BookingId.HasValue)
             .WithMessage("Booking med angivet ID finns inte");
-
-        }
+    }
 
     private static bool BeValidDays(string? days)
     {
         if (string.IsNullOrWhiteSpace(days))
             return false;
 
-        return days
-            .Split(',')
-            .Select(d => d.Trim())
-            .All(d => ValidDayAbbreviations.Contains(d));
+        return days.Split(',').Select(d => d.Trim()).All(d => ValidDayAbbreviations.Contains(d));
     }
 
     private async Task<bool> HotelExists(Guid? hotelId, CancellationToken cancellationToken)
@@ -87,4 +94,4 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
             return true;
         return await _context.Bookings.AnyAsync(b => b.Id == bookingId.Value, cancellationToken);
     }
-    }
+}

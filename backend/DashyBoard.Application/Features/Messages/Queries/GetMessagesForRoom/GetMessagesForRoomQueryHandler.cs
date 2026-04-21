@@ -25,19 +25,22 @@ public class GetMessagesForRoomQueryHandler
         var swedenTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
         var swedenNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, swedenTimeZone);
 
-        var activeBooking = await _context.Bookings
-            .Where(b =>
-                b.RoomId == request.RoomId &&
-                b.BookingStatus == Status.Active &&
-                b.CheckIn <= swedenNow &&
-                b.CheckOut >= swedenNow
+        var activeBooking = await _context
+            .Bookings.Where(b =>
+                b.RoomId == request.RoomId
+                && b.BookingStatus == Status.Active
+                && b.CheckIn <= swedenNow
+                && b.CheckOut >= swedenNow
             )
             .FirstOrDefaultAsync(cancellationToken);
 
-        var messages = await _context.Messages
-            .Where(m =>
-                m.HotelId == request.HotelId &&
-                (m.BookingId == null || (activeBooking != null && m.BookingId == activeBooking.Id))
+        var messages = await _context
+            .Messages.Where(m =>
+                m.HotelId == request.HotelId
+                && (
+                    m.BookingId == null
+                    || (activeBooking != null && m.BookingId == activeBooking.Id)
+                )
             )
             .OrderByDescending(m => m.CreatedAt)
             .ToListAsync(cancellationToken);
@@ -74,7 +77,10 @@ public class GetMessagesForRoomQueryHandler
         if (m.RecurrenceTimeStart.HasValue && m.RecurrenceTimeEnd.HasValue)
         {
             var currentTime = TimeOnly.FromDateTime(swedenNow);
-            if (currentTime < m.RecurrenceTimeStart.Value || currentTime > m.RecurrenceTimeEnd.Value)
+            if (
+                currentTime < m.RecurrenceTimeStart.Value
+                || currentTime > m.RecurrenceTimeEnd.Value
+            )
                 return false;
         }
 

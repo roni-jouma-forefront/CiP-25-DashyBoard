@@ -24,11 +24,13 @@ public class GetMessagesForMirrorQueryHandler
         var swedenTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
         var swedenNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, swedenTimeZone);
 
-        var query = _context.Messages
-            .Where(m => m.HotelId == request.HotelId)
-            .Where(m => request.BookingId == null
-                ? m.BookingId == null
-                : m.BookingId == null || m.BookingId == request.BookingId)
+        var query = _context
+            .Messages.Where(m => m.HotelId == request.HotelId)
+            .Where(m =>
+                request.BookingId == null
+                    ? m.BookingId == null
+                    : m.BookingId == null || m.BookingId == request.BookingId
+            )
             .AsQueryable();
 
         var messages = await query
@@ -67,7 +69,10 @@ public class GetMessagesForMirrorQueryHandler
         if (m.RecurrenceTimeStart.HasValue && m.RecurrenceTimeEnd.HasValue)
         {
             var currentTime = TimeOnly.FromDateTime(swedenNow);
-            if (currentTime < m.RecurrenceTimeStart.Value || currentTime > m.RecurrenceTimeEnd.Value)
+            if (
+                currentTime < m.RecurrenceTimeStart.Value
+                || currentTime > m.RecurrenceTimeEnd.Value
+            )
                 return false;
         }
 

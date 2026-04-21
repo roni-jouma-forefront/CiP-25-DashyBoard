@@ -16,10 +16,20 @@ public class TimeOnlyJsonConverter : JsonConverter<TimeOnly>
     {
         var value = reader.GetString();
 
-        if (TimeOnly.TryParseExact(value, Formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var result))
+        if (
+            TimeOnly.TryParseExact(
+                value,
+                Formats,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out var result
+            )
+        )
             return result;
 
-        throw new JsonException($"Kunde inte konvertera \"{value}\" till TimeOnly. Använd formatet HH:mm eller HH:mm:ss.");
+        throw new JsonException(
+            $"Kunde inte konvertera \"{value}\" till TimeOnly. Använd formatet HH:mm eller HH:mm:ss."
+        );
     }
 
     public override void Write(Utf8JsonWriter writer, TimeOnly value, JsonSerializerOptions options)
