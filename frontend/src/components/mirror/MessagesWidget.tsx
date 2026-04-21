@@ -1,18 +1,18 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { widgetTheme } from "../../theme/index.ts";
+import { useMessages } from "../../hooks/useMessages.ts";
 
-// interface MessageProps {
-//     bookingId: number,
-//     title: string,
-//     content: string,
-// }
+interface MessagesProps {
+  hotelId: string;
+  bookingId: string;
+}
 
-export default function MessagesWidget() {
+export default function MessagesWidget({ hotelId, bookingId }: MessagesProps) {
   const messageMocks = [
     {
       key: 1,
       postAt: 13.45,
-      bookingId: "Kalle",
+      bookingId: "123",
       title: "Meddelande 1",
       content:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -20,7 +20,7 @@ export default function MessagesWidget() {
     {
       key: 2,
       postAt: 13.45,
-      bookingId: "Mary",
+      bookingId: "456",
       title: "Meddelande 2",
       content:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -28,27 +28,45 @@ export default function MessagesWidget() {
     {
       key: 3,
       postAt: 13.45,
-      bookingId: "Lisa",
+      bookingId: "789",
       title: "Meddelande 3",
       content:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     },
   ];
 
-  // const { data: messages, error, isLoading } = useMessages();
+  const {
+    data: messagesData,
+    // error,
+    // isLoading,
+  } = useMessages({ hotelId, bookingId });
 
-  //   if (error)
-  //     return (
-  //       <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
-  //         Error: {error.message}
-  //       </Typography>
-  //     );
-  //   if (isLoading)
-  //     return (
-  //       <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
-  //         Loading arrivals info...
-  //       </Typography>
-  //     );
+  console.log(messagesData);
+
+  // if (error)
+  //   return (
+  //     <Typography
+  //       sx={{
+  //         m: 3,
+  //         opacity: 0.9,
+  //         color: `${widgetTheme.palette.primary.main}`,
+  //       }}
+  //     >
+  //       Error: {error.message}
+  //     </Typography>
+  //   );
+  // if (isLoading)
+  //   return (
+  //     <Typography
+  //       sx={{
+  //         m: 3,
+  //         opacity: 0.9,
+  //         color: `${widgetTheme.palette.primary.main}`,
+  //       }}
+  //     >
+  //       Loading arrivals info...
+  //     </Typography>
+  //   );
 
   return (
     <Box
@@ -77,6 +95,7 @@ export default function MessagesWidget() {
           </Typography>
         </Box>
       </Box>
+
       <Stack spacing={1.2}>
         {messageMocks.map((message) => {
           return (
@@ -129,6 +148,61 @@ export default function MessagesWidget() {
           );
         })}
       </Stack>
+      {/* 
+      <Box>
+        <Stack spacing={1.2}>
+          {messageData.map((message) => {
+            return (
+              <Paper
+                sx={{
+                  p: 1.2,
+                  borderRadius: 2,
+                  bgcolor: `${widgetTheme.palette.primary.dark}`,
+                  color: `${widgetTheme.palette.primary.main}`,
+                  border: `2px solid ${widgetTheme.palette.primary.light}`,
+                }}
+              >
+                <Stack direction="column">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignContent: "center",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "1.2rem", fontWeight: 700 }}>
+                      {message.title}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        display: "flex",
+                        alignContent: "center",
+                      }}
+                    >
+                      {message.createdAt}
+                    </Typography>
+                  </Box>
+
+                  <Box>
+                    <Typography sx={{ fontSize: "0.9rem", pt: 1 }}>
+                      {message.content}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      fontSize: "0.8rem",
+                      textAlign: "right",
+                      pt: 2,
+                    }}
+                  >
+                    <Typography>{message.bookingId}</Typography>
+                  </Box>
+                </Stack>
+              </Paper>
+            );
+          })}
+        </Stack> 
+      </Box> */}
     </Box>
   );
 }

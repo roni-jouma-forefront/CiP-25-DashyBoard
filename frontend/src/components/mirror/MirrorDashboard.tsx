@@ -88,19 +88,22 @@ function MirrorDashboard() {
               if (id === 4)
                 return (
                   <DraggableWrapper key={4} id={4}>
-                    <ArrivalsWidget  airport="ARN" timezone="Europe/Stockholm"/>
+                    <ArrivalsWidget airport="ARN" timezone="Europe/Stockholm" />
                   </DraggableWrapper>
                 );
               if (id === 5)
                 return (
                   <DraggableWrapper key={5} id={5}>
-                    <DeparturesWidget airport="ARN"/>
+                    <DeparturesWidget airport="ARN" />
                   </DraggableWrapper>
                 );
               if (id === 6)
                 return (
                   <DraggableWrapper key={6} id={6}>
-                    <MessagesWidget />
+                    <MessagesWidget
+                      hotelId="10000000-0000-0000-0000-000000000001"
+                      bookingId="60000000-0000-0000-0000-000000000001"
+                    />
                   </DraggableWrapper>
                 );
             })}
