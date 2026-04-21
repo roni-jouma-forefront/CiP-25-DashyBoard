@@ -53,3 +53,12 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+.icons {
+  font-size: 4rem;
+  color: #ffffff;
+}
+
+.iconSolo {
+  font-size: 6rem;
+}

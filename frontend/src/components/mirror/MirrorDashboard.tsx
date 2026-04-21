@@ -1,15 +1,16 @@
 import { Box } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useDrop } from "react-dnd";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
 import Watch from "../base/watch";
+import FlightInfo from "./FlightInfoWidget";
+import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
+import DeparturesWidget from "./DepartureFlightsWidget.tsx";
+import { widgetTheme } from "../../theme/index.ts";
 
 function MirrorDashboard() {
-  const [order, setOrder] = useState([1, 2]);
+  const [order, setOrder] = useState([1, 2, 3, 4, 5]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -28,56 +29,76 @@ function MirrorDashboard() {
     <>
       <Box
         sx={{
-          flexGrow: 1,
+          position: "relative",
+          width: "100%",
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        <AppBar
-          position="fixed"
+        <Box
           sx={{
-            background: "rgb(0, 45, 135))",
-            top: 0,
-            left: 0,
-            right: 0,
-            display: "flex",
-            justifyContent: "row",
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            maxWidth: "100%",
+            padding: 0,
+            backgroundColor: `${widgetTheme.palette.primary.dark}`,
           }}
         >
-          <Toolbar>
-            <Typography variant="h6" component="div">
-              Room 123
-            </Typography>
-          </Toolbar>
-        </AppBar>
-      </Box>
-
-      <Box
-        ref={drop as unknown as React.RefObject<HTMLDivElement>}
-        sx={{
-          borderImage: "linear-gradient(45deg, #f06, #09f) 1",
-          paddingRight: { xs: "1rem", sm: "3rem", md: "10rem" },
-          backgroundColor: isOver ? "rgba(0,0,0,0.1)" : "transparent",
-          display: "flex",
-          alignContent: "flex-start",
-        }}
-      >
-        {order.map((id) => {
-          if (id === 1)
-            return (
-              <DraggableWrapper key={1} id={1}>
-                <Watch
-                  key={1}
-                  location="Stockholm"
-                  timeZone="Europe/Stockholm"
-                />
-              </DraggableWrapper>
-            );
-          if (id === 2)
-            return (
-              <DraggableWrapper key={2} id={2}>
-                <WeatherWidget icao="ESSA"/>
-              </DraggableWrapper>
-            );
-        })}
+          <Box
+            ref={drop as unknown as React.RefObject<HTMLDivElement>}
+            sx={{
+              border: `25px solid ${widgetTheme.palette.primary.light}`,
+              boxShadow: `inset 0 0 0 4px ${widgetTheme.palette.primary.light}`,
+              outlineOffset: "-24px",
+              paddingRight: { xs: "1rem", sm: "3rem", md: "10rem" },
+              backgroundColor: isOver ? "rgba(0,0,0,0.1)" : "transparent",
+              display: "flex",
+              flexWrap: "wrap",
+              alignContent: "flex-start",
+              paddingBottom: { xs: "10rem", sm: "20rem", md: "30rem" },
+            }}
+          >
+            {order.map((id) => {
+              if (id === 1)
+                return (
+                  <DraggableWrapper key={1} id={1}>
+                    <Watch
+                      key={1}
+                      location="Stockholm"
+                      timeZone="Europe/Stockholm"
+                    />
+                  </DraggableWrapper>
+                );
+              if (id === 2)
+                return (
+                  <DraggableWrapper key={2} id={2}>
+                    {/*För att se de olika layouterna för pilot eller "vamlig" gäst byt boolen nedan. (false = vanlig gäst) */}
+                    <WeatherWidget icao="ESSA" pilotVersion={false} />
+                  </DraggableWrapper>
+                );
+              if (id === 3)
+                return (
+                  <DraggableWrapper key={3} id={3}>
+                    <FlightInfo airport="ARN" flight="OS966" />
+                  </DraggableWrapper>
+                );
+              if (id === 4)
+                return (
+                  <DraggableWrapper key={4} id={4}>
+                    <ArrivalsWidget />
+                  </DraggableWrapper>
+                );
+              if (id === 5)
+                return (
+                  <DraggableWrapper key={5} id={5}>
+                    <DeparturesWidget />
+                  </DraggableWrapper>
+                );
+            })}
+          </Box>
+        </Box>
       </Box>
     </>
   );

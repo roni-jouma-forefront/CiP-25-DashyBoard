@@ -51,10 +51,10 @@ VALUES
   ('20000000-0000-0000-0000-000000000216','10000000-0000-0000-0000-000000000002','216','2026-02-18T12:05:00Z',0),
   ('20000000-0000-0000-0000-000000000217','10000000-0000-0000-0000-000000000002','217','2026-02-18T12:05:00Z',0);
 
-INSERT INTO "Admins" ("Id","HotelId","Username","PasswordHash","FullName","Role","CreatedAt","IsDeleted")
+INSERT INTO "Admins" ("Id","HotelId","Username","PasswordHash","FirstName","LastName","Role","CreatedAt","IsDeleted")
 VALUES
-  ('50000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','admin_arn','hash_admin_arn','Arlanda Admin','Manager','2026-02-18T12:10:00Z',0),
-  ('50000000-0000-0000-0000-000000000002','10000000-0000-0000-0000-000000000002','admin_rwy','hash_admin_rwy','Runway Admin','Manager','2026-02-18T12:10:00Z',0);
+  ('50000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','admin_arn','$2a$12$XovokFHELhfYaUda7x1nNuSqlb0W0jriVirNRC7b/sOpXNxRqGFEO','Arlanda','Admin','Manager','2026-02-18T12:10:00Z',0),
+  ('50000000-0000-0000-0000-000000000002','10000000-0000-0000-0000-000000000002','admin_rwy','$2a$12$XovokFHELhfYaUda7x1nNuSqlb0W0jriVirNRC7b/sOpXNxRqGFEO','Runway','Admin','Manager','2026-02-18T12:10:00Z',0);
 
 INSERT INTO "Guests" ("Id","FirstName","LastName","CreatedAt","IsDeleted")
 VALUES

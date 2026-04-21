@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 using DashyBoard.Application.Common.Interfaces;
-using DashyBoard.Application.Features.Queries.GetAllGuests;
+using DashyBoard.Application.Features.Queries.Guests.GetAllGuests;
 using DashyBoard.Domain.Entities;
 using Moq;
 

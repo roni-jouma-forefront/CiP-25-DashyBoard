@@ -4,7 +4,9 @@ public class FlightInfoDto
 {
     public string FlightId { get; set; } = string.Empty;
     public string? DepartureAirportIcao { get; set; }
+    public string? DepartureAirportSwedish { get; set; }
     public string? ArrivalAirportIcao { get; set; }
+    public string? ArrivalAirportSwedish { get; set; }
     public LocationAndStatusDto? LocationAndStatus { get; set; }
     public FlightTimeDto? ArrivalTime { get; set; }
     public FlightTimeDto? DepartureTime { get; set; }

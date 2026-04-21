@@ -1,5 +1,5 @@
 using DashyBoard.Application.Common.Interfaces;
-using DashyBoard.Application.Features.Queries.GetGuest;
+using DashyBoard.Application.Features.Queries.Guests.GetGuest;
 using DashyBoard.Domain.Entities;
 using Moq;
 

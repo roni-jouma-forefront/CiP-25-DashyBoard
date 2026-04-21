@@ -40,6 +40,14 @@ public class Repository<T> : IRepository<T>
         return await _dbSet.Where(predicate).ToListAsync(cancellationToken);
     }
 
+    public virtual async Task<bool> AnyAsync(
+        Expression<Func<T, bool>> predicate,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return await _dbSet.AnyAsync(predicate, cancellationToken);
+    }
+
     public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
     {
         await _dbSet.AddAsync(entity, cancellationToken);
