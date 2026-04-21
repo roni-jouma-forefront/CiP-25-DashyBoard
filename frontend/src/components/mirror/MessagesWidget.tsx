@@ -1,6 +1,7 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { widgetTheme } from "../../theme/index.ts";
 import { useMessages } from "../../hooks/useMessages.ts";
+import formatTime from "../../utils/FormatTime.tsx";
 
 interface MessagesProps {
   hotelId: string;
@@ -8,65 +9,38 @@ interface MessagesProps {
 }
 
 export default function MessagesWidget({ hotelId, bookingId }: MessagesProps) {
-  const messageMocks = [
-    {
-      key: 1,
-      postAt: 13.45,
-      bookingId: "123",
-      title: "Meddelande 1",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    },
-    {
-      key: 2,
-      postAt: 13.45,
-      bookingId: "456",
-      title: "Meddelande 2",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    },
-    {
-      key: 3,
-      postAt: 13.45,
-      bookingId: "789",
-      title: "Meddelande 3",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    },
-  ];
-
   const {
-    data: messagesData,
-    // error,
-    // isLoading,
+    data: messagesData = [],
+    error,
+    isLoading,
   } = useMessages({ hotelId, bookingId });
 
   console.log(messagesData);
 
-  // if (error)
-  //   return (
-  //     <Typography
-  //       sx={{
-  //         m: 3,
-  //         opacity: 0.9,
-  //         color: `${widgetTheme.palette.primary.main}`,
-  //       }}
-  //     >
-  //       Error: {error.message}
-  //     </Typography>
-  //   );
-  // if (isLoading)
-  //   return (
-  //     <Typography
-  //       sx={{
-  //         m: 3,
-  //         opacity: 0.9,
-  //         color: `${widgetTheme.palette.primary.main}`,
-  //       }}
-  //     >
-  //       Loading arrivals info...
-  //     </Typography>
-  //   );
+  if (error)
+    return (
+      <Typography
+        sx={{
+          m: 3,
+          opacity: 0.9,
+          color: `${widgetTheme.palette.primary.main}`,
+        }}
+      >
+        Error: {error.message}
+      </Typography>
+    );
+  if (isLoading)
+    return (
+      <Typography
+        sx={{
+          m: 3,
+          opacity: 0.9,
+          color: `${widgetTheme.palette.primary.main}`,
+        }}
+      >
+        Loading arrivals info...
+      </Typography>
+    );
 
   return (
     <Box
@@ -96,7 +70,7 @@ export default function MessagesWidget({ hotelId, bookingId }: MessagesProps) {
         </Box>
       </Box>
 
-      <Stack spacing={1.2}>
+      {/* <Stack spacing={1.2}>
         {messageMocks.map((message) => {
           return (
             <Paper
@@ -147,11 +121,11 @@ export default function MessagesWidget({ hotelId, bookingId }: MessagesProps) {
             </Paper>
           );
         })}
-      </Stack>
-      {/* 
+      </Stack> */}
+
       <Box>
         <Stack spacing={1.2}>
-          {messageData.map((message) => {
+          {messagesData?.map((message) => {
             return (
               <Paper
                 sx={{
@@ -179,7 +153,7 @@ export default function MessagesWidget({ hotelId, bookingId }: MessagesProps) {
                         alignContent: "center",
                       }}
                     >
-                      {message.createdAt}
+                      {formatTime(message.createdAt) ?? "-"}
                     </Typography>
                   </Box>
 
@@ -195,14 +169,14 @@ export default function MessagesWidget({ hotelId, bookingId }: MessagesProps) {
                       pt: 2,
                     }}
                   >
-                    <Typography>{message.bookingId}</Typography>
+                    <Typography>Test Test</Typography>
                   </Box>
                 </Stack>
               </Paper>
             );
           })}
-        </Stack> 
-      </Box> */}
+        </Stack>
+      </Box>
     </Box>
   );
 }

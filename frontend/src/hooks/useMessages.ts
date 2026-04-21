@@ -7,7 +7,7 @@ interface MessagesProps  {
   }
 
 export const useMessages = ({ hotelId, bookingId }: MessagesProps) => {
-    return useQuery<MessagesData>({
+    return useQuery<MessagesData[]>({
     queryKey: ["hotelId", hotelId, "bookingId", bookingId],
     queryFn: () => GetMessages( hotelId, bookingId ),
     enabled: Boolean(hotelId),

@@ -2,16 +2,17 @@ export type MessagesData = {
   id: string;
   hotelId: string;
   bookingId: string;
+  title: string;
   content: string;
-  expiresAt: Date;
+  expiresAt: string;
   isActive: boolean;
-  createdAt: Date;
+  createdAt: string;
 };
 
 export async function GetMessages(
   hotelId: string,
   bookingId: string,
-): Promise<MessagesData> {
+): Promise<MessagesData[]> {
   const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
   console.log("Fetching messages");
 
@@ -24,9 +25,7 @@ export async function GetMessages(
   }
 
   const json = await res.json();
-  const item = Array.isArray(json)
-    ? json[0]
-    : (json?.metarData ?? json?.data ?? json);
+  const MessagesData = json as MessagesData[];
 
-  return item as MessagesData;
+  return MessagesData;
 }
