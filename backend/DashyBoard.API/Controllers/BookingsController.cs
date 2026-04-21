@@ -2,6 +2,7 @@ using DashyBoard.Application.DTOs;
 using DashyBoard.Application.Features.Commands.Bookings.CreateBooking;
 using DashyBoard.Application.Features.Commands.Bookings.DeleteBooking;
 using DashyBoard.Application.Features.Commands.Bookings.UpdateBooking;
+using DashyBoard.Application.Features.Commands.ImportBookingsFromCsv;
 using DashyBoard.Application.Features.Queries.Bookings.GetAllBookings;
 using DashyBoard.Application.Features.Queries.Bookings.GetBooking;
 using DashyBoard.Domain.Entities;
@@ -238,5 +239,40 @@ public class BookingsController : ControllerBase
                 "An error occurred while deleting the booking."
             );
         }
+    }
+
+    /// <summary>
+    /// Import bookings from a CSV file.
+    /// </summary>
+    [HttpPost("import")]
+    [Consumes("multipart/form-data")]
+    [ProducesResponseType(typeof(CsvImportResultDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ImportBookingsFromCsv(
+        IFormFile file,
+        CancellationToken cancellationToken
+    )
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("No file uploaded or file is empty.");
+
+        if (!file.FileName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+            return BadRequest("File must be a CSV file.");
+
+        using var stream = file.OpenReadStream();
+        var command = new ImportBookingsFromCsvCommand(stream);
+        var result = await _mediator.Send(command, cancellationToken);
+
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
+
+        _logger.LogInformation(
+            "CSV import completed: {Total} total, {Success} succeeded, {Failed} failed",
+            result.Data!.TotalRows,
+            result.Data.SuccessfulImports,
+            result.Data.FailedImports
+        );
+
+        return Ok(result.Data);
     }
 }

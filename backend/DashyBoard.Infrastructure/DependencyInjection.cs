@@ -36,6 +36,7 @@ public static class DependencyInjection
 
         // Services
         services.AddTransient<IDateTime, DateTimeService>();
+        services.AddScoped<IBookingCsvParser, BookingCsvParser>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
