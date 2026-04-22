@@ -5,10 +5,25 @@ import { Button, Stack, Typography } from "@mui/material";
 import { MessageAccordion } from "../../components/admin/MessageAccordion";
 import AlertDialog from "../../components/admin/AlertDialog";
 import React from "react";
+import { useMessages } from "../../hooks";
+
+const hotelId = import.meta.env.VITE_HOTEL_ID;
 
 export default function Room() {
-  const { id } = useParams();
+  const { id, bookingId } = useParams();
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const {
+    messages,
+    isLoading,
+    error,
+    editingId,
+    formData,
+    startEdit,
+    handleChange,
+    saveEdit,
+    cancelEdit,
+    onSubmit,
+  } = useMessages({ hotelId, bookingId });
 
   const handleDialog = () => {
     setDialogOpen(true);
@@ -36,10 +51,24 @@ export default function Room() {
         </Button>
       </Stack>
       <Stack direction="row" spacing={2} alignItems="flex-start">
-        <RoomDetailsForm />
-        <RoomMessageForm />
+        <RoomDetailsForm bookingId={bookingId} />
+        {bookingId && (
+          <RoomMessageForm onSubmit={onSubmit} bookingId={bookingId} />
+        )}
       </Stack>
-      <MessageAccordion />
+      {bookingId && (
+        <MessageAccordion
+          messages={messages}
+          editingId={editingId}
+          isLoading={isLoading}
+          error={!!error}
+          formData={formData}
+          startEdit={startEdit}
+          handleChange={handleChange}
+          saveEdit={saveEdit}
+          cancelEdit={cancelEdit}
+        />
+      )}
       <AlertDialog open={dialogOpen} onClose={handleClose} />
     </>
   );

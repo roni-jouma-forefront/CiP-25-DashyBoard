@@ -16,6 +16,7 @@ import type { Room } from "../../types/types";
 const mockRooms: Room[] = [
   {
     id: "1",
+    bookingId: "60000000-0000-0000-0000-000000000001",
     number: 101,
     status: "occupied",
     title: "Mr",
@@ -25,6 +26,7 @@ const mockRooms: Room[] = [
   },
   {
     id: "2",
+    bookingId: "60000000-0000-0000-0000-000000000002",
     number: 102,
     status: "occupied",
     title: "Mx",
@@ -34,6 +36,7 @@ const mockRooms: Room[] = [
   },
   {
     id: "3",
+    bookingId: "60000000-0000-0000-0000-0000000000013",
     number: 103,
     status: "occupied",
     title: "Ms",
@@ -43,6 +46,7 @@ const mockRooms: Room[] = [
   },
   {
     id: "4",
+    bookingId: "",
     number: 104,
     status: "available",
     title: null,
@@ -91,14 +95,19 @@ export const RoomsAccordion = () => {
                 alignItems="center"
                 sx={{ flex: 1 }}
               >
-                <Typography component="span" fontWeight="600">{room.number}</Typography>
+                <Typography component="span" fontWeight="600">
+                  {room.number}
+                </Typography>
                 {room.status === "occupied" && (
                   <Typography variant="body2">
                     {room.guestFirstName} {room.guestLastName}
                   </Typography>
                 )}
               </Stack>
-              <Button component={NavLink} to={`/admin/rooms/${room.id}`}>
+              <Button
+                component={NavLink}
+                to={`/admin/rooms/${room.id}/${room.bookingId}`}
+              >
                 Edit Room
               </Button>
             </Stack>
@@ -110,9 +119,7 @@ export const RoomsAccordion = () => {
               alignItems="flex-start"
               paddingTop={1}
             >
-              <Typography>
-                Departing Flight: {room.flight}
-              </Typography>
+              <Typography>Departing Flight: {room.flight}</Typography>
             </Stack>
           </AccordionDetails>
         </Accordion>

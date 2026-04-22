@@ -27,6 +27,10 @@ const Main = () => {
                 <Route index element={<AdminHome />} />
                 <Route path="rooms" element={<RoomAdminPage />} />
                 <Route path="rooms/:id" element={<RoomDetailsPage />} />
+                <Route
+                  path="rooms/:id/:bookingId"
+                  element={<RoomDetailsPage />}
+                />
                 <Route path="settings" element={<SettingsPage />} />
               </Route>
               <Route path="/room/:id" element={<Room />}></Route>
