@@ -97,6 +97,7 @@ export default function MessagesWidget({ hotelId, bookingId }: MessagesProps) {
                       sx={{
                         display: "flex",
                         alignContent: "center",
+                        ml: 2,
                       }}
                     >
                       {formatTime(message.createdAt) ?? "-"}
