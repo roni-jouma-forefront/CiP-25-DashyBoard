@@ -1,26 +1,29 @@
 import type { MsgStatus } from "./theme.types";
 
-export type MessageScope = "all" | "checkingOut" | "checkingIn";
-
-
 export type MessageBackend = {
   id: string;
-  messageScope: MessageScope;
+  hotelId: string;
+  bookingId: string | null;
   title: string;
   content: string;
-  postDate: string | null;
-  postTime: string | null;
-  deleteDate: string | null;
-  deleteTime: string | null;
+  recurring: boolean;
+  postAt: string | null;
+  expiresAt: string | null;
   isActive: boolean;
+  author: string;
 };
+
+// Återkommande meddelanden? bocka i återkommande
 
 export type MessageUI = {
   id: string;
-  messageScope: MessageScope;
+  hotelId: string;
+  bookingId: string | null;
   title: string;
   content: string;
   status: MsgStatus;
   postDateTime: string | null;
-  deleteDateTime: string | null;
-}
+  expiresAtDateTime: string | null;
+  isActive: boolean;
+  author: string;
+};

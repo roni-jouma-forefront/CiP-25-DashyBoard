@@ -14,7 +14,11 @@ public class AdminConfiguration : IEntityTypeConfiguration<Admin>
 
         builder.Property(a => a.Username).HasMaxLength(100);
 
-        builder.Property(a => a.FullName).HasMaxLength(200);
+        builder.Property(a => a.PasswordHash).HasMaxLength(500);
+
+        builder.Property(a => a.FirstName).HasMaxLength(100);
+
+        builder.Property(a => a.LastName).HasMaxLength(100);
 
         builder.Property(a => a.Role).HasMaxLength(50);
 
