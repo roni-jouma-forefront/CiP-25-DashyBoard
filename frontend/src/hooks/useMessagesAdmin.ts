@@ -12,7 +12,7 @@ type UseMessageAccordionParams = {
 
 // Websocket??
 
-export const useMessages = ({
+export const useMessagesAdmin = ({
   initialMessages = [],
   bookingId,
 }: UseMessageAccordionParams) => {
