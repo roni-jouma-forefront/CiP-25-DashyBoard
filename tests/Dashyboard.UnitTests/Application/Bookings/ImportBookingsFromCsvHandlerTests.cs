@@ -167,7 +167,7 @@ public class ImportBookingsFromCsvHandlerTests
         _flightRepoMock.Verify(
             r =>
                 r.AddAsync(
-                    It.Is<Flight>(f => f.FlightNumber == 1234),
+                    It.Is<Flight>(f => f.FlightNumber == "1234"),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once

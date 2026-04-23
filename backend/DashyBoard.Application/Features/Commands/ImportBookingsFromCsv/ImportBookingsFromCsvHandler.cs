@@ -150,7 +150,7 @@ public class ImportBookingsFromCsvHandler(
 
             // Extract numeric part of flight number for DB lookup
             var numericPart = new string(row.FlightNumber.Where(char.IsDigit).ToArray());
-            int? flightNum = int.TryParse(numericPart, out var parsed) ? parsed : null;
+            string? flightNum = string.IsNullOrWhiteSpace(numericPart) ? null : numericPart;
 
             // Check if flight already in DB
             var existing = await flightRepository.FindAsync(
