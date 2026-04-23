@@ -1,39 +1,47 @@
-﻿using DashyBoard.Application.Common.Interfaces;
+using DashyBoard.Application.Common.Interfaces;
 using DashyBoard.Application.DTOs;
 using DashyBoard.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static DashyBoard.Domain.Entities.Booking;
 
-namespace DashyBoard.Application.Features.Messages.Queries.GetMessagesForMirror;
+namespace DashyBoard.Application.Features.Messages.Queries.GetMessagesForRoom;
 
-public class GetMessagesForMirrorQueryHandler
-    : IRequestHandler<GetMessagesForMirrorQuery, List<MessageDto>>
+public class GetMessagesForRoomQueryHandler
+    : IRequestHandler<GetMessagesForRoomQuery, List<MessageDto>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetMessagesForMirrorQueryHandler(IApplicationDbContext context)
+    public GetMessagesForRoomQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<List<MessageDto>> Handle(
-        GetMessagesForMirrorQuery request,
+        GetMessagesForRoomQuery request,
         CancellationToken cancellationToken
     )
     {
         var swedenTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
         var swedenNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, swedenTimeZone);
 
-        var query = _context
-            .Messages.Where(m => m.HotelId == request.HotelId)
-            .Where(m =>
-                request.BookingId == null
-                    ? m.BookingId == null
-                    : m.BookingId == null || m.BookingId == request.BookingId
+        var activeBooking = await _context
+            .Bookings.Where(b =>
+                b.RoomId == request.RoomId
+                && b.BookingStatus == Status.Active
+                && b.CheckIn <= swedenNow
+                && b.CheckOut >= swedenNow
             )
-            .AsQueryable();
+            .FirstOrDefaultAsync(cancellationToken);
 
-        var messages = await query
+        var messages = await _context
+            .Messages.Where(m =>
+                m.HotelId == request.HotelId
+                && (
+                    m.BookingId == null
+                    || (activeBooking != null && m.BookingId == activeBooking.Id)
+                )
+            )
             .OrderByDescending(m => m.CreatedAt)
             .ToListAsync(cancellationToken);
 

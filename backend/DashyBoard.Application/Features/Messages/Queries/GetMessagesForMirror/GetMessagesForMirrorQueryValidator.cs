@@ -14,7 +14,6 @@ public class GetMessagesForMirrorQueryValidator : AbstractValidator<GetMessagesF
 
         RuleFor(x => x.HotelId)
             .MustAsync(HotelExists)
-            .When(x => x.HotelId.HasValue)
             .WithMessage("Hotel med angivet ID finns inte");
 
         RuleFor(x => x.BookingId)
@@ -23,11 +22,9 @@ public class GetMessagesForMirrorQueryValidator : AbstractValidator<GetMessagesF
             .WithMessage("Booking med angivet ID finns inte");
     }
 
-    private async Task<bool> HotelExists(Guid? hotelId, CancellationToken cancellationToken)
+    private async Task<bool> HotelExists(Guid hotelId, CancellationToken cancellationToken)
     {
-        if (!hotelId.HasValue)
-            return true;
-        return await _context.Hotels.AnyAsync(h => h.Id == hotelId.Value, cancellationToken);
+        return await _context.Hotels.AnyAsync(h => h.Id == hotelId, cancellationToken);
     }
 
     private async Task<bool> BookingExists(Guid? bookingId, CancellationToken cancellationToken)
