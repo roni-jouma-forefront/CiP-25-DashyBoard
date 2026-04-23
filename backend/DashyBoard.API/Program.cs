@@ -1,18 +1,72 @@
 using System.Text;
+using DashyBoard.API.Authentication;
 using DashyBoard.API.Middleware;
 using DashyBoard.Application;
 using DashyBoard.Infrastructure;
 using DashyBoard.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc(
+        "v1",
+        new OpenApiInfo
+        {
+            Title = "DashyBoard API",
+            Version = "v1",
+            Description = "API for managing DashyBoard application",
+        }
+    );
+    c.AddSecurityDefinition(
+        "github",
+        new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.OAuth2,
+            Flows = new OpenApiOAuthFlows
+            {
+                AuthorizationCode = new OpenApiOAuthFlow
+                {
+                    // Token URL is set dynamically per-request by GitHubTokenUrlFilter
+                    AuthorizationUrl = new Uri("https://github.com/login/oauth/authorize"),
+                    TokenUrl = new Uri("https://placeholder/oauth/github/token"),
+                    Scopes = new Dictionary<string, string>
+                    {
+                        { "read:user", "Read GitHub user profile" },
+                        { "user:email", "Read GitHub user email" },
+                        { "repo", "Check repository collaborator access" },
+                    },
+                },
+            },
+        }
+    );
+    c.AddSecurityRequirement(
+        new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "github",
+                    },
+                },
+                new[] { "read:user" }
+            },
+        }
+    );
+    c.DocumentFilter<GitHubTokenUrlFilter>();
+});
 
 // Add JWT Authentication
 builder
@@ -44,6 +98,13 @@ builder.Services.AddCors(options =>
         }
     );
 });
+
+// Add GitHub OAuth token validation
+builder.Services.AddHttpClient();
+builder
+    .Services.AddAuthentication("GitHub")
+    .AddScheme<AuthenticationSchemeOptions, GitHubTokenAuthHandler>("GitHub", null);
+builder.Services.AddAuthorization();
 
 // Add Clean Architecture layers
 builder.Services.AddApplication();
@@ -80,7 +141,13 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "DashyBoard API v1");
+        c.OAuthClientId(builder.Configuration["GitHub:ClientId"]);
+        c.OAuthUsePkce();
+        c.OAuthScopeSeparator(" ");
+    });
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
