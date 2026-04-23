@@ -4,6 +4,7 @@ using DashyBoard.Application.Features.Messages.Commands.CreateMessage;
 using DashyBoard.Application.Features.Messages.Commands.DeleteMessage;
 using DashyBoard.Application.Features.Messages.Commands.UpdateMessage;
 using DashyBoard.Application.Features.Messages.Queries.GetMessagesForMirror;
+using DashyBoard.Application.Features.Messages.Queries.GetMessagesForRoom;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,14 +21,26 @@ public class MessagesController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet]
+    [HttpGet("hotel/{hotelId}")]
     [ProducesResponseType(typeof(List<MessageDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<MessageDto>>> GetAll(
-        [FromQuery] Guid? hotelId,
+        [FromRoute] Guid hotelId,
         [FromQuery] Guid? bookingId
     )
     {
         var query = new GetMessagesForMirrorQuery { HotelId = hotelId, BookingId = bookingId };
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+
+    [HttpGet("hotel/{hotelId}/room/{roomId}")]
+    [ProducesResponseType(typeof(List<MessageDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<MessageDto>>> GetByRoom(
+        [FromRoute] Guid hotelId,
+        [FromRoute] Guid roomId
+    )
+    {
+        var query = new GetMessagesForRoomQuery { HotelId = hotelId, RoomId = roomId };
         var result = await _mediator.Send(query);
         return Ok(result);
     }

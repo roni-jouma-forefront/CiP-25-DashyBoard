@@ -63,9 +63,16 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         {
             HotelId = request.HotelId,
             BookingId = request.BookingId,
+            PostedBy = request.PostedBy,
+            Title = request.Title,
             Content = request.Content,
+            PostAt = request.PostAt ?? truncatedNow,
             ExpiresAt = request.ExpiresAt ?? truncatedNow.AddDays(1),
             IsActive = true,
+            RecurrenceType = request.RecurrenceType,
+            RecurrenceDays = request.RecurrenceDays,
+            RecurrenceTimeStart = request.RecurrenceTimeStart,
+            RecurrenceTimeEnd = request.RecurrenceTimeEnd,
         };
 
         _context.Messages.Add(message);

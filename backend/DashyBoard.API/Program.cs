@@ -1,5 +1,6 @@
 using System.Text;
 using DashyBoard.API.Authentication;
+using DashyBoard.API.Converters;
 using DashyBoard.API.Middleware;
 using DashyBoard.Application;
 using DashyBoard.Infrastructure;
@@ -13,7 +14,12 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddControllers();
+builder
+    .Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(c =>
@@ -134,7 +140,10 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    context.Database.EnsureCreated();
+    if (context.Database.IsRelational())
+        context.Database.Migrate();
+    else
+        context.Database.EnsureCreated();
 }
 
 // Configure the HTTP request pipeline
