@@ -10,32 +10,9 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { theme } from "../../theme";
-import type { MessageBackend, MessageUI } from "../../types/message.types";
-import { useState } from "react";
 import type { MsgStatus } from "../../types/theme.types";
-
-
-const mockMessages: MessageUI[] = [
-  {
-    id: "1",
-    messageScope: "all",
-    title: "Muffins for breakfast",
-    content: "Today we offer muffins for breakfast at the front desk.",
-    status: "posted",
-    postDateTime: "26-01-25 - 06:00",
-    deleteDateTime: "26-01-25 - 06:00",
-  },
-  {
-    id: "2",
-    messageScope: "checkingOut",
-    title: "Thank you for your stay",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "pending",
-    postDateTime: "26-01-25 - 06:00",
-    deleteDateTime: "26-01-25 - 10:00",
-  },
-];
+import type { MessageBackend, MessageUI } from "../../types/message.types";
+import type React from "react";
 
 const badgeStyle = (status: MsgStatus) => ({
   display: "inline-block",
@@ -52,47 +29,32 @@ const badgeStyle = (status: MsgStatus) => ({
   textTransform: "uppercase",
 });
 
-export const MessageAccordion = () => {
-  const [mockData, setMockData] = useState(mockMessages);
-  const [editMode, setEditMode] = useState("");
-  const [formData, setFormData] = useState<MessageBackend>({
-    id: "",
-    messageScope: "all",
-    title: "",
-    content: "",
-    postDate: "",
-    postTime: "",
-    deleteDate: "",
-    deleteTime: "",
-    isActive: false,
-  });
+interface MessageAccordionProps {
+  messages: MessageUI[];
+  isLoading: boolean;
+  error: boolean;
+  editingId: string;
+  formData: MessageBackend;
+  startEdit: (msg: MessageUI) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  saveEdit: (id: string) => void;
+  cancelEdit: () => void;
+}
 
-  const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    e.preventDefault();
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSave = (id: string) => {
-    setMockData((prev) =>
-      prev.map((msg) => {
-        if (msg.id === id) {
-          return {
-            ...msg,
-            title: formData.title,
-            content: formData.content,
-          };
-        } else {
-          return msg;
-        }
-      }),
-    );
-    setEditMode("");
-  };
+export const MessageAccordion = ({
+  messages,
+  isLoading,
+  error,
+  editingId,
+  formData,
+  startEdit,
+  handleChange,
+  saveEdit,
+  cancelEdit,
+}: MessageAccordionProps) => {
+  if (isLoading) return <Typography>Loading messages...</Typography>;
+  if (error)
+    return <Typography color="error">Error loading messages</Typography>;
 
   return (
     <Box
@@ -108,7 +70,7 @@ export const MessageAccordion = () => {
     >
       <Typography variant="h5">Messages</Typography>
 
-      {mockData.map((msg) => (
+      {messages.map((msg) => (
         <Accordion key={msg.id} component="form">
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -123,18 +85,25 @@ export const MessageAccordion = () => {
               width={1}
               marginRight={2}
             >
-              {editMode === msg.id ? (
+              {editingId === msg.id ? (
                 <>
                   <TextField
                     label="Title"
                     name="title"
                     fullWidth
                     value={formData.title}
-                    onChange={handleEdit}
+                    onChange={handleChange}
                   />
                   <Button
                     onClick={() => {
-                      handleSave(msg.id);
+                      cancelEdit();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      saveEdit(msg.id);
                     }}
                   >
                     Save
@@ -155,7 +124,7 @@ export const MessageAccordion = () => {
             </Stack>
           </AccordionSummary>
           <AccordionDetails>
-            {editMode === msg.id ? (
+            {editingId === msg.id ? (
               <TextField
                 label="Content"
                 name="content"
@@ -163,7 +132,7 @@ export const MessageAccordion = () => {
                 rows={4}
                 fullWidth
                 value={formData.content}
-                onChange={handleEdit}
+                onChange={handleChange}
               />
             ) : (
               <>
@@ -182,18 +151,13 @@ export const MessageAccordion = () => {
                       {msg.status} {msg.postDateTime}
                     </Typography>
                     <Typography component="span" sx={badgeStyle("delete")}>
-                      Delets {msg.deleteDateTime}
+                      Delets {msg.expiresAtDateTime}
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={2}>
                     <Button
                       onClick={() => {
-                        setEditMode(msg.id);
-                        setFormData((prev) => ({
-                          ...prev,
-                          title: msg.title,
-                          content: msg.content,
-                        }));
+                        startEdit(msg);
                       }}
                     >
                       Edit

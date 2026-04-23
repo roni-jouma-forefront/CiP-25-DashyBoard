@@ -3,6 +3,7 @@ export type Title = "Mrs" | "Ms" | "Mr" | "Mx" | null;
 
 export type Room = {
   id: string;
+  bookingId: string,
   number: number;
   status: RoomStatus;
   title: Title;
