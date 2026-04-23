@@ -74,6 +74,7 @@ export default function MessagesWidget({ hotelId, bookingId }: MessagesProps) {
           {messagesData?.map((message) => {
             return (
               <Paper
+                key={message.id}
                 sx={{
                   p: 1.2,
                   borderRadius: 2,
