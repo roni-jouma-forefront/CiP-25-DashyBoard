@@ -5,15 +5,15 @@ import formatTime from "../../utils/FormatTime.tsx";
 
 interface MessagesProps {
   hotelId: string;
-  bookingId: string;
+  roomId: string;
 }
 
-export default function MessagesWidget({ hotelId, bookingId }: MessagesProps) {
+export default function MessagesWidget({ hotelId, roomId }: MessagesProps) {
   const {
     data: messagesData = [],
     error,
     isLoading,
-  } = useMessages({ hotelId, bookingId });
+  } = useMessages({ hotelId, roomId });
 
   console.log(messagesData);
 

@@ -117,7 +117,7 @@ function MirrorDashboard() {
                   <DraggableWrapper key={6} id={6}>
                     <MessagesWidget
                       hotelId={import.meta.env.VITE_HOTEL_ID}
-                      bookingId="60000000-0000-0000-0000-000000000001"
+                      roomId="20000000-0000-0000-0000-000000000101"
                     />
                   </DraggableWrapper>
                 );
