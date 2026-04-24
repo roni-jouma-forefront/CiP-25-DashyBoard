@@ -5,6 +5,7 @@ using DashyBoard.Application.Features.Commands.Bookings.UpdateBooking;
 using DashyBoard.Application.Features.Commands.ImportBookingsFromCsv;
 using DashyBoard.Application.Features.Queries.Bookings.GetAllBookings;
 using DashyBoard.Application.Features.Queries.Bookings.GetBooking;
+using DashyBoard.Application.Features.Queries.Bookings.GetBookingWithGuest;
 using DashyBoard.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -274,5 +275,51 @@ public class BookingsController : ControllerBase
         );
 
         return Ok(result.Data);
+    }
+
+    /// <summary>
+    /// Get active booking for a room with guest info.
+    /// Returns booking + guest in one call (for mirror display).
+    /// </summary>
+    /// <param name="roomId">Room ID</param>
+    /// <param name="bookingStatus">Optional status filter (defaults to Active)</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Booking with guest info, or null if no booking found</returns>
+    [HttpGet("room/{roomId}/with-guest")]
+    [ProducesResponseType(typeof(BookingWithGuestDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetBookingWithGuest(
+        Guid roomId,
+        Booking.Status? bookingStatus,
+        CancellationToken cancellationToken
+    )
+    {
+        if (roomId == Guid.Empty)
+            return BadRequest("Room ID is required.");
+
+        try
+        {
+            var query = new GetBookingWithGuestQuery(roomId, bookingStatus);
+            var result = await _mediator.Send(query, cancellationToken);
+
+            if (result == null)
+                return NoContent();
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "Error occurred while retrieving booking with guest for room ID {RoomId}",
+                roomId
+            );
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                "An error occurred while retrieving the booking."
+            );
+        }
     }
 }

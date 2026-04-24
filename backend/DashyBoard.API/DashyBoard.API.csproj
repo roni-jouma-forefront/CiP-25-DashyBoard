@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -25,5 +24,4 @@
     <ProjectReference Include="..\DashyBoard.Application\DashyBoard.Application.csproj" />
     <ProjectReference Include="..\DashyBoard.Infrastructure\DashyBoard.Infrastructure.csproj" />
   </ItemGroup>
-
 </Project>
