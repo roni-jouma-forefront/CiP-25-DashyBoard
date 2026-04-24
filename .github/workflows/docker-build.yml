@@ -60,7 +60,7 @@ jobs:
           tags: dashyboard-backend:${{ github.sha }}
           load: true
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=max,ignore-error=true
 
       - name: Save backend Docker image
         if: github.ref == 'refs/heads/main'
@@ -113,7 +113,7 @@ jobs:
           tags: dashyboard-frontend:${{ github.sha }}
           load: true
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=max,ignore-error=true
 
       - name: Save frontend Docker image
         if: github.ref == 'refs/heads/main'
