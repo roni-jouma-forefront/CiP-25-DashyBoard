@@ -7,10 +7,11 @@ import Watch from "../base/watch";
 import FlightInfo from "./FlightInfoWidget";
 import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
 import DeparturesWidget from "./DepartureFlightsWidget.tsx";
+import WaitTimeWidget from "./WaitTimesWidget.tsx";
 import { widgetTheme } from "../../theme/index.ts";
 
 function MirrorDashboard() {
-  const [order, setOrder] = useState([1, 2, 3, 4, 5]);
+  const [order, setOrder] = useState([1, 2, 3, 4, 5, 6]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -94,6 +95,12 @@ function MirrorDashboard() {
                 return (
                   <DraggableWrapper key={5} id={5}>
                     <DeparturesWidget />
+                  </DraggableWrapper>
+                );
+              if (id === 6)
+                return (
+                  <DraggableWrapper key={6} id={6}>
+                    <WaitTimeWidget airport="ARN" />
                   </DraggableWrapper>
                 );
             })}
