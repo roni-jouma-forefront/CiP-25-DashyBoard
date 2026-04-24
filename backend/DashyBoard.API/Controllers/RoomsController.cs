@@ -4,6 +4,7 @@ using DashyBoard.Application.Features.Commands.Rooms.DeleteRoom;
 using DashyBoard.Application.Features.Commands.Rooms.UpdateRoom;
 using DashyBoard.Application.Features.Queries.Rooms.GetAllRooms;
 using DashyBoard.Application.Features.Queries.Rooms.GetRoom;
+using DashyBoard.Application.Features.Queries.Rooms.GetRoomsWithBookings;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -254,6 +255,46 @@ public class RoomsController : ControllerBase
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 "An error occurred while deleting the room."
+            );
+        }
+    }
+
+    /// <summary>
+    /// Get all rooms for a hotel with active bookings and guest info.
+    /// Returns enriched data in a single call (avoids N+1 problem).
+    /// Use this for admin dashboard.
+    /// </summary>
+    /// <param name="hotelId">Hotel ID</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>List of rooms with active booking and guest info</returns>
+    [HttpGet("hotel/{hotelId}/with-bookings")]
+    [ProducesResponseType(typeof(List<RoomWithBookingDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetRoomsWithBookings(
+        Guid hotelId,
+        CancellationToken cancellationToken
+    )
+    {
+        if (hotelId == Guid.Empty)
+            return BadRequest("Hotel ID is required.");
+
+        try
+        {
+            var query = new GetRoomsWithBookingsQuery(hotelId);
+            var result = await _mediator.Send(query, cancellationToken);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "Error occurred while retrieving rooms with bookings for hotel ID {HotelId}",
+                hotelId
+            );
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                "An error occurred while retrieving rooms with bookings."
             );
         }
     }
