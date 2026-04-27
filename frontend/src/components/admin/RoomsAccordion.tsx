@@ -13,50 +13,21 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import type { Room } from "../../types/types";
 
-const mockRooms: Room[] = [
-  {
-    id: "1",
-    bookingId: "60000000-0000-0000-0000-000000000001",
-    number: 101,
-    status: "occupied",
-    title: "Mr",
-    guestFirstName: "Arne",
-    guestLastName: "Andersson",
-    flight: "SK123",
-  },
-  {
-    id: "2",
-    bookingId: "60000000-0000-0000-0000-000000000002",
-    number: 102,
-    status: "occupied",
-    title: "Mx",
-    guestFirstName: "Cookie",
-    guestLastName: "Larsson",
-    flight: "BA777",
-  },
-  {
-    id: "3",
-    bookingId: "60000000-0000-0000-0000-0000000000013",
-    number: 103,
-    status: "occupied",
-    title: "Ms",
-    guestFirstName: "Karin",
-    guestLastName: "Karinsson",
-    flight: "BA777",
-  },
-  {
-    id: "4",
-    bookingId: "",
-    number: 104,
-    status: "available",
-    title: null,
-    guestFirstName: null,
-    guestLastName: null,
-    flight: null,
-  },
-];
+interface RoomsAccordionProps {
+  rooms: Room[];
+  isLoading: boolean;
+  error: Error | null;
+}
 
-export const RoomsAccordion = () => {
+export const RoomsAccordion = ({
+  rooms,
+  isLoading,
+  error,
+}: RoomsAccordionProps) => {
+  if (isLoading) return <Typography>Loading messages...</Typography>;
+  if (error)
+    return <Typography color="error">Error loading messages</Typography>;
+
   return (
     <Box
       sx={{
@@ -70,7 +41,7 @@ export const RoomsAccordion = () => {
         marginRight: "10px",
       }}
     >
-      {mockRooms.map((room) => (
+      {rooms.map((room) => (
         <Accordion key={room.id}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -84,7 +55,7 @@ export const RoomsAccordion = () => {
               justifyContent="space-between"
               width={1}
             >
-              {room.status === "occupied" ? (
+              {room.activeBooking ? (
                 <RadioButtonCheckedIcon />
               ) : (
                 <CircleOutlinedIcon />
@@ -96,17 +67,18 @@ export const RoomsAccordion = () => {
                 sx={{ flex: 1 }}
               >
                 <Typography component="span" fontWeight="600">
-                  {room.number}
+                  {room.roomNumber}
                 </Typography>
-                {room.status === "occupied" && (
+                {room.activeBooking?.guest && (
                   <Typography variant="body2">
-                    {room.guestFirstName} {room.guestLastName}
+                    {room.activeBooking.guest.firstName}{" "}
+                    {room.activeBooking.guest.lastName}
                   </Typography>
                 )}
               </Stack>
               <Button
                 component={NavLink}
-                to={`/admin/rooms/${room.id}/${room.bookingId}`}
+                to={`/admin/rooms/${room.id}/${room.roomNumber}${room.activeBooking?.id ? `/${room.activeBooking.id}` : ""}`}
               >
                 Edit Room
               </Button>
@@ -119,7 +91,10 @@ export const RoomsAccordion = () => {
               alignItems="flex-start"
               paddingTop={1}
             >
-              <Typography>Departing Flight: {room.flight}</Typography>
+              <Typography>
+                Departing Flight:{" "}
+                {room.activeBooking?.flightId ?? "No departing flight"}
+              </Typography>
             </Stack>
           </AccordionDetails>
         </Accordion>
