@@ -26,13 +26,25 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
 
   if (error)
     return (
-      <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
+      <Typography
+        sx={{
+          m: 3,
+          opacity: 0.9,
+          color: `${widgetTheme.palette.primary.main}`,
+        }}
+      >
         Error: {error.message}
       </Typography>
     );
   if (isLoading)
     return (
-      <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
+      <Typography
+        sx={{
+          m: 3,
+          opacity: 0.9,
+          color: `${widgetTheme.palette.primary.main}`,
+        }}
+      >
         Loading weather info...
       </Typography>
     );
@@ -114,7 +126,7 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                     <i className={`icons wi ${getWeatherIconClass()}`}></i>
                   </Box>
                 </Box>
-                <Typography
+                <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
@@ -126,7 +138,7 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                       {metarData.station?.name ?? "-"}
                     </Typography>
                   </Box>
-                </Typography>
+                </Box>
               </Box>
               <Box>
                 <Stack spacing={1} sx={{ borderRadius: 2 }}>
@@ -180,9 +192,7 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                       justifyContent: "space-around",
                     }}
                   >
-                    <i
-                      className={`icons wi ${getWeatherIconClass()}`}
-                    ></i>
+                    <i className={`icons wi ${getWeatherIconClass()}`}></i>
                     <Typography
                       sx={{
                         fontSize: "2.5rem",
@@ -195,7 +205,7 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                     </Typography>
                   </Box>
 
-                  <Typography
+                  <Box
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -210,7 +220,7 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                         {metarData.station?.name ?? "-"}
                       </Typography>
                     </Box>
-                  </Typography>
+                  </Box>
                 </Box>
               </Box>
             </>

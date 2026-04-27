@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 import { useDrop } from "react-dnd";
 import DraggableWrapper from "./DraggableWrapper";
@@ -7,10 +7,12 @@ import Watch from "../base/watch";
 import FlightInfo from "./FlightInfoWidget";
 import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
 import DeparturesWidget from "./DepartureFlightsWidget.tsx";
+import MessagesWidget from "./MessagesWidget.tsx";
 import { widgetTheme } from "../../theme/index.ts";
 
 function MirrorDashboard() {
-  const [order, setOrder] = useState([1, 2, 3, 4, 5]);
+  const [order, setOrder] = useState([1, 2, 3, 4, 5, 6]);
+  const guestName = "Hozier";
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -46,6 +48,20 @@ function MirrorDashboard() {
             backgroundColor: `${widgetTheme.palette.primary.dark}`,
           }}
         >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              m: 2,
+            }}
+          >
+            <Typography
+              variant="h3"
+              sx={{ color: `${widgetTheme.palette.primary.main}` }}
+            >
+              Welcome {guestName}
+            </Typography>
+          </Box>
           <Box
             ref={drop as unknown as React.RefObject<HTMLDivElement>}
             sx={{
@@ -87,13 +103,22 @@ function MirrorDashboard() {
               if (id === 4)
                 return (
                   <DraggableWrapper key={4} id={4}>
-                    <ArrivalsWidget />
+                    <ArrivalsWidget airport="ARN" timezone="Europe/Stockholm" />
                   </DraggableWrapper>
                 );
               if (id === 5)
                 return (
                   <DraggableWrapper key={5} id={5}>
-                    <DeparturesWidget />
+                    <DeparturesWidget airport="ARN" />
+                  </DraggableWrapper>
+                );
+              if (id === 6)
+                return (
+                  <DraggableWrapper key={6} id={6}>
+                    <MessagesWidget
+                      hotelId={import.meta.env.VITE_HOTEL_ID}
+                      roomId="20000000-0000-0000-0000-000000000101"
+                    />
                   </DraggableWrapper>
                 );
             })}
