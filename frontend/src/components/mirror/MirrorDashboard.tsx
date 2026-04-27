@@ -123,7 +123,7 @@ function MirrorDashboard() {
                     <Watch
                       key={1}
                       location={import.meta.env.VITE_LOCATION_NAME}
-                      timeZone="Europe/Stockholm"
+                      timeZone={import.meta.env.VITE_TIMEZONE}
                     />
                   </DraggableWrapper>
                 );
@@ -148,7 +148,7 @@ function MirrorDashboard() {
                   <DraggableWrapper key={4} id={4}>
                     <ArrivalsWidget
                       airport={import.meta.env.VITE_AIRPORT_NAME}
-                      timezone="Europe/Stockholm"
+                      timezone={import.meta.env.VITE_TIMEZONE}
                     />
                   </DraggableWrapper>
                 );
