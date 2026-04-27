@@ -31,7 +31,6 @@ function MirrorDashboard() {
   }));
 
   const { roomId } = useParams();
-  console.log(roomId);
 
   const {
     data: bookings = {},
@@ -131,26 +130,34 @@ function MirrorDashboard() {
               if (id === 2)
                 return (
                   <DraggableWrapper key={2} id={2}>
-                    {/*För att se de olika layouterna för pilot eller "vamlig" gäst byt boolen nedan. (false = vanlig gäst) */}
+                    {/*För att se de olika layouterna för pilot eller "vanlig" gäst byt boolen nedan. (false = vanlig gäst) */}
                     <WeatherWidget icao="ESSA" pilotVersion={false} />
                   </DraggableWrapper>
                 );
               if (id === 3)
                 return (
                   <DraggableWrapper key={3} id={3}>
-                    <FlightInfo airport="ARN" flight="OS966" />
+                    <FlightInfo
+                      airport={import.meta.env.VITE_AIRPORT_NAME}
+                      flight="OS966"
+                    />
                   </DraggableWrapper>
                 );
               if (id === 4)
                 return (
                   <DraggableWrapper key={4} id={4}>
-                    <ArrivalsWidget airport="ARN" timezone="Europe/Stockholm" />
+                    <ArrivalsWidget
+                      airport={import.meta.env.VITE_AIRPORT_NAME}
+                      timezone="Europe/Stockholm"
+                    />
                   </DraggableWrapper>
                 );
               if (id === 5)
                 return (
                   <DraggableWrapper key={5} id={5}>
-                    <DeparturesWidget airport="ARN" />
+                    <DeparturesWidget
+                      airport={import.meta.env.VITE_AIRPORT_NAME}
+                    />
                   </DraggableWrapper>
                 );
               if (id === 6)
@@ -158,14 +165,16 @@ function MirrorDashboard() {
                   <DraggableWrapper key={6} id={6}>
                     <MessagesWidget
                       hotelId={import.meta.env.VITE_HOTEL_ID}
-                      roomId="20000000-0000-0000-0000-000000000101"
+                      roomId={"20000000-0000-0000-0000-000000000101"}
                     />
                   </DraggableWrapper>
                 );
               if (id === 6)
                 return (
                   <DraggableWrapper key={6} id={6}>
-                    <WaitTimeWidget airport="ARN" />
+                    <WaitTimeWidget
+                      airport={import.meta.env.VITE_AIRPORT_NAME}
+                    />
                   </DraggableWrapper>
                 );
             })}
