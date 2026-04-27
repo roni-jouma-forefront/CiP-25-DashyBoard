@@ -10,6 +10,8 @@ import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 import MessagesWidget from "./MessagesWidget.tsx";
 import WaitTimeWidget from "./WaitTimesWidget.tsx";
 import { widgetTheme } from "../../theme/index.ts";
+import { useBookings } from "../../hooks/useBookings.ts";
+import { useParams } from "react-router";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3, 4, 5, 6]);
@@ -27,6 +29,44 @@ function MirrorDashboard() {
       isOver: monitor.isOver(),
     }),
   }));
+
+  const { roomId } = useParams();
+  console.log(roomId);
+
+  const {
+    data: bookings = {},
+    error,
+    isLoading,
+  } = useBookings({
+    roomId,
+  });
+
+  if (error)
+    return (
+      <Typography
+        sx={{
+          m: 3,
+          opacity: 0.9,
+          color: `${widgetTheme.palette.primary.main}`,
+        }}
+      >
+        Error: {error.message}
+      </Typography>
+    );
+  if (isLoading)
+    return (
+      <Typography
+        sx={{
+          m: 3,
+          opacity: 0.9,
+          color: `${widgetTheme.palette.primary.main}`,
+        }}
+      >
+        Loading arrivals info...
+      </Typography>
+    );
+
+  console.log(bookings);
 
   return (
     <>
