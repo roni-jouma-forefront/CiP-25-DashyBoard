@@ -20,7 +20,7 @@ export async function GetArrivalFlights(
   airport: string,
 ): Promise<ArrivalsData[]> {
   const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
-  console.log("Fetching arrivals");
+
   const today = new Date().toLocaleDateString("sv-SE", {
     year: "numeric",
     month: "2-digit",

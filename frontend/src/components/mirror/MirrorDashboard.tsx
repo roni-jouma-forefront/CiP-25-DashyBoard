@@ -8,6 +8,7 @@ import FlightInfo from "./FlightInfoWidget";
 import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
 import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 import MessagesWidget from "./MessagesWidget.tsx";
+import WaitTimeWidget from "./WaitTimesWidget.tsx";
 import { widgetTheme } from "../../theme/index.ts";
 
 function MirrorDashboard() {
@@ -119,6 +120,12 @@ function MirrorDashboard() {
                       hotelId={import.meta.env.VITE_HOTEL_ID}
                       roomId="20000000-0000-0000-0000-000000000101"
                     />
+                  </DraggableWrapper>
+                );
+              if (id === 6)
+                return (
+                  <DraggableWrapper key={6} id={6}>
+                    <WaitTimeWidget airport="ARN" />
                   </DraggableWrapper>
                 );
             })}

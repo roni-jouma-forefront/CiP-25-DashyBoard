@@ -1,25 +1,19 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
-import { useDepartureFlights } from "../../hooks";
-import { widgetTheme } from "../../theme";
-import formatTime from "../../utils/FormatTime";
+import { widgetTheme } from "../../theme/index.ts";
+import { useWaitTimes } from "../../hooks/useWaitTimes.ts";
 
-interface DepartureProps {
-  airport: string
+interface WaitTimeaProps {
+  airport: string;
 }
 
-
-export default function DeparturesWidget({airport}: DepartureProps) {
-  const today = new Date().toLocaleDateString("en-GB", {
-    month: "long",
-    day: "numeric",
-  });
-
+export default function WaitTimeWidget({ airport }: WaitTimeaProps) {
+  console.log(airport);
   const {
-    data: departures = [],
+    data: waitTimes = [],
     error,
     isLoading,
-  } = useDepartureFlights({
-    airport: airport,
+  } = useWaitTimes({
+    airport,
   });
 
   if (error)
@@ -43,7 +37,7 @@ export default function DeparturesWidget({airport}: DepartureProps) {
           color: `${widgetTheme.palette.primary.main}`,
         }}
       >
-        Loading departures info...
+        Loading arrivals info...
       </Typography>
     );
 
@@ -70,16 +64,15 @@ export default function DeparturesWidget({airport}: DepartureProps) {
           }}
         >
           <Typography sx={{ fontSize: "1.4rem", fontWeight: 700 }}>
-            Departures
+            Waiting Times
           </Typography>
-          <Typography sx={{ fontWeight: 700 }}>{today}</Typography>
         </Box>
       </Box>
       <Stack spacing={1.2}>
-        {departures.slice(0, 5).map((departure) => {
+        {waitTimes.slice(0, 5).map((waitTime) => {
           return (
             <Paper
-              key={departure.flightId}
+              key={waitTime.queueName}
               sx={{
                 p: 1.2,
                 borderRadius: 2,
@@ -88,25 +81,16 @@ export default function DeparturesWidget({airport}: DepartureProps) {
                 border: `2px solid ${widgetTheme.palette.primary.light}`,
               }}
             >
-              <Stack direction="row" justifyContent="space-between">
-                <Box>
+              <Stack direction="column" justifyContent="space-between">
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <Typography sx={{ fontWeight: 700, fontSize: "0.9rem" }}>
-                    {departure.flightId}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: "0.75rem",
-                      color: `${widgetTheme.palette.primary.main}`,
-                    }}
-                  >
-                    {departure.departureAirportSwedish ?? "-"} to{" "}
-                    {departure.arrivalAirportSwedish ?? "-"}
-                  </Typography>
-                </Box>
-
-                <Box sx={{ textAlign: "right" }}>
-                  <Typography sx={{ fontSize: "0.8rem" }}>
-                    {formatTime(departure.departureTime?.scheduledUtc) ?? "-"}
+                    {waitTime.queueName ?? "-"}
                   </Typography>
                   <Typography
                     sx={{
@@ -115,8 +99,26 @@ export default function DeparturesWidget({airport}: DepartureProps) {
                       color: "#3b82f6",
                     }}
                   >
-                    {departure.locationAndStatus?.terminal ?? "-"}
+                    {waitTime.terminal ?? "-"}
                   </Typography>
+                </Box>
+
+                <Box sx={{ mt: 0.5 }}>
+                  <Box
+                    sx={{
+                      fontSize: "0.8rem",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "0.8rem", fontWeight: 600 }}>
+                      Current wait:
+                    </Typography>
+                    <Typography sx={{ fontSize: "0.8rem" }}>
+                      {" "}
+                      {waitTime.currentProjectedWaitTime ?? "-"} min
+                    </Typography>
+                  </Box>
                 </Box>
               </Stack>
             </Paper>
