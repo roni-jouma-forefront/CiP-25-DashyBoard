@@ -65,7 +65,7 @@ public class UpdateBookingCommandHandler(IRepository<Booking> repository, IDateT
 
         booking.RoomId = request.RoomId;
         booking.GuestId = request.GuestId;
-        booking.FlightId = request.FlightId;
+        booking.FlightNumber = request.FlightNumber;
         booking.NumberOfGuests = request.NumberOfGuests;
         booking.CheckIn = request.CheckIn;
         booking.CheckOut = request.CheckOut;
@@ -81,7 +81,7 @@ public class UpdateBookingCommandHandler(IRepository<Booking> repository, IDateT
                 Id = booking.Id,
                 RoomId = booking.RoomId,
                 GuestId = booking.GuestId,
-                FlightId = booking.FlightId,
+                FlightNumber = booking.FlightNumber,
                 NumberOfGuests = booking.NumberOfGuests,
                 CheckIn = booking.CheckIn,
                 CheckOut = booking.CheckOut,

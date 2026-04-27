@@ -16,7 +16,6 @@ public class ImportBookingsFromCsvHandlerTests
     private Mock<IRepository<Booking>> _bookingRepoMock;
     private Mock<IRepository<Guest>> _guestRepoMock;
     private Mock<IRepository<Room>> _roomRepoMock;
-    private Mock<IRepository<Flight>> _flightRepoMock;
     private Mock<ISwedaviaFlightApiService> _flightApiMock;
     private Mock<IDateTime> _dateTimeMock;
     private Mock<ILogger<ImportBookingsFromCsvHandler>> _loggerMock;
@@ -29,7 +28,6 @@ public class ImportBookingsFromCsvHandlerTests
         _bookingRepoMock = new Mock<IRepository<Booking>>();
         _guestRepoMock = new Mock<IRepository<Guest>>();
         _roomRepoMock = new Mock<IRepository<Room>>();
-        _flightRepoMock = new Mock<IRepository<Flight>>();
         _flightApiMock = new Mock<ISwedaviaFlightApiService>();
         _dateTimeMock = new Mock<IDateTime>();
         _loggerMock = new Mock<ILogger<ImportBookingsFromCsvHandler>>();
@@ -41,8 +39,6 @@ public class ImportBookingsFromCsvHandlerTests
             _bookingRepoMock.Object,
             _guestRepoMock.Object,
             _roomRepoMock.Object,
-            _flightRepoMock.Object,
-            _flightApiMock.Object,
             _dateTimeMock.Object,
             _loggerMock.Object
         );
@@ -107,7 +103,7 @@ public class ImportBookingsFromCsvHandlerTests
         // Flight API returns data
         var flightDto = new FlightInfoDto
         {
-            FlightId = "SK1234",
+            FlightNumber = "SK1234",
             LocationAndStatus = new LocationAndStatusDto
             {
                 Gate = "A12",
@@ -125,19 +121,6 @@ public class ImportBookingsFromCsvHandlerTests
                 )
             )
             .ReturnsAsync(new[] { flightDto });
-
-        // No existing flight in DB
-        _flightRepoMock
-            .Setup(r =>
-                r.FindAsync(
-                    It.IsAny<Expression<Func<Flight, bool>>>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync(Enumerable.Empty<Flight>());
-        _flightRepoMock
-            .Setup(r => r.AddAsync(It.IsAny<Flight>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Flight f, CancellationToken _) => f);
 
         // Booking add
         _bookingRepoMock
@@ -160,14 +143,6 @@ public class ImportBookingsFromCsvHandlerTests
             r =>
                 r.AddAsync(
                     It.Is<Guest>(g => g.FirstName == "John" && g.LastName == "Doe"),
-                    It.IsAny<CancellationToken>()
-                ),
-            Times.Once
-        );
-        _flightRepoMock.Verify(
-            r =>
-                r.AddAsync(
-                    It.Is<Flight>(f => f.FlightNumber == "1234"),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once
@@ -330,7 +305,7 @@ public class ImportBookingsFromCsvHandlerTests
 
         var flightDto = new FlightInfoDto
         {
-            FlightId = "SK3344",
+            FlightNumber = "SK3344",
             LocationAndStatus = new LocationAndStatusDto { Gate = "B5" },
             DepartureTime = new FlightTimeDto { ScheduledUtc = new DateTime(2026, 5, 5, 14, 0, 0) },
         };
@@ -344,18 +319,6 @@ public class ImportBookingsFromCsvHandlerTests
                 )
             )
             .ReturnsAsync(new[] { flightDto });
-
-        _flightRepoMock
-            .Setup(r =>
-                r.FindAsync(
-                    It.IsAny<Expression<Func<Flight, bool>>>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync(Enumerable.Empty<Flight>());
-        _flightRepoMock
-            .Setup(r => r.AddAsync(It.IsAny<Flight>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Flight f, CancellationToken _) => f);
 
         _bookingRepoMock
             .Setup(r => r.AddAsync(It.IsAny<Booking>(), It.IsAny<CancellationToken>()))

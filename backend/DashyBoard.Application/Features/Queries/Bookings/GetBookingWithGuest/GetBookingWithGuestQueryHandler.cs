@@ -55,7 +55,7 @@ public class GetBookingWithGuestQueryHandler(
         {
             Id = booking.Id,
             RoomId = booking.RoomId,
-            FlightId = booking.FlightId,
+            FlightNumber = booking.FlightNumber,
             NumberOfGuests = booking.NumberOfGuests,
             CheckIn = booking.CheckIn,
             CheckOut = booking.CheckOut,

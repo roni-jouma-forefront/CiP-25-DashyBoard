@@ -9,7 +9,7 @@ public record UpdateBookingCommand(
     Guid Id,
     Guid? RoomId,
     Guid? GuestId,
-    Guid? FlightId,
+    string FlightNumber,
     int NumberOfGuests,
     DateTime CheckIn,
     DateTime CheckOut,

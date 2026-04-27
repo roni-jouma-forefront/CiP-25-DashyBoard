@@ -19,7 +19,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Room> Rooms => Set<Room>();
     public DbSet<Guest> Guests => Set<Guest>();
     public DbSet<Booking> Bookings => Set<Booking>();
-    public DbSet<Flight> Flights => Set<Flight>();
     public DbSet<Admin> Admins => Set<Admin>();
     public DbSet<Message> Messages => Set<Message>();
 
