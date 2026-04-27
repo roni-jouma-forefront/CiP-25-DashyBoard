@@ -116,7 +116,7 @@ export default function WaitTimeWidget({ airport }: WaitTimeaProps) {
                     </Typography>
                     <Typography sx={{ fontSize: "0.8rem" }}>
                       {" "}
-                      {waitTime.currentProjectedWaitTime ?? "-"} min
+                      {waitTime.currentProjectedWaitTime ?? "-"} minutes
                     </Typography>
                   </Box>
                 </Box>
