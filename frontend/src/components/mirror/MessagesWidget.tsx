@@ -15,8 +15,6 @@ export default function MessagesWidget({ hotelId, roomId }: MessagesProps) {
     isLoading,
   } = useMessages({ hotelId, roomId });
 
-  console.log(messagesData);
-
   if (error)
     return (
       <Typography
@@ -117,7 +115,7 @@ export default function MessagesWidget({ hotelId, roomId }: MessagesProps) {
                       pt: 2,
                     }}
                   >
-                    <Typography>Test Test</Typography>
+                    <Typography>{message.postedBy ?? -" "}</Typography>
                   </Box>
                 </Stack>
               </Paper>

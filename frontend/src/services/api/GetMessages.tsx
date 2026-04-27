@@ -7,6 +7,7 @@ export type MessagesData = {
   expiresAt: string;
   isActive: boolean;
   createdAt: string;
+  postedBy: string;
 };
 
 export async function GetMessages(
