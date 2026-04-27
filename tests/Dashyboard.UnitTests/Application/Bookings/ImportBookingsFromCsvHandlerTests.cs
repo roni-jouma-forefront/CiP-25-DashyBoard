@@ -103,7 +103,7 @@ public class ImportBookingsFromCsvHandlerTests
         // Flight API returns data
         var flightDto = new FlightInfoDto
         {
-            FlightNumber = "SK1234",
+            FlightId = "SK1234",
             LocationAndStatus = new LocationAndStatusDto
             {
                 Gate = "A12",
@@ -305,7 +305,7 @@ public class ImportBookingsFromCsvHandlerTests
 
         var flightDto = new FlightInfoDto
         {
-            FlightNumber = "SK3344",
+            FlightId = "SK3344",
             LocationAndStatus = new LocationAndStatusDto { Gate = "B5" },
             DepartureTime = new FlightTimeDto { ScheduledUtc = new DateTime(2026, 5, 5, 14, 0, 0) },
         };
