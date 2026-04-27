@@ -23,7 +23,6 @@ export type MetarData = {
 
 export async function GetWeather(icao: string): Promise<MetarData> {
   const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
-  console.log("Fetching weather");
 
   const res = await fetch(`${apiUrl}/api/CheckWx/${icao.toUpperCase()}`, {
     headers: { "Content-Type": "application/json" },

@@ -24,7 +24,6 @@ export async function GetFlightInfo(
   flight: string,
 ): Promise<FlightData> {
   const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
-  console.log("Fetching flight info");
 
   const res = await fetch(
     `${apiUrl}/api/Departure/airport/${airport.toUpperCase()}/flight/${flight.toUpperCase()}`,
