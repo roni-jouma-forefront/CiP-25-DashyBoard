@@ -10,7 +10,7 @@ import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 import MessagesWidget from "./MessagesWidget.tsx";
 import WaitTimeWidget from "./WaitTimesWidget.tsx";
 import { widgetTheme } from "../../theme/index.ts";
-import { useBookings } from "../../hooks/useBookings.ts";
+import { useBookings } from "../../hooks";
 import { useParams } from "react-router";
 
 function MirrorDashboard() {
@@ -122,7 +122,7 @@ function MirrorDashboard() {
                   <DraggableWrapper key={1} id={1}>
                     <Watch
                       key={1}
-                      location="Stockholm"
+                      location={import.meta.env.VITE_LOCATION_NAME}
                       timeZone="Europe/Stockholm"
                     />
                   </DraggableWrapper>

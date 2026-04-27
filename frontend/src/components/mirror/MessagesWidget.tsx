@@ -1,6 +1,6 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { widgetTheme } from "../../theme/index.ts";
-import { useMessages } from "../../hooks/useMessages.ts";
+import { useMessages } from "../../hooks";
 import formatTime from "../../utils/FormatTime.tsx";
 
 interface MessagesProps {
