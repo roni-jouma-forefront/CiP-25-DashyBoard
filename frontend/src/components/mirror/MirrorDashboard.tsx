@@ -8,6 +8,7 @@ import FlightInfo from "./FlightInfoWidget";
 import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
 import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 import MessagesWidget from "./MessagesWidget.tsx";
+import WaitTimeWidget from "./WaitTimesWidget.tsx";
 import { widgetTheme } from "../../theme/index.ts";
 
 function MirrorDashboard() {
