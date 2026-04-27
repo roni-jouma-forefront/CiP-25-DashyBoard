@@ -2,7 +2,7 @@ import { DashboardForm } from "../../components/admin/forms/DashboardForm";
 import Watch from "../../components/base/watch";
 import { Stack, Typography } from "@mui/material";
 import { MessageAccordion } from "../../components/admin/MessageAccordion";
-import { useMessages } from "../../hooks";
+import { useMessagesAdmin } from "../../hooks";
 
 const hotelId = import.meta.env.VITE_HOTEL_ID;
 
@@ -18,7 +18,7 @@ export default function AdminHome() {
     saveEdit,
     cancelEdit,
     onSubmit
-  } = useMessages({ hotelId });
+  } = useMessagesAdmin({ hotelId });
 
   return (
     <>

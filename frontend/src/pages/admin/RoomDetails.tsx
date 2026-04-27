@@ -5,7 +5,7 @@ import { Button, Stack, Typography } from "@mui/material";
 import { MessageAccordion } from "../../components/admin/MessageAccordion";
 import AlertDialog from "../../components/admin/AlertDialog";
 import React from "react";
-import { useMessages } from "../../hooks";
+import { useMessagesAdmin } from "../../hooks";
 
 const hotelId = import.meta.env.VITE_HOTEL_ID;
 
@@ -23,7 +23,7 @@ export default function Room() {
     saveEdit,
     cancelEdit,
     onSubmit,
-  } = useMessages({ hotelId, bookingId });
+  } = useMessagesAdmin({ hotelId, bookingId });
 
   const handleDialog = () => {
     setDialogOpen(true);

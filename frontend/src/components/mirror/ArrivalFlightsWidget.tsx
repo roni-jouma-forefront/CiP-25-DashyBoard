@@ -1,28 +1,29 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { useArrivalFlights } from "../../hooks";
 import { widgetTheme } from "../../theme/index.ts";
+import formatTime from "../../utils/FormatTime.tsx";
 
-function formatTime(utc: string | null | undefined) {
-  if (!utc) return "-";
-  return new Date(utc).toLocaleTimeString("sv-SE", {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Europe/Stockholm",
-  });
+interface ArrivalProps {
+  airport: string, 
+  timezone: string
 }
 
-export default function ArrivalsWidget() {
+export default function ArrivalsWidget( { airport, timezone }: ArrivalProps) {
   const today = new Date().toLocaleDateString("en-GB", {
     month: "long",
     day: "numeric",
   });
+
+  /////////////////////////////////////////
+  const test = timezone; 
+  console.log(test)
 
   const {
     data: arrivals = [],
     error,
     isLoading,
   } = useArrivalFlights({
-    airport: "ARN",
+    airport,
   });
 
   if (error)

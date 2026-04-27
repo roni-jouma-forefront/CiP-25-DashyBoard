@@ -21,7 +21,6 @@ export async function GetDepartureFlights(
   const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
 
   const today = new Date().toLocaleDateString("sv-SE", {
-    timeZone: "Europe/Stockholm",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
