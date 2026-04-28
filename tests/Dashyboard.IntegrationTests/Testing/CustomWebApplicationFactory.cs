@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using System.Text.Encodings.Web;
 using DashyBoard.Application.Common.Interfaces;
 using DashyBoard.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
@@ -7,8 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Security.Claims;
-using System.Text.Encodings.Web;
 
 namespace Dashyboard.IntegrationTests.Testing;
 
