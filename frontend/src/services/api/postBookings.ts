@@ -8,7 +8,7 @@ export async function postBookings(FormData: FormData) {
   });
 
   if (!res.ok) {
-    throw new Error(`Cound't post bookings file}`);
+    throw new Error(`Couldn't post bookings file`);
   } else {
     return "Posted";
   }
