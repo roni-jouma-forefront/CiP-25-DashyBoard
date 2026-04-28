@@ -17,7 +17,7 @@ export async function postMessage(data: MessageBackend) {
   });
 
   if (!res.ok) {
-    throw new Error(`Cound't post messages`);
+    throw new Error(`Couldn't post messages`);
   } else {
     return "Posted";
   }

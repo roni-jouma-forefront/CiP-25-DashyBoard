@@ -24,9 +24,8 @@ export const RoomsAccordion = ({
   isLoading,
   error,
 }: RoomsAccordionProps) => {
-  if (isLoading) return <Typography>Loading messages...</Typography>;
-  if (error)
-    return <Typography color="error">Error loading messages</Typography>;
+  if (isLoading) return <Typography>Loading rooms...</Typography>;
+  if (error) return <Typography color="error">Error loading rooms</Typography>;
 
   return (
     <Box
