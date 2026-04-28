@@ -37,9 +37,8 @@ export async function GetFlightInfo(
   }
 
   const json = await res.json();
-  const item = Array.isArray(json)
-    ? json[0]
-    : (json?.metarData ?? json?.data ?? json);
+  console.log("FLIGHTINFO", json);
+  const item = json[0] ?? [];
 
   return item as FlightData;
 }

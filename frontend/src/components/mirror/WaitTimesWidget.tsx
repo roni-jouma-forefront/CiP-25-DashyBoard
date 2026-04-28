@@ -1,6 +1,6 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { widgetTheme } from "../../theme/index.ts";
-import { useWaitTimes } from "../../hooks/useWaitTimes.ts";
+import { useWaitTimes } from "../../hooks";
 
 interface WaitTimeaProps {
   airport: string;

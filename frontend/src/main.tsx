@@ -38,7 +38,10 @@ const Main = () => {
                 <Route path="settings" element={<SettingsPage />} />
               </Route>
               <Route path="/room/:id" element={<Room />}></Route>
-              <Route path="/mirror" element={<MirrorDndProvider />}></Route>
+              <Route
+                path="/mirror/:bookingId"
+                element={<MirrorDndProvider />}
+              ></Route>
             </Routes>
           </StrictMode>
         </BrowserRouter>

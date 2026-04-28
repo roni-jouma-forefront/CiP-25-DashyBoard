@@ -26,7 +26,6 @@ export const useMessagesAdmin = ({
     queryKey: ["messages", bookingId],
     queryFn: () => getMessages({ bookingId }),
     enabled: !!initialMessages,
-    // staleTime: 2 * 5 * 1000,
   });
 
   const { mutate } = useMutation<string, Error, MessageBackend>({

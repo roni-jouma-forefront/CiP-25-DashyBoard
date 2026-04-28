@@ -10,6 +10,8 @@ import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 import MessagesWidget from "./MessagesWidget.tsx";
 import WaitTimeWidget from "./WaitTimesWidget.tsx";
 import { widgetTheme } from "../../theme/index.ts";
+import { useBookings } from "../../hooks";
+import { useParams } from "react-router";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3, 4, 5, 6]);
@@ -27,6 +29,43 @@ function MirrorDashboard() {
       isOver: monitor.isOver(),
     }),
   }));
+
+  const { bookingId } = useParams();
+
+  const { data, error, isLoading } = useBookings({
+    bookingId: bookingId as string,
+  });
+
+  if (!data) {
+    return <div>Ingen data</div>;
+  }
+
+  if (error)
+    return (
+      <Typography
+        sx={{
+          m: 3,
+          opacity: 0.9,
+          color: `${widgetTheme.palette.primary.main}`,
+        }}
+      >
+        Error: {error.message}
+      </Typography>
+    );
+  if (isLoading)
+    return (
+      <Typography
+        sx={{
+          m: 3,
+          opacity: 0.9,
+          color: `${widgetTheme.palette.primary.main}`,
+        }}
+      >
+        Loading bookings info...
+      </Typography>
+    );
+
+  console.log(data, typeof data);
 
   return (
     <>
@@ -83,34 +122,42 @@ function MirrorDashboard() {
                   <DraggableWrapper key={1} id={1}>
                     <Watch
                       key={1}
-                      location="Stockholm"
-                      timeZone="Europe/Stockholm"
+                      location={import.meta.env.VITE_LOCATION_NAME}
+                      timeZone={import.meta.env.VITE_TIMEZONE}
                     />
                   </DraggableWrapper>
                 );
               if (id === 2)
                 return (
                   <DraggableWrapper key={2} id={2}>
-                    {/*För att se de olika layouterna för pilot eller "vamlig" gäst byt boolen nedan. (false = vanlig gäst) */}
-                    <WeatherWidget icao="ESSA" pilotVersion={false} />
+                    {/*För att se de olika layouterna för pilot eller "vanlig" gäst byt boolen nedan. (false = vanlig gäst) */}
+                    <WeatherWidget icao="ESSA" pilotVersion={true} />
                   </DraggableWrapper>
                 );
-              if (id === 3)
+              if (id === 3 && data.flightNumber)
                 return (
                   <DraggableWrapper key={3} id={3}>
-                    <FlightInfo airport="ARN" flight="OS966" />
+                    <FlightInfo
+                      airport={import.meta.env.VITE_AIRPORT_NAME}
+                      flight={data.flightNumber}
+                    />
                   </DraggableWrapper>
                 );
               if (id === 4)
                 return (
                   <DraggableWrapper key={4} id={4}>
-                    <ArrivalsWidget airport="ARN" timezone="Europe/Stockholm" />
+                    <ArrivalsWidget
+                      airport={import.meta.env.VITE_AIRPORT_NAME}
+                      timezone={import.meta.env.VITE_TIMEZONE}
+                    />
                   </DraggableWrapper>
                 );
               if (id === 5)
                 return (
                   <DraggableWrapper key={5} id={5}>
-                    <DeparturesWidget airport="ARN" />
+                    <DeparturesWidget
+                      airport={import.meta.env.VITE_AIRPORT_NAME}
+                    />
                   </DraggableWrapper>
                 );
               if (id === 6)
@@ -118,14 +165,16 @@ function MirrorDashboard() {
                   <DraggableWrapper key={6} id={6}>
                     <MessagesWidget
                       hotelId={import.meta.env.VITE_HOTEL_ID}
-                      roomId="20000000-0000-0000-0000-000000000101"
+                      roomId={"20000000-0000-0000-0000-000000000101"}
                     />
                   </DraggableWrapper>
                 );
               if (id === 6)
                 return (
                   <DraggableWrapper key={6} id={6}>
-                    <WaitTimeWidget airport="ARN" />
+                    <WaitTimeWidget
+                      airport={import.meta.env.VITE_AIRPORT_NAME}
+                    />
                   </DraggableWrapper>
                 );
             })}

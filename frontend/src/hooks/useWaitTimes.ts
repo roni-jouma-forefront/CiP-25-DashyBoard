@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetWaitTimes, type WaitTimesData } from "../services/GetWaitTimes";
+import { GetWaitTimes, type WaitTimesData } from "../services/api/GetWaitTimes";
 
 interface WaitTimesProps {
     airport?: string

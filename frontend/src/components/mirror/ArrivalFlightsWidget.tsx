@@ -4,19 +4,18 @@ import { widgetTheme } from "../../theme/index.ts";
 import formatTime from "../../utils/FormatTime.tsx";
 
 interface ArrivalProps {
-  airport: string, 
-  timezone: string
+  airport: string;
+  timezone: string;
 }
 
-export default function ArrivalsWidget( { airport, timezone }: ArrivalProps) {
+export default function ArrivalsWidget({ airport, timezone }: ArrivalProps) {
   const today = new Date().toLocaleDateString("en-GB", {
     month: "long",
     day: "numeric",
   });
 
-  /////////////////////////////////////////
-  const test = timezone; 
-  console.log(test)
+  const test = timezone;
+  console.log(test);
 
   const {
     data: arrivals = [],
@@ -28,13 +27,25 @@ export default function ArrivalsWidget( { airport, timezone }: ArrivalProps) {
 
   if (error)
     return (
-      <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
+      <Typography
+        sx={{
+          m: 3,
+          opacity: 0.9,
+          color: `${widgetTheme.palette.primary.main}`,
+        }}
+      >
         Error: {error.message}
       </Typography>
     );
   if (isLoading)
     return (
-      <Typography sx={{ m: 3, opacity: 0.9, color: `${widgetTheme.palette.primary.main}` }}>
+      <Typography
+        sx={{
+          m: 3,
+          opacity: 0.9,
+          color: `${widgetTheme.palette.primary.main}`,
+        }}
+      >
         Loading arrivals info...
       </Typography>
     );
