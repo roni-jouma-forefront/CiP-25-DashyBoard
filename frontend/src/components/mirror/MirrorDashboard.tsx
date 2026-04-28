@@ -30,15 +30,15 @@ function MirrorDashboard() {
     }),
   }));
 
-  const { roomId } = useParams();
+  const { bookingId } = useParams();
 
-  const {
-    data: bookings = {},
-    error,
-    isLoading,
-  } = useBookings({
-    roomId,
+  const { data, error, isLoading } = useBookings({
+    bookingId: bookingId as string,
   });
+
+  if (!data) {
+    return <div>Ingen data</div>;
+  }
 
   if (error)
     return (
@@ -61,11 +61,11 @@ function MirrorDashboard() {
           color: `${widgetTheme.palette.primary.main}`,
         }}
       >
-        Loading arrivals info...
+        Loading bookings info...
       </Typography>
     );
 
-  console.log(bookings);
+  console.log(data, typeof data);
 
   return (
     <>
@@ -134,12 +134,12 @@ function MirrorDashboard() {
                     <WeatherWidget icao="ESSA" pilotVersion={false} />
                   </DraggableWrapper>
                 );
-              if (id === 3)
+              if (id === 3 && data.flightNumber)
                 return (
                   <DraggableWrapper key={3} id={3}>
                     <FlightInfo
                       airport={import.meta.env.VITE_AIRPORT_NAME}
-                      flight="OS966"
+                      flight={data.flightNumber}
                     />
                   </DraggableWrapper>
                 );

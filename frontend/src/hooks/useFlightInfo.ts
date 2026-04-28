@@ -10,7 +10,7 @@ export const useFlightInfo = ({ airport, flight }: FlightProps) => {
   return useQuery<FlightData>({
     queryKey: ["airport", airport, "flight", flight],
     queryFn: () => GetFlightInfo(airport, flight),
-    enabled: !!airport,
+    enabled: !!airport && !!flight,
     staleTime: 2*5*1000,
   });
 };

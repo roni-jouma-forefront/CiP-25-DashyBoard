@@ -39,7 +39,7 @@ const Main = () => {
               </Route>
               <Route path="/room/:id" element={<Room />}></Route>
               <Route
-                path="/mirror/:roomid"
+                path="/mirror/:bookingId"
                 element={<MirrorDndProvider />}
               ></Route>
             </Routes>
