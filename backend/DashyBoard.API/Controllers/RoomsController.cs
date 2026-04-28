@@ -6,11 +6,13 @@ using DashyBoard.Application.Features.Queries.Rooms.GetAllRooms;
 using DashyBoard.Application.Features.Queries.Rooms.GetRoom;
 using DashyBoard.Application.Features.Queries.Rooms.GetRoomsWithBookings;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DashyBoard.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class RoomsController : ControllerBase
 {

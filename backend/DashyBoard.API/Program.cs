@@ -74,9 +74,23 @@ builder.Services.AddSwaggerGen(c =>
     c.DocumentFilter<GitHubTokenUrlFilter>();
 });
 
-// Add JWT Authentication
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        }
+    );
+});
+
+// Add authentication - GitHub is the default scheme used by [Authorize]
+builder.Services.AddHttpClient();
 builder
-    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .Services.AddAuthentication("GitHub")
+    .AddScheme<AuthenticationSchemeOptions, GitHubTokenAuthHandler>("GitHub", null)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -92,24 +106,6 @@ builder
             ),
         };
     });
-
-// Add CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(
-        "AllowAll",
-        policy =>
-        {
-            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-        }
-    );
-});
-
-// Add GitHub OAuth token validation
-builder.Services.AddHttpClient();
-builder
-    .Services.AddAuthentication("GitHub")
-    .AddScheme<AuthenticationSchemeOptions, GitHubTokenAuthHandler>("GitHub", null);
 builder.Services.AddAuthorization();
 
 // Add health checks
