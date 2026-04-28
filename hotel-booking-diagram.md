@@ -38,7 +38,7 @@ erDiagram
         int Id PK
         int RoomId FK
         int GuestId FK
-        int DepartureFlightId FK
+        int DepartureFlightNumber FK
         DateTime CheckIn
         DateTime CheckOut
         enum Status

@@ -84,6 +84,7 @@ public class CreateMessageTests
         {
             Id = bookingId,
             GuestId = guestId,
+            FlightNumber = "SK123",
             CheckIn = DateTime.UtcNow.AddDays(-1),
             CheckOut = DateTime.UtcNow.AddDays(1),
             CreatedAt = DateTime.UtcNow,

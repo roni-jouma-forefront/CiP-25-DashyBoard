@@ -47,7 +47,7 @@ public class CreateBookingCommandHandlerTests
         var command = new CreateBookingCommand(
             RoomId: Guid.NewGuid(),
             GuestId: Guid.NewGuid(),
-            FlightId: Guid.NewGuid(),
+            FlightNumber: "OS123",
             NumberOfGuests: 2,
             CheckIn: CheckIn,
             CheckOut: CheckOut,
@@ -79,7 +79,7 @@ public class CreateBookingCommandHandlerTests
         var command = new CreateBookingCommand(
             RoomId: roomId,
             GuestId: guestId,
-            FlightId: null,
+            FlightNumber: "LH456",
             NumberOfGuests: 1,
             CheckIn: CheckIn,
             CheckOut: CheckOut,
@@ -128,7 +128,7 @@ public class CreateBookingCommandHandlerTests
         var command = new CreateBookingCommand(
             RoomId: roomId,
             GuestId: Guid.NewGuid(),
-            FlightId: null,
+            FlightNumber: null,
             NumberOfGuests: 1,
             CheckIn: CheckIn,
             CheckOut: CheckOut,
@@ -169,7 +169,7 @@ public class CreateBookingCommandHandlerTests
         var command = new CreateBookingCommand(
             RoomId: null,
             GuestId: guestId,
-            FlightId: null,
+            FlightNumber: null,
             NumberOfGuests: 1,
             CheckIn: CheckIn,
             CheckOut: CheckOut,

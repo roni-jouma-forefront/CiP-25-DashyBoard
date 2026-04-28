@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import type { MessageBackend, MessageUI } from "../types/message.types";
 import { getMessages } from "../services/api/getMessagesAdmin";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -40,7 +40,6 @@ export const useMessagesAdmin = ({
     mutate(formData);
   };
 
-  const [messages, setMessages] = useState<MessageUI[]>(data);
   const [editingId, setEditingId] = useState("");
   const [formData, setFormData] = useState<MessageBackend>({
     id: "",
@@ -54,10 +53,6 @@ export const useMessagesAdmin = ({
     isActive: false,
     author: "",
   });
-
-  useEffect(() => {
-    setMessages(data);
-  }, [data]);
 
   const startEdit = (msg: MessageUI) => {
     setEditingId(msg.id);
@@ -81,18 +76,14 @@ export const useMessagesAdmin = ({
   };
 
   const saveEdit = (id: string) => {
-    setMessages((prev) =>
-      prev.map((msg) => {
-        if (msg.id === id) {
-          return {
-            ...msg,
-            title: formData.title,
-            content: formData.content,
-          };
-        } else {
-          return msg;
-        }
-      }),
+    queryClient.setQueryData<MessageUI[]>(
+      ["messages", bookingId],
+      (prev = []) =>
+        prev.map((msg) =>
+          msg.id === id
+            ? { ...msg, title: formData.title, content: formData.content }
+            : msg,
+        ),
     );
     setEditingId("");
   };
@@ -102,7 +93,7 @@ export const useMessagesAdmin = ({
   };
 
   return {
-    messages,
+    messages: data,
     isLoading,
     isPending,
     error,

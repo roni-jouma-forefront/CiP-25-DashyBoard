@@ -8,7 +8,7 @@ namespace DashyBoard.Application.Features.Commands.Bookings.CreateBooking;
 public record CreateBookingCommand(
     Guid? RoomId,
     Guid? GuestId,
-    Guid? FlightId,
+    string FlightNumber,
     int NumberOfGuests,
     DateTime CheckIn,
     DateTime CheckOut,

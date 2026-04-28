@@ -1,15 +1,28 @@
 export type RoomStatus = "available" | "occupied";
 export type Title = "Mrs" | "Ms" | "Mr" | "Mx" | null;
 
+export type Guest = {
+  id: string;
+  firstName: string;
+  lastName: string;
+};
+
+export type ActiveBooking = {
+  id: string;
+  roomId: string;
+  flightId: string;
+  checkIn: string;
+  checkOut: string;
+  bookingStatus: number;
+  guest: Guest;
+  numberOfGuests: number;
+};
+
 export type Room = {
   id: string;
-  bookingId: string,
-  number: number;
-  status: RoomStatus;
-  title: Title;
-  guestFirstName: string | null;
-  guestLastName: string | null;
-  flight: string | null;
+  hotelId: number;
+  roomNumber: number;
+  activeBooking: ActiveBooking | null;
 };
 
 export type AdditionalGuest = {
