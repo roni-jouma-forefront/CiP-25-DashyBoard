@@ -7,17 +7,21 @@ import { useState } from "react";
 export default function UploadForm() {
   const [uploadComplete, setUploadComplete] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const [error, setError] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleFileUpload = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUploadComplete(false);
-    setUploadError(null);
+    setError(null);
 
     if (!file) {
-      setError(true);
+      setError("You must submit a file!");
+      return;
+    }
+
+    if (file.type !== "text/csv") {
+      setError("Only CSV file accepted");
       return;
     }
 
@@ -29,7 +33,7 @@ export default function UploadForm() {
       await postBookings(formData);
       setUploadComplete(true);
     } catch (err) {
-      setUploadError(err instanceof Error ? err.message : "Upload failed");
+      setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setLoading(false);
     }
@@ -49,8 +53,21 @@ export default function UploadForm() {
           }}
         />
         {error && (
-          <Typography color="error" variant="body2" sx={{ mb: 2 }}>
-            You must submit a file!
+          <Typography
+            color="error"
+            variant="body2"
+            sx={{ display: "flex", alignItems: "center", mb: 2 }}
+          >
+            {error}
+          </Typography>
+        )}
+        {uploadComplete && (
+          <Typography
+            variant="body2"
+            color="success.main"
+            sx={{ display: "flex", alignItems: "center", mb: 2 }}
+          >
+            Upload Complete
           </Typography>
         )}
         <Button
@@ -62,20 +79,6 @@ export default function UploadForm() {
           {loading ? "Uploading..." : "Upload"}
         </Button>
       </form>
-      {uploadComplete && (
-        <Typography
-          variant="body2"
-          color="success.main"
-          sx={{ display: "flex", alignItems: "center" }}
-        >
-          Upload Complete
-        </Typography>
-      )}
-      {uploadError && (
-        <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-          {uploadError}
-        </Typography>
-      )}
     </>
   );
 }
