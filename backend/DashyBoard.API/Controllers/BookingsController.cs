@@ -52,7 +52,7 @@ public class BookingsController : ControllerBase
             var command = new CreateBookingCommand(
                 RoomId: bookingDto.RoomId,
                 GuestId: bookingDto.GuestId,
-                FlightId: bookingDto.FlightId,
+                FlightNumber: bookingDto.FlightNumber,
                 NumberOfGuests: bookingDto.NumberOfGuests,
                 CheckIn: bookingDto.CheckIn,
                 CheckOut: bookingDto.CheckOut,
@@ -179,7 +179,7 @@ public class BookingsController : ControllerBase
                 Id: id,
                 RoomId: bookingDto.RoomId,
                 GuestId: bookingDto.GuestId,
-                FlightId: bookingDto.FlightId,
+                FlightNumber: bookingDto.FlightNumber,
                 NumberOfGuests: bookingDto.NumberOfGuests,
                 CheckIn: bookingDto.CheckIn,
                 CheckOut: bookingDto.CheckOut,

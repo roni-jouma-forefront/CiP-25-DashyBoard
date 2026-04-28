@@ -8,7 +8,7 @@ public class Booking : BaseAuditableEntity
     public Guid? RoomId { get; set; }
     public Guid? GuestId { get; set; }
     public int NumberOfGuests { get; set; }
-    public Guid? FlightId { get; set; }
+    public string FlightNumber { get; set; } = null!;
     public DateTime CheckIn { get; set; }
     public DateTime CheckOut { get; set; }
     public Status BookingStatus { get; set; }

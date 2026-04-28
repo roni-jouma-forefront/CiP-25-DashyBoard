@@ -20,7 +20,7 @@ public class BookingWithGuestDto
 {
     public Guid Id { get; set; }
     public Guid? RoomId { get; set; }
-    public Guid? FlightId { get; set; }
+    public string FlightNumber { get; set; } = null!;
     public int NumberOfGuests { get; set; }
     public DateTime CheckIn { get; set; }
     public DateTime CheckOut { get; set; }

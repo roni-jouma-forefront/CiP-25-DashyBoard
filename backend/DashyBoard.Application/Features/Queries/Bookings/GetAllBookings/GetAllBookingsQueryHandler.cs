@@ -34,7 +34,7 @@ public class GetAllBookingsQueryHandler(IRepository<Booking> repository)
                 Id = b.Id,
                 RoomId = b.RoomId,
                 GuestId = b.GuestId,
-                FlightId = b.FlightId,
+                FlightNumber = b.FlightNumber,
                 NumberOfGuests = b.NumberOfGuests,
                 CheckIn = b.CheckIn,
                 CheckOut = b.CheckOut,

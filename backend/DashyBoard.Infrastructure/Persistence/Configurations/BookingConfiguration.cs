@@ -30,11 +30,5 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
             .WithMany()
             .HasForeignKey(b => b.GuestId)
             .OnDelete(DeleteBehavior.SetNull);
-
-        builder
-            .HasOne<Flight>()
-            .WithMany()
-            .HasForeignKey(b => b.FlightId)
-            .OnDelete(DeleteBehavior.SetNull);
     }
 }
