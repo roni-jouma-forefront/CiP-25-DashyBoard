@@ -9,13 +9,13 @@ import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
 import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 import MessagesWidget from "./MessagesWidget.tsx";
 import WaitTimeWidget from "./WaitTimesWidget.tsx";
+import GuestName from "./GuestName.tsx";
 import { widgetTheme } from "../../theme/index.ts";
 import { useBookings } from "../../hooks";
 import { useParams } from "react-router";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3, 4, 5, 6]);
-  const guestName = "Hozier";
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -31,7 +31,6 @@ function MirrorDashboard() {
   }));
 
   const { bookingId } = useParams();
-
   const { data, error, isLoading } = useBookings({
     bookingId: bookingId as string,
   });
@@ -39,7 +38,6 @@ function MirrorDashboard() {
   if (!data) {
     return <div>Ingen data</div>;
   }
-
   if (error)
     return (
       <Typography
@@ -65,8 +63,6 @@ function MirrorDashboard() {
       </Typography>
     );
 
-  console.log(data, typeof data);
-
   return (
     <>
       <Box
@@ -88,7 +84,7 @@ function MirrorDashboard() {
             backgroundColor: `${widgetTheme.palette.primary.dark}`,
           }}
         >
-          <Box
+          {/* <Box
             sx={{
               display: "flex",
               justifyContent: "center",
@@ -99,9 +95,10 @@ function MirrorDashboard() {
               variant="h3"
               sx={{ color: `${widgetTheme.palette.primary.main}` }}
             >
-              Welcome {guestName}
+              Welcome NAMN
             </Typography>
-          </Box>
+          </Box> */}
+          <GuestName guestId={data.guestId} />
           <Box
             ref={drop as unknown as React.RefObject<HTMLDivElement>}
             sx={{
