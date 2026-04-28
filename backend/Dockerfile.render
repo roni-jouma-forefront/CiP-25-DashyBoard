@@ -1,0 +1,51 @@
+# Render-optimized Dockerfile for .NET 8 API
+# Uses multi-stage build for smaller image size
+
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy solution and project files first (better layer caching)
+COPY ["DashyBoard.sln", "."]
+COPY ["backend/DashyBoard.API/DashyBoard.API.csproj", "backend/DashyBoard.API/"]
+COPY ["backend/DashyBoard.Application/DashyBoard.Application.csproj", "backend/DashyBoard.Application/"]
+COPY ["backend/DashyBoard.Domain/DashyBoard.Domain.csproj", "backend/DashyBoard.Domain/"]
+COPY ["backend/DashyBoard.Infrastructure/DashyBoard.Infrastructure.csproj", "backend/DashyBoard.Infrastructure/"]
+
+# Restore dependencies
+RUN dotnet restore "backend/DashyBoard.API/DashyBoard.API.csproj"
+
+# Copy all source code
+COPY . .
+
+# Build and publish
+WORKDIR "/src/backend/DashyBoard.API"
+RUN dotnet publish "DashyBoard.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# Runtime stage - using slim image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim AS final
+WORKDIR /app
+
+# Install sqlite3 for database operations
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends sqlite3 curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create data directory with proper permissions
+RUN mkdir -p /app/data && chmod 777 /app/data
+
+# Copy seed script for initial data
+COPY backend/scripts/seed.sql /app/seed.sql
+
+# Copy published application
+COPY --from=build /app/publish .
+
+# Expose port (Render uses 10000 by default, but we configure 8080)
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# Start the application
+ENTRYPOINT ["dotnet", "DashyBoard.API.dll"]
