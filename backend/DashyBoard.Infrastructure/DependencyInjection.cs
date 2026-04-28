@@ -20,9 +20,20 @@ public static class DependencyInjection
     )
     {
         // Database
+        var dbUrl = Environment.GetEnvironmentVariable("TURSO_DB_URL");
+        var authToken = Environment.GetEnvironmentVariable("TURSO_AUTH_TOKEN");
+        string connectionString;
+        if (!string.IsNullOrEmpty(dbUrl) && !string.IsNullOrEmpty(authToken))
+        {
+            connectionString = $"{dbUrl}?authToken={authToken}";
+        }
+        else
+        {
+            connectionString = configuration.GetConnectionString("DefaultConnection");
+        }
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite(
-                configuration.GetConnectionString("DefaultConnection"),
+                connectionString,
                 b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
             )
         );
