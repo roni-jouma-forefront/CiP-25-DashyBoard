@@ -131,7 +131,7 @@ function MirrorDashboard() {
                 return (
                   <DraggableWrapper key={2} id={2}>
                     {/*För att se de olika layouterna för pilot eller "vanlig" gäst byt boolen nedan. (false = vanlig gäst) */}
-                    <WeatherWidget icao="ESSA" pilotVersion={false} />
+                    <WeatherWidget icao="ESSA" pilotVersion={true} />
                   </DraggableWrapper>
                 );
               if (id === 3 && data.flightNumber)
