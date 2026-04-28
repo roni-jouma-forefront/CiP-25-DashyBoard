@@ -2,7 +2,6 @@
 using DashyBoard.Application.Features.Flights.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-
 using Microsoft.AspNetCore.Mvc;
 
 namespace DashyBoard.API.Controllers.ExternalControllers;
