@@ -55,3 +55,5 @@ services:
       # This will be set after backend deploys - update with your actual backend URL
       - key: VITE_BASE_URL
         value: https://dashyboard-api.onrender.com
+      - key: VITE_HOTEL_ID
+        value: your-hotel-id-here
