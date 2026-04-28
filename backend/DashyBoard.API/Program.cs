@@ -112,6 +112,9 @@ builder
     .AddScheme<AuthenticationSchemeOptions, GitHubTokenAuthHandler>("GitHub", null);
 builder.Services.AddAuthorization();
 
+// Add health checks
+builder.Services.AddHealthChecks();
+
 // Add Clean Architecture layers
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -143,18 +146,15 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
 }
 
-// Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
+// Configure the HTTP request pipeline - Enable Swagger in all environments for Render
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "DashyBoard API v1");
-        c.OAuthClientId(builder.Configuration["GitHub:ClientId"]);
-        c.OAuthUsePkce();
-        c.OAuthScopeSeparator(" ");
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "DashyBoard API v1");
+    c.OAuthClientId(builder.Configuration["GitHub:ClientId"]);
+    c.OAuthUsePkce();
+    c.OAuthScopeSeparator(" ");
+});
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
@@ -167,6 +167,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Health check endpoint for Render/Docker
+app.MapHealthChecks("/health");
 
 app.Run();
 
