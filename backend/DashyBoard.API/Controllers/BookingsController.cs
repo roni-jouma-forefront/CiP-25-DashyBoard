@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DashyBoard.API.Controllers;
 
 [ApiController]
-[Authorize]
 [Route("api/[controller]")]
 public class BookingsController : ControllerBase
 {
