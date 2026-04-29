@@ -1,11 +1,13 @@
 using DashyBoard.Application.DTOs.CheckWX;
 using DashyBoard.Application.Features.CheckWx.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DashyBoard.API.Controllers.ExternalControllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class CheckWxController : ControllerBase
 {

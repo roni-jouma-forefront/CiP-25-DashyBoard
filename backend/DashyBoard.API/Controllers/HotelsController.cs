@@ -5,11 +5,13 @@ using DashyBoard.Application.Features.Commands.Hotels.UpdateHotel;
 using DashyBoard.Application.Features.Queries.Hotels.GetAllHotels;
 using DashyBoard.Application.Features.Queries.Hotels.GetHotel;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DashyBoard.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class HotelsController : ControllerBase
 {

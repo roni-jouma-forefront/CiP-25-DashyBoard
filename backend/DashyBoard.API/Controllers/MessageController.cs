@@ -6,11 +6,13 @@ using DashyBoard.Application.Features.Messages.Commands.UpdateMessage;
 using DashyBoard.Application.Features.Messages.Queries.GetMessagesForMirror;
 using DashyBoard.Application.Features.Messages.Queries.GetMessagesForRoom;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DashyBoard.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class MessagesController : ControllerBase
 {
