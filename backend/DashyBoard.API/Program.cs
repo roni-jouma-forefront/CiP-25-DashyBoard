@@ -89,6 +89,7 @@ builder.Services.AddCors(options =>
 // Add authentication - GitHub is the default scheme used by [Authorize]
 builder.Services.AddHttpClient();
 builder
+    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .Services.AddAuthentication("GitHub")
     .AddScheme<AuthenticationSchemeOptions, GitHubTokenAuthHandler>("GitHub", null)
     .AddJwtBearer(options =>
