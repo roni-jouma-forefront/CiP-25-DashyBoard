@@ -10,12 +10,13 @@ import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 import MessagesWidget from "./MessagesWidget.tsx";
 import WaitTimeWidget from "./WaitTimesWidget.tsx";
 import GuestName from "./GuestName.tsx";
+import WeatherWidgetDestination from "./WeatherWidgetDestination.tsx";
 import { widgetTheme } from "../../theme/index.ts";
 import { useBookings } from "../../hooks";
 import { useParams } from "react-router";
 
 function MirrorDashboard() {
-  const [order, setOrder] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const [order, setOrder] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -174,6 +175,15 @@ function MirrorDashboard() {
                   <DraggableWrapper key={7} id={7}>
                     <WaitTimeWidget
                       airport={import.meta.env.VITE_AIRPORT_NAME}
+                    />
+                  </DraggableWrapper>
+                );
+              if (id === 8)
+                return (
+                  <DraggableWrapper key={8} id={8}>
+                    <WeatherWidgetDestination
+                      icao="LOWW"
+                      pilotVersion={false}
                     />
                   </DraggableWrapper>
                 );
