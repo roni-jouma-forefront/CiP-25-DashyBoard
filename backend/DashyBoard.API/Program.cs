@@ -1,4 +1,3 @@
-using System.Text;
 using DashyBoard.API.Authentication;
 using DashyBoard.API.Converters;
 using DashyBoard.API.Middleware;
@@ -6,22 +5,27 @@ using DashyBoard.Application;
 using DashyBoard.Infrastructure;
 using DashyBoard.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
+// --------------------
+// Controllers / JSON
+// --------------------
 builder
     .Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
     });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
+
+// --------------------
+// Swagger
+// --------------------
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc(
@@ -33,6 +37,7 @@ builder.Services.AddSwaggerGen(c =>
             Description = "API for managing DashyBoard application",
         }
     );
+
     c.AddSecurityDefinition(
         "github",
         new OpenApiSecurityScheme
@@ -42,7 +47,6 @@ builder.Services.AddSwaggerGen(c =>
             {
                 AuthorizationCode = new OpenApiOAuthFlow
                 {
-                    // Token URL is set dynamically per-request by GitHubTokenUrlFilter
                     AuthorizationUrl = new Uri("https://github.com/login/oauth/authorize"),
                     TokenUrl = new Uri("https://placeholder/oauth/github/token"),
                     Scopes = new Dictionary<string, string>
@@ -55,45 +59,22 @@ builder.Services.AddSwaggerGen(c =>
             },
         }
     );
-    c.AddSecurityRequirement(
-        new OpenApiSecurityRequirement
-        {
-            {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "github",
-                    },
-                },
-                new[] { "read:user" }
-            },
-        }
-    );
+
     c.DocumentFilter<GitHubTokenUrlFilter>();
 });
 
-// Add JWT Authentication
+// --------------------
+// Authentication (NO JWT)
+// --------------------
 builder
-    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)
-            ),
-        };
-    });
+    .Services.AddAuthentication("GitHub")
+    .AddScheme<AuthenticationSchemeOptions, GitHubTokenAuthHandler>("GitHub", options => { });
 
-// Add CORS
+builder.Services.AddAuthorization();
+
+// --------------------
+// CORS
+// --------------------
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
@@ -105,70 +86,48 @@ builder.Services.AddCors(options =>
     );
 });
 
-// Add GitHub OAuth token validation
-builder.Services.AddHttpClient();
-builder
-    .Services.AddAuthentication("GitHub")
-    .AddScheme<AuthenticationSchemeOptions, GitHubTokenAuthHandler>("GitHub", null);
-builder.Services.AddAuthorization();
-
-// Add health checks
+// --------------------
+// Health checks
+// --------------------
 builder.Services.AddHealthChecks();
 
-// Add Clean Architecture layers
+// --------------------
+// Clean Architecture layers
+// --------------------
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
 var app = builder.Build();
 
-// Ensure database directory and database are created
+// --------------------
+// Turso-safe migrations
+// --------------------
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-    // Only setup directories for SQLite (skip for InMemory in tests)
-    if (context.Database.IsSqlite())
-    {
-        var connectionString = context.Database.GetConnectionString();
-        if (connectionString != null)
-        {
-            var builder2 = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder(
-                connectionString
-            );
-            var dbPath = builder2.DataSource;
-            var dbDir = Path.GetDirectoryName(dbPath);
-            if (!string.IsNullOrEmpty(dbDir))
-            {
-                Directory.CreateDirectory(dbDir);
-            }
-        }
-    }
-
-    context.Database.EnsureCreated();
+    context.Database.Migrate();
 }
 
-// Configure the HTTP request pipeline - Enable Swagger in all environments for Render
+// --------------------
+// Middleware pipeline
+// --------------------
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "DashyBoard API v1");
     c.OAuthClientId(builder.Configuration["GitHub:ClientId"]);
     c.OAuthUsePkce();
-    c.OAuthScopeSeparator(" ");
 });
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
-
 app.UseCors("AllowAll");
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();
-
-// Health check endpoint for Render/Docker
 app.MapHealthChecks("/health");
 
 app.Run();

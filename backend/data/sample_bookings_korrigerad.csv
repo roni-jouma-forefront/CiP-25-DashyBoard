@@ -1,0 +1,2 @@
+GuestFirstName,GuestLastName,RoomNumber,NumberOfGuests,CheckIn,CheckOut,BookingStatus,FlightNumber,FlightType
+John,Doe,101,2,2026-04-28,2026-05-05,Confirmed,SK1234,Arrival
