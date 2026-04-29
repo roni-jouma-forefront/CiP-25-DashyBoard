@@ -42,7 +42,7 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
         sx={{
           m: 3,
           opacity: 0.9,
-          color: `${widgetTheme.palette.primary.main}`,
+          color: `${widgetTheme.palette.primary.light}`,
         }}
       >
         Loading weather info...

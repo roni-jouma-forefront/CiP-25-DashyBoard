@@ -43,7 +43,7 @@ export default function ArrivalsWidget({ airport, timezone }: ArrivalProps) {
         sx={{
           m: 3,
           opacity: 0.9,
-          color: `${widgetTheme.palette.primary.main}`,
+          color: `${widgetTheme.palette.primary.light}`,
         }}
       >
         Loading arrivals info...

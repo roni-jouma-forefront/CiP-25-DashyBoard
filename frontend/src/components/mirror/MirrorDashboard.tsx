@@ -57,7 +57,7 @@ function MirrorDashboard() {
         sx={{
           m: 3,
           opacity: 0.9,
-          color: `${widgetTheme.palette.primary.main}`,
+          color: `${widgetTheme.palette.primary.light}`,
         }}
       >
         Loading bookings info...
@@ -85,20 +85,6 @@ function MirrorDashboard() {
             backgroundColor: `${widgetTheme.palette.primary.dark}`,
           }}
         >
-          {/* <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              m: 2,
-            }}
-          >
-            <Typography
-              variant="h3"
-              sx={{ color: `${widgetTheme.palette.primary.main}` }}
-            >
-              Welcome NAMN
-            </Typography>
-          </Box> */}
           <GuestName guestId={data.guestId} />
           <Box
             ref={drop as unknown as React.RefObject<HTMLDivElement>}
@@ -181,10 +167,7 @@ function MirrorDashboard() {
               if (id === 8)
                 return (
                   <DraggableWrapper key={8} id={8}>
-                    <WeatherWidgetDestination
-                      icao="LOWW"
-                      pilotVersion={false}
-                    />
+                    <WeatherWidgetDestination icao="LOWW" pilotVersion={true} />
                   </DraggableWrapper>
                 );
             })}

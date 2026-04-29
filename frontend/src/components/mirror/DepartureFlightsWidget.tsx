@@ -4,11 +4,10 @@ import { widgetTheme } from "../../theme";
 import formatTime from "../../utils/FormatTime";
 
 interface DepartureProps {
-  airport: string
+  airport: string;
 }
 
-
-export default function DeparturesWidget({airport}: DepartureProps) {
+export default function DeparturesWidget({ airport }: DepartureProps) {
   const today = new Date().toLocaleDateString("en-GB", {
     month: "long",
     day: "numeric",
@@ -40,7 +39,7 @@ export default function DeparturesWidget({airport}: DepartureProps) {
         sx={{
           m: 3,
           opacity: 0.9,
-          color: `${widgetTheme.palette.primary.main}`,
+          color: `${widgetTheme.palette.primary.light}`,
         }}
       >
         Loading departures info...

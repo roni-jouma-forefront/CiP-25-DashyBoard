@@ -42,7 +42,7 @@ function WeatherWidgetDestination({ icao, pilotVersion }: WeatherProps) {
         sx={{
           m: 3,
           opacity: 0.9,
-          color: `${widgetTheme.palette.primary.main}`,
+          color: `${widgetTheme.palette.primary.light}`,
         }}
       >
         Loading weather info...
@@ -118,7 +118,9 @@ function WeatherWidgetDestination({ icao, pilotVersion }: WeatherProps) {
                     alignItems: "center",
                   }}
                 >
-                  <Typography sx={{ fontSize: "1.4rem", fontWeight: 700 }}>
+                  <Typography
+                    sx={{ fontSize: "1.2rem", fontWeight: 700, mr: 0.5 }}
+                  >
                     Destination Weather
                   </Typography>
 
