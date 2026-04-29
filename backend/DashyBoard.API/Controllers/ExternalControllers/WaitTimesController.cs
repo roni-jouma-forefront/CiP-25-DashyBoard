@@ -1,6 +1,7 @@
 ﻿using DashyBoard.Application.DTOs.Swedavia;
 using DashyBoard.Application.Features.WaitTimes.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DashyBoard.API.Controllers.ExternalControllers;

@@ -8,6 +8,7 @@ using DashyBoard.Application.Features.Queries.Bookings.GetBooking;
 using DashyBoard.Application.Features.Queries.Bookings.GetBookingWithGuest;
 using DashyBoard.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DashyBoard.API.Controllers;

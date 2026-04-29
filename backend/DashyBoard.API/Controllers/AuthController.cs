@@ -1,6 +1,7 @@
 using DashyBoard.Application.DTOs;
 using DashyBoard.Application.Features.Commands.Login;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DashyBoard.API.Controllers;

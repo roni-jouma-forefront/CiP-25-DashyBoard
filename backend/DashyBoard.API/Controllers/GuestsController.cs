@@ -5,6 +5,7 @@ using DashyBoard.Application.Features.Commands.Guests.UpdateGuest;
 using DashyBoard.Application.Features.Queries.Guests.GetAllGuests;
 using DashyBoard.Application.Features.Queries.Guests.GetGuest;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DashyBoard.API.Controllers;

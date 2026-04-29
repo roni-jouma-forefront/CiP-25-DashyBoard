@@ -30,6 +30,8 @@ services:
         sync: false
       - key: GitHub__ClientSecret
         sync: false
+      - key: GitHub__Repository
+        sync: false
       - key: Jwt__Secret
         generateValue: true
 
@@ -57,3 +59,9 @@ services:
         value: https://dashyboard-api.onrender.com
       - key: VITE_HOTEL_ID
         value: your-hotel-id-here
+      - key: VITE_GITHUB_CLIENT_ID
+        value: your-github-client-id-here
+      - key: VITE_GITHUB_CLIENT_SECRET
+        value: your-github-client-secret-here  
+      - key: VITE_GITHUB_REPOSITORY
+        value: your-github-repository-here
