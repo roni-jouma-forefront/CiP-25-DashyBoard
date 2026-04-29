@@ -15,7 +15,7 @@ import { useBookings } from "../../hooks";
 import { useParams } from "react-router";
 
 function MirrorDashboard() {
-  const [order, setOrder] = useState([1, 2, 3, 4, 5, 6]);
+  const [order, setOrder] = useState([1, 2, 3, 4, 5, 6, 7]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -128,7 +128,10 @@ function MirrorDashboard() {
                 return (
                   <DraggableWrapper key={2} id={2}>
                     {/*För att se de olika layouterna för pilot eller "vanlig" gäst byt boolen nedan. (false = vanlig gäst) */}
-                    <WeatherWidget icao="ESSA" pilotVersion={true} />
+                    <WeatherWidget
+                      icao={import.meta.env.VITE_AIRPORT_ICAO}
+                      pilotVersion={true}
+                    />
                   </DraggableWrapper>
                 );
               if (id === 3 && data.flightNumber)
@@ -166,9 +169,9 @@ function MirrorDashboard() {
                     />
                   </DraggableWrapper>
                 );
-              if (id === 6)
+              if (id === 7)
                 return (
-                  <DraggableWrapper key={6} id={6}>
+                  <DraggableWrapper key={7} id={7}>
                     <WaitTimeWidget
                       airport={import.meta.env.VITE_AIRPORT_NAME}
                     />
