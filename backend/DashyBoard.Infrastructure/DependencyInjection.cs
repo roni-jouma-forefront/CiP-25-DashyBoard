@@ -19,13 +19,25 @@ public static class DependencyInjection
         IConfiguration configuration
     )
     {
-        // Database
+        // Database (Turso/LibSQL)
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite(
-                configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
-            )
-        );
+        {
+            if (connectionString != null && connectionString.Contains("libsql://"))
+            {
+                options.UseLibSql(
+                    connectionString,
+                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
+                );
+            }
+            else
+            {
+                options.UseSqlite(
+                    connectionString,
+                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
+                );
+            }
+        });
 
         services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>()

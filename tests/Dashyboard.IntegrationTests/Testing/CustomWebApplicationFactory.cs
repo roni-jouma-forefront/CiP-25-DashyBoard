@@ -18,13 +18,19 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            var descriptor = services.SingleOrDefault(d =>
-                d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>)
-            );
+            // Remove all DbContext-related registrations
+            var descriptorsToRemove = services
+                .Where(d =>
+                    d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>)
+                    || d.ServiceType == typeof(ApplicationDbContext)
+                    || d.ServiceType == typeof(IApplicationDbContext)
+                    || d.ServiceType.FullName?.Contains("EntityFrameworkCore") == true
+                )
+                .ToList();
 
-            if (descriptor != null)
+            foreach (var d in descriptorsToRemove)
             {
-                services.Remove(descriptor);
+                services.Remove(d);
             }
 
             services.AddDbContext<ApplicationDbContext>(options =>
