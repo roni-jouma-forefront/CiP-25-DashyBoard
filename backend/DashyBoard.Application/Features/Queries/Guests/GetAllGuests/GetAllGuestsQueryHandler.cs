@@ -22,11 +22,12 @@ public class GetAllGuestsQueryHandler(IRepository<Guest> repository)
         var hasLastNameFilter = !string.IsNullOrWhiteSpace(lastName);
 
         var guests =
-            hasFirstNameFilter || hasLastNameFilter
+            hasFirstNameFilter || hasLastNameFilter || request.IsPilot.HasValue
                 ? await repository.FindAsync(
                     g =>
                         (!hasFirstNameFilter || g.FirstName.ToLower().Contains(firstNameLower!))
-                        && (!hasLastNameFilter || g.LastName.ToLower().Contains(lastNameLower!)),
+                        && (!hasLastNameFilter || g.LastName.ToLower().Contains(lastNameLower!))
+                        && (!request.IsPilot.HasValue || g.IsPilot == request.IsPilot.Value),
                     cancellationToken
                 )
                 : await repository.GetAllAsync(cancellationToken);
@@ -37,6 +38,7 @@ public class GetAllGuestsQueryHandler(IRepository<Guest> repository)
                 Id = g.Id,
                 FirstName = g.FirstName,
                 LastName = g.LastName,
+                IsPilot = g.IsPilot,
             })
             .ToList();
     }

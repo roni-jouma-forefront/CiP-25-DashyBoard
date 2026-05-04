@@ -46,6 +46,7 @@ public class GetBookingWithGuestQueryHandler(
                     Id = guest.Id,
                     FirstName = guest.FirstName,
                     LastName = guest.LastName,
+                    IsPilot = guest.IsPilot,
                 };
             }
         }

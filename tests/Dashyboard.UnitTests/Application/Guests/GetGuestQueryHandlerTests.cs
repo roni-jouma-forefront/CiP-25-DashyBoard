@@ -27,6 +27,7 @@ public class GetGuestQueryHandlerTests
             Id = guestId,
             FirstName = "Alice",
             LastName = "Smith",
+            IsPilot = false,
         };
 
         _repositoryMock

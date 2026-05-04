@@ -29,12 +29,14 @@ public class GetAllGuestsQueryHandlerTests
                 Id = Guid.NewGuid(),
                 FirstName = "Alice",
                 LastName = "Smith",
+                IsPilot = false,
             },
             new Guest
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Bob",
                 LastName = "Jones",
+                IsPilot = true,
             },
         };
 
@@ -81,6 +83,7 @@ public class GetAllGuestsQueryHandlerTests
                 Id = guestId,
                 FirstName = "Alice",
                 LastName = "Smith",
+                IsPilot = false,
             },
         };
 
@@ -111,6 +114,7 @@ public class GetAllGuestsQueryHandlerTests
                 Id = Guid.NewGuid(),
                 FirstName = "Alice",
                 LastName = "Smith",
+                IsPilot = false,
             },
         };
 

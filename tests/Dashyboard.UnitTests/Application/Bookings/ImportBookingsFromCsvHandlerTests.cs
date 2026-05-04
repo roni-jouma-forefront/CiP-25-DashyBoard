@@ -166,6 +166,7 @@ public class ImportBookingsFromCsvHandlerTests
             Id = Guid.NewGuid(),
             FirstName = "John",
             LastName = "Doe",
+            IsPilot = false,
         };
         _guestRepoMock
             .Setup(r =>

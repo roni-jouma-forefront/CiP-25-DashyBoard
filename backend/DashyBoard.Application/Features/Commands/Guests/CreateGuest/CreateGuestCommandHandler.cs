@@ -19,6 +19,7 @@ public class CreateGuestCommandHandler(IRepository<Guest> repository, IDateTime 
             Id = Guid.NewGuid(),
             FirstName = request.FirstName,
             LastName = request.LastName,
+            IsPilot = request.IsPilot,
             CreatedAt = dateTime.CetNow,
         };
 
@@ -30,6 +31,7 @@ public class CreateGuestCommandHandler(IRepository<Guest> repository, IDateTime 
                 Id = guest.Id,
                 FirstName = guest.FirstName!,
                 LastName = guest.LastName!,
+                IsPilot = guest.IsPilot,
             }
         );
     }

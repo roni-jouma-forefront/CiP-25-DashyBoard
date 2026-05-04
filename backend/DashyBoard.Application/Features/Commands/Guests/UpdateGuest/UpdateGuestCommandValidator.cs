@@ -17,5 +17,7 @@ public class UpdateGuestCommandValidator : AbstractValidator<UpdateGuestCommand>
             .WithMessage("Last name is required")
             .MaximumLength(35)
             .WithMessage("Last name must not exceed 35 characters");
+
+        RuleFor(x => x.IsPilot).NotNull().WithMessage("Pilot status is required");
     }
 }

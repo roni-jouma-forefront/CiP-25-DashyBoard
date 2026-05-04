@@ -27,6 +27,7 @@ public class DeleteGuestCommandHandlerTests
             Id = guestId,
             FirstName = "Alice",
             LastName = "Smith",
+            IsPilot = false,
         };
 
         _repositoryMock
@@ -73,6 +74,7 @@ public class DeleteGuestCommandHandlerTests
             Id = guestId,
             FirstName = "Alice",
             LastName = "Smith",
+            IsPilot = false,
         };
 
         _repositoryMock
