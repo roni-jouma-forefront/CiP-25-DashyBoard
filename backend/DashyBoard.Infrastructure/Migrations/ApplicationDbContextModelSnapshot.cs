@@ -169,6 +169,9 @@ namespace DashyBoard.Infrastructure.Migrations
                     b.Property<bool>("IsPilot")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsPilot")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(35)
