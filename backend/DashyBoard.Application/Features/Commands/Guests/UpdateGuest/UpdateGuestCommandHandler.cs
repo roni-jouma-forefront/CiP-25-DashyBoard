@@ -23,6 +23,7 @@ public class UpdateGuestCommandHandler(IRepository<Guest> repository, IDateTime 
 
         guest.FirstName = request.FirstName;
         guest.LastName = request.LastName;
+        guest.IsPilot = request.IsPilot;
         guest.UpdatedAt = dateTime.CetNow;
         guest.UpdatedBy = "work in progress";
 
@@ -34,6 +35,7 @@ public class UpdateGuestCommandHandler(IRepository<Guest> repository, IDateTime 
                 Id = guest.Id,
                 FirstName = guest.FirstName,
                 LastName = guest.LastName,
+                IsPilot = guest.IsPilot,
             }
         );
     }
