@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
@@ -14,9 +14,30 @@ import WeatherWidgetDestination from "./WeatherWidgetDestination.tsx";
 import { widgetTheme } from "../../theme/index.ts";
 import { useBookings } from "../../hooks";
 import { useParams } from "react-router";
+import { GetFlightInfo } from "../../services/api/GetFlightInfo.tsx";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
+  const [arrivalAirportIcao, setArrivalAirportIcao] = useState<string>();
+  const { bookingId } = useParams();
+  const { data, error, isLoading } = useBookings({
+    bookingId: bookingId as string,
+  });
+
+  async function getDestinationIcao(airport: string, flightnumber: string) {
+    const destIcao = await GetFlightInfo(airport, flightnumber).then((res) => {
+      setArrivalAirportIcao(res.arrivalAirportIcao);
+    });
+    console.log("DESTIN ICAO", destIcao);
+
+    return destIcao;
+  }
+
+  useEffect(() => {
+    if (data) {
+      getDestinationIcao(import.meta.env.VITE_AIRPORT_NAME, data.flightNumber);
+    }
+  }, [data]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -30,11 +51,6 @@ function MirrorDashboard() {
       isOver: monitor.isOver(),
     }),
   }));
-
-  const { bookingId } = useParams();
-  const { data, error, isLoading } = useBookings({
-    bookingId: bookingId as string,
-  });
 
   if (!data) {
     return <div>Ingen data</div>;
@@ -167,7 +183,10 @@ function MirrorDashboard() {
               if (id === 8)
                 return (
                   <DraggableWrapper key={8} id={8}>
-                    <WeatherWidgetDestination icao="LOWW" pilotVersion={true} />
+                    <WeatherWidgetDestination
+                      icao={arrivalAirportIcao ?? "destination weather icao"}
+                      pilotVersion={true}
+                    />
                   </DraggableWrapper>
                 );
             })}
