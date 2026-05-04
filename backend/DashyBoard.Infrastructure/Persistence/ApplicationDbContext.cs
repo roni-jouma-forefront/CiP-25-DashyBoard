@@ -3,7 +3,6 @@ using DashyBoard.Application.Common.Interfaces;
 using DashyBoard.Domain.Common;
 using DashyBoard.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DashyBoard.Infrastructure.Persistence;
 
@@ -26,32 +25,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-        // Convert all Guid properties to TEXT for Turso/LibSQL compatibility
-        var guidToStringConverter = new ValueConverter<Guid, string>(
-            v => v.ToString("D"),
-            v => Guid.Parse(v)
-        );
-        var nullableGuidToStringConverter = new ValueConverter<Guid?, string?>(
-            v => v.HasValue ? v.Value.ToString("D") : null,
-            v => v != null ? Guid.Parse(v) : null
-        );
-
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-        {
-            foreach (var property in entityType.GetProperties())
-            {
-                if (property.ClrType == typeof(Guid))
-                {
-                    property.SetValueConverter(guidToStringConverter);
-                }
-                else if (property.ClrType == typeof(Guid?))
-                {
-                    property.SetValueConverter(nullableGuidToStringConverter);
-                }
-            }
-        }
-
         base.OnModelCreating(modelBuilder);
     }
 

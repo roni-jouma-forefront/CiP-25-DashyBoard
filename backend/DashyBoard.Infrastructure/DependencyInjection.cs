@@ -19,28 +19,17 @@ public static class DependencyInjection
         IConfiguration configuration
     )
     {
-        // Database (Turso/LibSQL)
+        // Database
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            if (connectionString != null && connectionString.Contains("libsql://"))
+            if (connectionString != null && connectionString.Contains("postgresql://"))
             {
-                // Convert from "Data Source=libsql://host?authToken=xxx" or "libsql://host?authToken=xxx"
-                // to "https://host/v2/pipeline;token" format required by BMDRM.LibSql.Core
-                var libsqlUrl = connectionString
-                    .Replace("Data Source=", "", StringComparison.OrdinalIgnoreCase)
-                    .Replace("data Source=", "", StringComparison.OrdinalIgnoreCase)
-                    .Trim();
-                var uri = new Uri(libsqlUrl);
-                var token =
-                    System.Web.HttpUtility.ParseQueryString(uri.Query).Get("authToken") ?? "";
-                var converted = $"https://{uri.Host}/v2/pipeline;{token}";
-
-                options.UseLibSql(converted);
+                options.UseNpgsql(connectionString);
             }
-            else if (connectionString != null && connectionString.Contains("/v2/pipeline"))
+            else if (connectionString != null && connectionString.Contains("Host="))
             {
-                options.UseLibSql(connectionString);
+                options.UseNpgsql(connectionString);
             }
             else
             {
