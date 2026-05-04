@@ -167,10 +167,7 @@ namespace DashyBoard.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsPilot")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsPilot")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()

@@ -13,7 +13,7 @@ namespace DashyBoard.Infrastructure.Migrations
             migrationBuilder.AddColumn<bool>(
                 name: "IsPilot",
                 table: "Guests",
-                type: "INTEGER",
+                type: "boolean",
                 nullable: false,
                 defaultValue: false
             );
