@@ -24,7 +24,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                     d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>)
                     || d.ServiceType == typeof(ApplicationDbContext)
                     || d.ServiceType == typeof(IApplicationDbContext)
-                    || d.ServiceType.FullName?.Contains("EntityFrameworkCore") == true)
+                    || d.ServiceType.FullName?.Contains("EntityFrameworkCore") == true
+                )
                 .ToList();
 
             foreach (var d in descriptorsToRemove)
