@@ -21,7 +21,7 @@ const icaoRowStyling = {
   backgroundColor: `${widgetTheme.palette.primary.dark}`,
 };
 
-function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
+function WeatherWidgetDestination({ icao, pilotVersion }: WeatherProps) {
   const { data: metarData, error, isLoading } = useWeather({ icao });
 
   if (error)
@@ -118,8 +118,10 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                     alignItems: "center",
                   }}
                 >
-                  <Typography sx={{ fontSize: "1.4rem", fontWeight: 700 }}>
-                    Weather
+                  <Typography
+                    sx={{ fontSize: "1.2rem", fontWeight: 700, mr: 0.5 }}
+                  >
+                    Destination Weather
                   </Typography>
 
                   <Box sx={{ mb: 2, display: "flex", alignItems: "center" }}>
@@ -184,6 +186,9 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                   width: "12em",
                 }}
               >
+                <Typography sx={{ fontSize: "1.2rem", fontWeight: 700, mb: 1 }}>
+                  Destination Weather
+                </Typography>
                 <Box sx={{ position: "relative" }}>
                   <Box
                     sx={{
@@ -231,4 +236,4 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
   );
 }
 
-export default WeatherWidget;
+export default WeatherWidgetDestination;

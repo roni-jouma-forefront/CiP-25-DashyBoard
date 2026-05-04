@@ -29,7 +29,7 @@ export default function GuestName({ guestId }: GuestNameProps) {
         sx={{
           m: 3,
           opacity: 0.9,
-          color: `${widgetTheme.palette.primary.main}`,
+          color: `${widgetTheme.palette.primary.light}`,
         }}
       >
         Loading guest name info...
