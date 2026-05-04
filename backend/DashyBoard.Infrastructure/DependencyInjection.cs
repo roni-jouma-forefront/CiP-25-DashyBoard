@@ -36,17 +36,11 @@ public static class DependencyInjection
                     System.Web.HttpUtility.ParseQueryString(uri.Query).Get("authToken") ?? "";
                 var converted = $"https://{uri.Host}/v2/pipeline;{token}";
 
-                options.UseLibSql(
-                    converted,
-                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
-                );
+                options.UseLibSql(converted);
             }
             else if (connectionString != null && connectionString.Contains("/v2/pipeline"))
             {
-                options.UseLibSql(
-                    connectionString,
-                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
-                );
+                options.UseLibSql(connectionString);
             }
             else
             {
