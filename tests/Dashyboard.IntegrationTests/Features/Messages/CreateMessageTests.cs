@@ -78,6 +78,7 @@ public class CreateMessageTests
             Id = guestId,
             FirstName = "Rikardo",
             LastName = "Persson",
+            IsPilot = false,
             CreatedAt = DateTime.UtcNow,
         };
         var booking = new Booking

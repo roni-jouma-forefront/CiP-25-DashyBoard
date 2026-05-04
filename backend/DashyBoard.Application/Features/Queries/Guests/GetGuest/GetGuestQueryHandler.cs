@@ -25,6 +25,7 @@ public class GetGuestQueryHandler(IRepository<Guest> repository)
                 Id = guest.Id,
                 FirstName = guest.FirstName,
                 LastName = guest.LastName,
+                IsPilot = guest.IsPilot,
             };
         }
     }
