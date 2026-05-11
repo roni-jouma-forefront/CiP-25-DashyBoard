@@ -3,6 +3,8 @@ import type { MessageBackend, MessageUI } from "../types/message.types";
 import { getMessages } from "../services/api/getMessagesAdmin";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { postMessage } from "../services/api/postMessage";
+import { deleteMessage } from "../services/api/deleteMessage";
+import { updateMessage } from "../services/api/updateMessage";
 
 type UseMessageAccordionParams = {
   initialMessages?: MessageUI[];
@@ -25,11 +27,25 @@ export const useMessagesAdmin = ({
   } = useQuery<MessageUI[]>({
     queryKey: ["messages", bookingId],
     queryFn: () => getMessages({ bookingId }),
-    enabled: !!initialMessages,
+    enabled: !!bookingId,
   });
 
   const { mutate } = useMutation<string, Error, MessageBackend>({
     mutationFn: postMessage,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["messages", bookingId] });
+    },
+  });
+
+  const { mutate: deleteMutate } = useMutation<string, Error, string>({
+    mutationFn: deleteMessage,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["messages", bookingId] });
+    },
+  });
+
+  const { mutate: updateMutate } = useMutation<string, Error, MessageBackend>({
+    mutationFn: updateMessage,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["messages", bookingId] });
     },
@@ -75,20 +91,16 @@ export const useMessagesAdmin = ({
   };
 
   const saveEdit = (id: string) => {
-    queryClient.setQueryData<MessageUI[]>(
-      ["messages", bookingId],
-      (prev = []) =>
-        prev.map((msg) =>
-          msg.id === id
-            ? { ...msg, title: formData.title, content: formData.content }
-            : msg,
-        ),
-    );
+    updateMutate({...formData, id});
     setEditingId("");
   };
 
   const cancelEdit = () => {
     setEditingId("");
+  };
+
+  const handleDelete = (id: string) => {
+    deleteMutate(id);
   };
 
   return {
@@ -103,5 +115,6 @@ export const useMessagesAdmin = ({
     cancelEdit,
     handleChange,
     onSubmit,
+    handleDelete,
   };
 };

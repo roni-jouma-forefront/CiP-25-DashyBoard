@@ -58,7 +58,7 @@ public class CreateBookingCommandHandler(IRepository<Booking> repository, IDateT
             CheckIn = request.CheckIn,
             CheckOut = request.CheckOut,
             BookingStatus = request.BookingStatus,
-            CreatedAt = dateTime.CetNow,
+            CreatedAt = dateTime.UtcNow,
         };
 
         await repository.AddAsync(booking, cancellationToken);

@@ -23,7 +23,7 @@ public class UpdateHotelCommandHandler(IRepository<Hotel> repository, IDateTime 
 
         hotel.Name = request.Name;
         hotel.IcaoCode = request.IcaoCode;
-        hotel.UpdatedAt = dateTime.CetNow;
+        hotel.UpdatedAt = dateTime.UtcNow;
         hotel.UpdatedBy = "work in progress";
 
         await repository.UpdateAsync(hotel, cancellationToken);

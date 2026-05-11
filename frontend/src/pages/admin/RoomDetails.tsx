@@ -5,12 +5,14 @@ import { Button, Stack, Typography } from "@mui/material";
 import { MessageAccordion } from "../../components/admin/MessageAccordion";
 import AlertDialog from "../../components/admin/AlertDialog";
 import React from "react";
-import { useMessagesAdmin } from "../../hooks";
+import { useBookings, useMessagesAdmin } from "../../hooks";
+import { theme } from "../../theme";
+import { useGuestName } from "../../hooks/useGuestName";
 
 const hotelId = import.meta.env.VITE_HOTEL_ID;
 
 export default function Room() {
-  const { id, bookingId } = useParams();
+  const { roomNumber, bookingId } = useParams();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const {
     messages,
@@ -23,7 +25,22 @@ export default function Room() {
     saveEdit,
     cancelEdit,
     onSubmit,
+    handleDelete,
   } = useMessagesAdmin({ hotelId, bookingId });
+  const {
+    data: bookingsData,
+    error: bookingsError,
+    isLoading: bookingsIsLoading,
+  } = useBookings({
+    bookingId: bookingId as string,
+  });
+  const {
+    data: guestData,
+    error: guestError,
+    isLoading: guestIsLoading,
+  } = useGuestName({
+    guestId: bookingsData?.guestId ?? "",
+  });
 
   const handleDialog = () => {
     setDialogOpen(true);
@@ -33,6 +50,16 @@ export default function Room() {
     setDialogOpen(false);
   };
 
+  if (bookingsIsLoading || guestIsLoading)
+    return <Typography>Loading data...</Typography>;
+  if (bookingsError || guestError)
+    return (
+      <Typography sx={{ m: 3, opacity: 0.9, color: theme.palette.error.main }}>
+        Error: {(bookingsError ?? guestError)?.message}
+      </Typography>
+    );
+  if (!bookingsData) return <Typography>No booking data found</Typography>;
+
   return (
     <>
       <Stack
@@ -41,7 +68,7 @@ export default function Room() {
         justifyContent="space-between"
         alignItems="flex-end"
       >
-        <Typography variant="h2">Details for room {id}</Typography>
+        <Typography variant="h2">Details for room {roomNumber}</Typography>
         <Button
           variant="contained"
           color="error"
@@ -51,10 +78,14 @@ export default function Room() {
         </Button>
       </Stack>
       <Stack direction="row" spacing={2} alignItems="flex-start">
-        <RoomDetailsForm bookingId={bookingId} />
-        {bookingId && (
-          <RoomMessageForm onSubmit={onSubmit} bookingId={bookingId} />
-        )}
+        <RoomDetailsForm
+          bookingId={bookingId}
+          firstName={guestData?.firstName}
+          lastName={guestData?.lastName}
+          departureDate={bookingsData.checkOut}
+          departureFlight={bookingsData.flightNumber}
+        />
+        <RoomMessageForm onSubmit={onSubmit} bookingId={bookingId} />
       </Stack>
       {bookingId && (
         <MessageAccordion
@@ -67,6 +98,7 @@ export default function Room() {
           handleChange={handleChange}
           saveEdit={saveEdit}
           cancelEdit={cancelEdit}
+          handleDelete={handleDelete}
         />
       )}
       <AlertDialog open={dialogOpen} onClose={handleClose} />

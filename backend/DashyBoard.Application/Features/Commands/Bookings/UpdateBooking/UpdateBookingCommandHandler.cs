@@ -70,7 +70,7 @@ public class UpdateBookingCommandHandler(IRepository<Booking> repository, IDateT
         booking.CheckIn = request.CheckIn;
         booking.CheckOut = request.CheckOut;
         booking.BookingStatus = request.BookingStatus;
-        booking.UpdatedAt = dateTime.CetNow;
+        booking.UpdatedAt = dateTime.UtcNow;
         booking.UpdatedBy = "work in progress";
 
         await repository.UpdateAsync(booking, cancellationToken);

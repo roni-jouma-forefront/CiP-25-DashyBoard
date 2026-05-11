@@ -1,4 +1,4 @@
-﻿using DashyBoard.Application.DTOs.Swedavia;
+using DashyBoard.Application.DTOs.Swedavia;
 
 namespace DashyBoard.Application.Common.Interfaces.External;
 

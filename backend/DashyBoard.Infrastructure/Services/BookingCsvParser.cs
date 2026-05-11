@@ -72,8 +72,18 @@ public class BookingCsvParser : IBookingCsvParser
                         dict["NumberOfGuests"],
                         CultureInfo.InvariantCulture
                     ),
-                    CheckIn = DateTime.Parse(dict["CheckIn"], CultureInfo.InvariantCulture),
-                    CheckOut = DateTime.Parse(dict["CheckOut"], CultureInfo.InvariantCulture),
+                    CheckIn = DateTime.Parse(
+                        dict["CheckIn"],
+                        CultureInfo.InvariantCulture,
+                        System.Globalization.DateTimeStyles.AssumeUniversal
+                            | System.Globalization.DateTimeStyles.AdjustToUniversal
+                    ),
+                    CheckOut = DateTime.Parse(
+                        dict["CheckOut"],
+                        CultureInfo.InvariantCulture,
+                        System.Globalization.DateTimeStyles.AssumeUniversal
+                            | System.Globalization.DateTimeStyles.AdjustToUniversal
+                    ),
                     BookingStatus = dict["BookingStatus"],
                     FlightNumber = dict["FlightNumber"],
                     FlightType = dict["FlightType"],
