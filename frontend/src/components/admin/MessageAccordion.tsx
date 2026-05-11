@@ -153,7 +153,7 @@ export const MessageAccordion = ({
                       {msg.status} {msg.postDateTime}
                     </Typography>
                     <Typography component="span" sx={badgeStyle("delete")}>
-                      Delets {msg.expiresAtDateTime}
+                      Expires {msg.expiresAtDateTime}
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={2}>

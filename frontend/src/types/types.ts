@@ -10,7 +10,7 @@ export type Guest = {
 export type ActiveBooking = {
   id: string;
   roomId: string;
-  flightId: string;
+  flightNumber: string;
   checkIn: string;
   checkOut: string;
   bookingStatus: number;

@@ -1,5 +1,5 @@
-import dayjs from "dayjs";
 import type { MessageBackend, MessageUI } from "../types/message.types";
+import { formatDateTime } from "../utils/FormatTime";
 
 export const mapMessageFromApi = (msg: MessageBackend): MessageUI => {
   return {
@@ -9,12 +9,8 @@ export const mapMessageFromApi = (msg: MessageBackend): MessageUI => {
     title: msg.title,
     content: msg.content,
     status: msg.isActive ? "posted" : "pending",
-    postDateTime: msg.postAt
-      ? dayjs(msg.postAt).format("YYYY.MM-DD HH:mm")
-      : null,
-    expiresAtDateTime: msg.expiresAt
-      ? dayjs(msg.expiresAt).format("YYYY.MM-DD HH:mm")
-      : null,
+    postDateTime: msg.postAt ? formatDateTime(msg.postAt) : null,
+    expiresAtDateTime: msg.expiresAt ? formatDateTime(msg.expiresAt) : null,
     isActive: msg.isActive,
     author: msg.author,
   };
