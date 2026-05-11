@@ -1,4 +1,4 @@
-﻿using DashyBoard.Application.DTOs;
+using DashyBoard.Application.DTOs;
 using MediatR;
 
 namespace DashyBoard.Application.Features.Messages.Queries.GetMessagesForMirror;

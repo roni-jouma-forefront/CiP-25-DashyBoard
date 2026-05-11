@@ -1,4 +1,4 @@
-﻿using DashyBoard.Application.Common.Interfaces;
+using DashyBoard.Application.Common.Interfaces;
 using DashyBoard.Application.Common.Models;
 using DashyBoard.Domain.Entities;
 using MediatR;
@@ -47,16 +47,14 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         }
 
         var utcNow = DateTime.UtcNow;
-        var swedenTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-        var swedenNow = TimeZoneInfo.ConvertTimeFromUtc(utcNow, swedenTimeZone);
         var truncatedNow = new DateTime(
-            swedenNow.Year,
-            swedenNow.Month,
-            swedenNow.Day,
-            swedenNow.Hour,
-            swedenNow.Minute,
-            swedenNow.Second,
-            DateTimeKind.Unspecified
+            utcNow.Year,
+            utcNow.Month,
+            utcNow.Day,
+            utcNow.Hour,
+            utcNow.Minute,
+            utcNow.Second,
+            DateTimeKind.Utc
         );
 
         var message = new Message
