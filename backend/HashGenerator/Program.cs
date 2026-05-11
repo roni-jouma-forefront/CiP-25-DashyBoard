@@ -1,13 +1,14 @@
-﻿var hashFromSeed = "$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYzpLhJ5vMe";
-var testPassword = "password123";
+﻿using Microsoft.Data.Sqlite;
 
-Console.WriteLine("Testing BCrypt password verification:");
-Console.WriteLine($"Password: {testPassword}");
-Console.WriteLine($"Hash from seed: {hashFromSeed}");
-Console.WriteLine($"Verification result: {BCrypt.Net.BCrypt.Verify(testPassword, hashFromSeed)}");
-Console.WriteLine();
+var newHash = "$2a$12$AncAxFHnLCGvOPZcPov5eO46GxshgGKZY90hRsY9tjVnKhHKmBxdy";
+var dbPath = Path.GetFullPath("../data/DashyBoard_Dev.db");
 
-// Generate a new hash
-var newHash = BCrypt.Net.BCrypt.HashPassword(testPassword, workFactor: 12);
-Console.WriteLine($"Newly generated hash: {newHash}");
-Console.WriteLine($"New hash verifies: {BCrypt.Net.BCrypt.Verify(testPassword, newHash)}");
+Console.WriteLine($"Updating password hash in: {dbPath}");
+
+using var db = new SqliteConnection($"Data Source={dbPath}");
+db.Open();
+var cmd = db.CreateCommand();
+cmd.CommandText = "UPDATE Admins SET PasswordHash = @hash";
+cmd.Parameters.AddWithValue("@hash", newHash);
+var rows = cmd.ExecuteNonQuery();
+Console.WriteLine($"Updated {rows} admin row(s). Password is now: admin123");

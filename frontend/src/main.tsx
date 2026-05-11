@@ -5,6 +5,7 @@ import RoomAdminPage from "./pages/admin/Rooms.tsx";
 import SettingsPage from "./pages/admin/Settings";
 import RoomDetailsPage from "./pages/admin/RoomDetails";
 import Room from "./pages/Room";
+import LoginPage from "./pages/LoginPage";
 import MirrorDndProvider from "./components/mirror/MirrorDndProvider.tsx";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -12,42 +13,49 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TestRender from "./components/admin/RenderAdminLayout.tsx";
+import { AuthProvider } from "./context/AuthContext.tsx";
+import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 import "./weather-icons.css";
 
 const queryClient = new QueryClient();
 
 const Main = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <BrowserRouter>
-          <StrictMode>
-            <Routes>
-              <Route path="/admin" element={<TestRender />}>
-                <Route index element={<AdminHome />} />
-                <Route path="rooms" element={<RoomAdminPage />} />
-                <Route path="rooms/:id" element={<RoomDetailsPage />} />
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <BrowserRouter>
+            <StrictMode>
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/admin" element={<TestRender />}>
+                    <Route index element={<AdminHome />} />
+                    <Route path="rooms" element={<RoomAdminPage />} />
+                    <Route path="rooms/:id" element={<RoomDetailsPage />} />
+                    <Route
+                      path="rooms/:id/:roomNumber"
+                      element={<RoomDetailsPage />}
+                    />
+                    <Route
+                      path="rooms/:id/:roomNumber/:bookingId"
+                      element={<RoomDetailsPage />}
+                    />
+                    <Route path="settings" element={<SettingsPage />} />
+                  </Route>
+                </Route>
+                <Route path="/room/:id" element={<Room />} />
                 <Route
-                  path="rooms/:id/:roomNumber"
-                  element={<RoomDetailsPage />}
+                  path="/mirror/:bookingId"
+                  element={<MirrorDndProvider />}
                 />
-                <Route
-                  path="rooms/:id/:roomNumber/:bookingId"
-                  element={<RoomDetailsPage />}
-                />
-                <Route path="settings" element={<SettingsPage />} />
-              </Route>
-              <Route path="/room/:id" element={<Room />}></Route>
-              <Route
-                path="/mirror/:bookingId"
-                element={<MirrorDndProvider />}
-              ></Route>
-            </Routes>
-          </StrictMode>
-        </BrowserRouter>
-        <ReactQueryDevtools initialIsOpen={true} />
-      </LocalizationProvider>
-    </QueryClientProvider>
+              </Routes>
+            </StrictMode>
+          </BrowserRouter>
+          <ReactQueryDevtools initialIsOpen={true} />
+        </LocalizationProvider>
+      </QueryClientProvider>
+    </AuthProvider>
   );
 };
 export default Main;
