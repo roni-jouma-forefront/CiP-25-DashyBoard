@@ -1,12 +1,13 @@
 import type { MessageBackend } from "../../types/message.types";
 
-export async function postMessage(data: MessageBackend) {
+export async function updateMessage(data: MessageBackend) {
   const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
 
-  const res = await fetch(`${apiUrl}/api/messages`, {
-    method: "POST",
+  const res = await fetch(`${apiUrl}/api/messages/${data.id}`, {
+    method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      id: data.id,
       hotelId: import.meta.env.VITE_HOTEL_ID,
       bookingId: data.bookingId,
       title: data.title,
@@ -18,8 +19,8 @@ export async function postMessage(data: MessageBackend) {
   });
 
   if (!res.ok) {
-    throw new Error(`Couldn't post messages`);
+    throw new Error(`Couldn't update messages`);
   } else {
-    return "Posted";
+    return "Updated";
   }
 }
