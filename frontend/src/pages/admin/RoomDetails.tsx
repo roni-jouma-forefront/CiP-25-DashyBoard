@@ -25,6 +25,7 @@ export default function Room() {
     saveEdit,
     cancelEdit,
     onSubmit,
+    handleDelete,
   } = useMessagesAdmin({ hotelId, bookingId });
   const {
     data: bookingsData,
@@ -97,6 +98,7 @@ export default function Room() {
           handleChange={handleChange}
           saveEdit={saveEdit}
           cancelEdit={cancelEdit}
+          handleDelete={handleDelete}
         />
       )}
       <AlertDialog open={dialogOpen} onClose={handleClose} />

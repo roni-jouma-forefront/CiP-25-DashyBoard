@@ -39,6 +39,7 @@ interface MessageAccordionProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   saveEdit: (id: string) => void;
   cancelEdit: () => void;
+  handleDelete: (id: string) => void;
 }
 
 export const MessageAccordion = ({
@@ -51,6 +52,7 @@ export const MessageAccordion = ({
   handleChange,
   saveEdit,
   cancelEdit,
+  handleDelete,
 }: MessageAccordionProps) => {
   if (isLoading) return <Typography>Loading messages...</Typography>;
   if (error)
@@ -162,7 +164,14 @@ export const MessageAccordion = ({
                     >
                       Edit
                     </Button>
-                    <Button value={msg.id}>Delete</Button>
+                    <Button
+                      onClick={() => {
+                        handleDelete(msg.id);
+                      }}
+                      value={msg.id}
+                    >
+                      Delete
+                    </Button>
                   </Stack>
                 </Stack>
                 <Stack
