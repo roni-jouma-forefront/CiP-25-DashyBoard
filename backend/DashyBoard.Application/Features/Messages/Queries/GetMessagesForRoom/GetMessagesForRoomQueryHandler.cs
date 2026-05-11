@@ -22,15 +22,16 @@ public class GetMessagesForRoomQueryHandler
         CancellationToken cancellationToken
     )
     {
+        var utcNow = DateTime.UtcNow;
         var swedenTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-        var swedenNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, swedenTimeZone);
+        var swedenNow = TimeZoneInfo.ConvertTimeFromUtc(utcNow, swedenTimeZone);
 
         var activeBooking = await _context
             .Bookings.Where(b =>
                 b.RoomId == request.RoomId
                 && b.BookingStatus == Status.Active
-                && b.CheckIn <= swedenNow
-                && b.CheckOut >= swedenNow
+                && b.CheckIn <= utcNow
+                && b.CheckOut >= utcNow
             )
             .FirstOrDefaultAsync(cancellationToken);
 
