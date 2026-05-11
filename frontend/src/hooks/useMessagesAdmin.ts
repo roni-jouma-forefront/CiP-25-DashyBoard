@@ -17,6 +17,7 @@ type UseMessageAccordionParams = {
 export const useMessagesAdmin = ({
   initialMessages = [],
   bookingId,
+  hotelId,
 }: UseMessageAccordionParams) => {
   const queryClient = useQueryClient();
   const {
@@ -27,7 +28,7 @@ export const useMessagesAdmin = ({
   } = useQuery<MessageUI[]>({
     queryKey: ["messages", bookingId],
     queryFn: () => getMessages({ bookingId }),
-    enabled: !!bookingId,
+    enabled: !!hotelId,
   });
 
   const { mutate } = useMutation<string, Error, MessageBackend>({
@@ -91,7 +92,7 @@ export const useMessagesAdmin = ({
   };
 
   const saveEdit = (id: string) => {
-    updateMutate({...formData, id});
+    updateMutate({ ...formData, id });
     setEditingId("");
   };
 
