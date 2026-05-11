@@ -117,10 +117,10 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
             <Switch
               checked={formData.recurring}
               onChange={handleChange}
-              name="Reacurring"
+              name="Recurring"
             />
           }
-          label="Reacurring"
+          label="Recurring"
         />
         <MessageBaseForm
           handleChange={handleChange}
