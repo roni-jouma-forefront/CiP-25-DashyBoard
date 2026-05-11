@@ -92,7 +92,7 @@ export const RoomsAccordion = ({
             >
               <Typography>
                 Departing Flight:{" "}
-                {room.activeBooking?.flightId ?? "No departing flight"}
+                {room.activeBooking?.flightNumber ?? "No departing flight"}
               </Typography>
             </Stack>
           </AccordionDetails>
