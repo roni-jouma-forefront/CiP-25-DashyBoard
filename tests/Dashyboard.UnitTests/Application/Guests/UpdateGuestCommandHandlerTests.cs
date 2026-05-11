@@ -30,13 +30,14 @@ public class UpdateGuestCommandHandlerTests
             Id = guestId,
             FirstName = "Old",
             LastName = "Name",
+            IsPilot = false,
         };
 
         _repositoryMock
             .Setup(r => r.GetByIdAsync(guestId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingGuest);
 
-        var command = new UpdateGuestCommand(guestId, "Alice", "Smith");
+        var command = new UpdateGuestCommand(guestId, "Alice", "Smith", false);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -47,6 +48,7 @@ public class UpdateGuestCommandHandlerTests
         Assert.That(result.Data!.Id, Is.EqualTo(guestId));
         Assert.That(result.Data.FirstName, Is.EqualTo("Alice"));
         Assert.That(result.Data.LastName, Is.EqualTo("Smith"));
+        Assert.That(result.Data.IsPilot, Is.False);
     }
 
     [Test]
@@ -59,7 +61,7 @@ public class UpdateGuestCommandHandlerTests
             .Setup(r => r.GetByIdAsync(guestId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Guest?)null);
 
-        var command = new UpdateGuestCommand(guestId, "Alice", "Smith");
+        var command = new UpdateGuestCommand(guestId, "Alice", "Smith", false);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -80,13 +82,14 @@ public class UpdateGuestCommandHandlerTests
             Id = guestId,
             FirstName = "Old",
             LastName = "Name",
+            IsPilot = false,
         };
 
         _repositoryMock
             .Setup(r => r.GetByIdAsync(guestId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingGuest);
 
-        var command = new UpdateGuestCommand(guestId, "Alice", "Smith");
+        var command = new UpdateGuestCommand(guestId, "Alice", "Smith", false);
 
         // Act
         await _handler.Handle(command, CancellationToken.None);
@@ -108,7 +111,7 @@ public class UpdateGuestCommandHandlerTests
             .Setup(r => r.GetByIdAsync(guestId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Guest?)null);
 
-        var command = new UpdateGuestCommand(guestId, "Alice", "Smith");
+        var command = new UpdateGuestCommand(guestId, "Alice", "Smith", false);
 
         // Act
         await _handler.Handle(command, CancellationToken.None);

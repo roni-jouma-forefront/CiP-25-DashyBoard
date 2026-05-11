@@ -5,6 +5,7 @@ using DashyBoard.Application.Features.Commands.Guests.UpdateGuest;
 using DashyBoard.Application.Features.Queries.Guests.GetAllGuests;
 using DashyBoard.Application.Features.Queries.Guests.GetGuest;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DashyBoard.API.Controllers;
@@ -58,7 +59,8 @@ public class GuestsController : ControllerBase
         {
             var command = new CreateGuestCommand(
                 FirstName: createGuestDto.FirstName,
-                LastName: createGuestDto.LastName
+                LastName: createGuestDto.LastName,
+                IsPilot: createGuestDto.IsPilot
             );
             var result = await _mediator.Send(command, cancellationToken);
             return CreatedAtAction(nameof(GetGuestById), new { id = result.Data!.Id }, result.Data);
@@ -83,6 +85,7 @@ public class GuestsController : ControllerBase
     /// </summary>
     /// <param name="firstName">Optional first name filter</param>
     /// <param name="lastName">Optional last name filter</param>
+    /// <param name="isPilot">Optional pilot status filter</param>
     /// <param name="cancellationToken"></param>
     /// <returns>List of guests</returns>
     [HttpGet]
@@ -91,12 +94,13 @@ public class GuestsController : ControllerBase
     public async Task<IActionResult> GetAllGuests(
         string? firstName,
         string? lastName,
+        bool? isPilot,
         CancellationToken cancellationToken
     )
     {
         try
         {
-            var query = new GetAllGuestsQuery(firstName, lastName);
+            var query = new GetAllGuestsQuery(firstName, lastName, isPilot);
             var result = await _mediator.Send(query, cancellationToken);
             return Ok(result);
         }
@@ -177,7 +181,8 @@ public class GuestsController : ControllerBase
             var command = new UpdateGuestCommand(
                 Id: id,
                 FirstName: updateGuestDto.FirstName,
-                LastName: updateGuestDto.LastName
+                LastName: updateGuestDto.LastName,
+                IsPilot: updateGuestDto.IsPilot
             );
             var result = await _mediator.Send(command, cancellationToken);
             return Ok(result);

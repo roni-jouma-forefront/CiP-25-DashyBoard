@@ -16,6 +16,7 @@ import TestRender from "./components/admin/RenderAdminLayout.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 import "./weather-icons.css";
+import BookingsPage from "./pages/admin/Bookings.tsx";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,37 @@ const Main = () => {
         </LocalizationProvider>
       </QueryClientProvider>
     </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <BrowserRouter>
+          <StrictMode>
+            <Routes>
+              <Route path="/admin" element={<TestRender />}>
+                <Route index element={<AdminHome />} />
+                <Route path="rooms" element={<RoomAdminPage />} />
+                <Route path="rooms/:id" element={<RoomDetailsPage />} />
+                <Route
+                  path="rooms/:id/:roomNumber"
+                  element={<RoomDetailsPage />}
+                />
+                <Route
+                  path="rooms/:id/:roomNumber/:bookingId"
+                  element={<RoomDetailsPage />}
+                />
+                <Route path="bookings" element={<BookingsPage />} />
+                <Route path="settings" element={<SettingsPage />} />
+              </Route>
+              <Route path="/room/:id" element={<Room />}></Route>
+              <Route
+                path="/mirror/:bookingId"
+                element={<MirrorDndProvider />}
+              ></Route>
+            </Routes>
+          </StrictMode>
+        </BrowserRouter>
+        <ReactQueryDevtools initialIsOpen={true} />
+      </LocalizationProvider>
+    </QueryClientProvider>
   );
 };
 export default Main;

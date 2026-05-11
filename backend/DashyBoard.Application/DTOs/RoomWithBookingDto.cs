@@ -29,6 +29,7 @@ public class BookingWithGuestDto
 }
 
 /// <summary>
+/// <summary>
 /// Simplified guest info for embedding in other DTOs.
 /// </summary>
 public class GuestInfoDto
@@ -36,4 +37,5 @@ public class GuestInfoDto
     public Guid Id { get; set; }
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
+    public bool IsPilot { get; set; }
 }

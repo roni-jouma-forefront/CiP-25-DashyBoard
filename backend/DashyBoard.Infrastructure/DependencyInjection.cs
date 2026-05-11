@@ -20,12 +20,25 @@ public static class DependencyInjection
     )
     {
         // Database
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite(
-                configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
-            )
-        );
+        {
+            if (connectionString != null && connectionString.Contains("postgresql://"))
+            {
+                options.UseNpgsql(connectionString);
+            }
+            else if (connectionString != null && connectionString.Contains("Host="))
+            {
+                options.UseNpgsql(connectionString);
+            }
+            else
+            {
+                options.UseSqlite(
+                    connectionString,
+                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
+                );
+            }
+        });
 
         services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>()

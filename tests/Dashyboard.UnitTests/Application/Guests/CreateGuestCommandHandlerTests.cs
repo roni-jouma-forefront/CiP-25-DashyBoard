@@ -32,7 +32,7 @@ public class CreateGuestCommandHandlerTests
             .Setup(r => r.AddAsync(It.IsAny<Guest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Guest g, CancellationToken _) => g);
 
-        var command = new CreateGuestCommand("Alice", "Smith");
+        var command = new CreateGuestCommand("Alice", "Smith", false);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -53,7 +53,7 @@ public class CreateGuestCommandHandlerTests
             .Setup(r => r.AddAsync(It.IsAny<Guest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Guest g, CancellationToken _) => g);
 
-        var command = new CreateGuestCommand("Bob", "Jones");
+        var command = new CreateGuestCommand("Bob", "Jones", true);
 
         // Act
         await _handler.Handle(command, CancellationToken.None);

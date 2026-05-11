@@ -11,20 +11,15 @@ export async function getMessages({
   const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
   const hotelId = import.meta.env.VITE_HOTEL_ID;
 
-  let res;
-
+  let url = `${apiUrl}/api/Messages/hotel/${hotelId}`;
+  
   if (bookingId) {
-    res = await fetch(
-      `${apiUrl}/api/messages?hotelId=${hotelId}&bookingId=${bookingId}`,
-      {
-        headers: { "Content-Type": "application/json" },
-      },
-    );
-  } else {
-    res = await fetch(`${apiUrl}/api/messages/`, {
-      headers: { "Content-Type": "application/json" },
-    });
+    url += `?bookingId=${bookingId}`;
   }
+
+  const res = await fetch(url, {
+    headers: { "Content-Type": "application/json" },
+  });
 
   if (!res.ok) {
     throw new Error(`Cound't get messages`);

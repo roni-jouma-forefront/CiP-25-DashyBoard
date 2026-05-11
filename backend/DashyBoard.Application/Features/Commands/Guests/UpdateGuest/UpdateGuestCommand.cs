@@ -4,5 +4,5 @@ using MediatR;
 
 namespace DashyBoard.Application.Features.Commands.Guests.UpdateGuest;
 
-public record UpdateGuestCommand(Guid Id, string FirstName, string LastName)
+public record UpdateGuestCommand(Guid Id, string FirstName, string LastName, bool IsPilot)
     : IRequest<Result<GuestDto>>;

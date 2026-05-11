@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
@@ -9,13 +9,35 @@ import ArrivalsWidget from "./ArrivalFlightsWidget.tsx";
 import DeparturesWidget from "./DepartureFlightsWidget.tsx";
 import MessagesWidget from "./MessagesWidget.tsx";
 import WaitTimeWidget from "./WaitTimesWidget.tsx";
+import GuestName from "./GuestName.tsx";
+import WeatherWidgetDestination from "./WeatherWidgetDestination.tsx";
 import { widgetTheme } from "../../theme/index.ts";
 import { useBookings } from "../../hooks";
 import { useParams } from "react-router";
+import { GetFlightInfo } from "../../services/api/GetFlightInfo.tsx";
 
 function MirrorDashboard() {
-  const [order, setOrder] = useState([1, 2, 3, 4, 5, 6]);
-  const guestName = "Hozier";
+  const [order, setOrder] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
+  const [arrivalAirportIcao, setArrivalAirportIcao] = useState<string>();
+  const { bookingId } = useParams();
+  const { data, error, isLoading } = useBookings({
+    bookingId: bookingId as string,
+  });
+
+  async function getDestinationIcao(airport: string, flightnumber: string) {
+    const destIcao = await GetFlightInfo(airport, flightnumber).then((res) => {
+      setArrivalAirportIcao(res.arrivalAirportIcao);
+    });
+    console.log("DESTIN ICAO", destIcao);
+
+    return destIcao;
+  }
+
+  useEffect(() => {
+    if (data) {
+      getDestinationIcao(import.meta.env.VITE_AIRPORT_NAME, data.flightNumber);
+    }
+  }, [data]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -30,16 +52,9 @@ function MirrorDashboard() {
     }),
   }));
 
-  const { bookingId } = useParams();
-
-  const { data, error, isLoading } = useBookings({
-    bookingId: bookingId as string,
-  });
-
   if (!data) {
     return <div>Ingen data</div>;
   }
-
   if (error)
     return (
       <Typography
@@ -58,14 +73,12 @@ function MirrorDashboard() {
         sx={{
           m: 3,
           opacity: 0.9,
-          color: `${widgetTheme.palette.primary.main}`,
+          color: `${widgetTheme.palette.primary.light}`,
         }}
       >
         Loading bookings info...
       </Typography>
     );
-
-  console.log(data, typeof data);
 
   return (
     <>
@@ -88,20 +101,7 @@ function MirrorDashboard() {
             backgroundColor: `${widgetTheme.palette.primary.dark}`,
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              m: 2,
-            }}
-          >
-            <Typography
-              variant="h3"
-              sx={{ color: `${widgetTheme.palette.primary.main}` }}
-            >
-              Welcome {guestName}
-            </Typography>
-          </Box>
+          <GuestName guestId={data.guestId} />
           <Box
             ref={drop as unknown as React.RefObject<HTMLDivElement>}
             sx={{
@@ -131,7 +131,10 @@ function MirrorDashboard() {
                 return (
                   <DraggableWrapper key={2} id={2}>
                     {/*För att se de olika layouterna för pilot eller "vanlig" gäst byt boolen nedan. (false = vanlig gäst) */}
-                    <WeatherWidget icao="ESSA" pilotVersion={true} />
+                    <WeatherWidget
+                      icao={import.meta.env.VITE_AIRPORT_ICAO}
+                      pilotVersion={true}
+                    />
                   </DraggableWrapper>
                 );
               if (id === 3 && data.flightNumber)
@@ -169,11 +172,20 @@ function MirrorDashboard() {
                     />
                   </DraggableWrapper>
                 );
-              if (id === 6)
+              if (id === 7)
                 return (
-                  <DraggableWrapper key={6} id={6}>
+                  <DraggableWrapper key={7} id={7}>
                     <WaitTimeWidget
                       airport={import.meta.env.VITE_AIRPORT_NAME}
+                    />
+                  </DraggableWrapper>
+                );
+              if (id === 8)
+                return (
+                  <DraggableWrapper key={8} id={8}>
+                    <WeatherWidgetDestination
+                      icao={arrivalAirportIcao ?? "destination weather icao"}
+                      pilotVersion={true}
                     />
                   </DraggableWrapper>
                 );

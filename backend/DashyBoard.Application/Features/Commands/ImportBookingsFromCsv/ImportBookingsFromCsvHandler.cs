@@ -79,6 +79,7 @@ public class ImportBookingsFromCsvHandler(
                 Id = Guid.NewGuid(),
                 FirstName = row.GuestFirstName,
                 LastName = row.GuestLastName,
+                IsPilot = row.IsPilot,
                 CreatedAt = dateTime.CetNow,
                 CreatedBy = "csv-import",
             };

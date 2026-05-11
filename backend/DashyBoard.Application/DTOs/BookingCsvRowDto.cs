@@ -6,6 +6,7 @@ public class BookingCsvRowDto
     public required string GuestLastName { get; set; }
     public required string RoomNumber { get; set; }
     public int NumberOfGuests { get; set; }
+    public bool IsPilot { get; set; }
     public DateTime CheckIn { get; set; }
     public DateTime CheckOut { get; set; }
     public required string BookingStatus { get; set; }
