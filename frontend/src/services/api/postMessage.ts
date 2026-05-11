@@ -11,7 +11,10 @@ export async function postMessage(data: MessageBackend) {
     body: JSON.stringify({
       hotelId: import.meta.env.VITE_HOTEL_ID,
       bookingId: data.bookingId,
+      title: data.title,
       content: data.content,
+      postedBy: data.author,
+      postAt: data.postAt,
       expiresAt: data.expiresAt,
     }),
   });
