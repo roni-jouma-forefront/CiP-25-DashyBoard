@@ -3,8 +3,6 @@ import type { MessageBackend } from "../../types/message.types";
 export async function postMessage(data: MessageBackend) {
   const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
 
-  console.log(import.meta.env.VITE_HOTEL_ID)
-
   const res = await fetch(`${apiUrl}/api/messages`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
