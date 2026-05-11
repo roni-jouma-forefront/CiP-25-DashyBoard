@@ -25,7 +25,7 @@ export const useMessagesAdmin = ({
   } = useQuery<MessageUI[]>({
     queryKey: ["messages", bookingId],
     queryFn: () => getMessages({ bookingId }),
-    enabled: !!initialMessages,
+    enabled: !!bookingId,
   });
 
   const { mutate } = useMutation<string, Error, MessageBackend>({
