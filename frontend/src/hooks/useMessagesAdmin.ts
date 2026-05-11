@@ -4,6 +4,7 @@ import { getMessages } from "../services/api/getMessagesAdmin";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { postMessage } from "../services/api/postMessage";
 import { deleteMessage } from "../services/api/deleteMessage";
+import { updateMessage } from "../services/api/updateMessage";
 
 type UseMessageAccordionParams = {
   initialMessages?: MessageUI[];
@@ -38,6 +39,13 @@ export const useMessagesAdmin = ({
 
   const { mutate: deleteMutate } = useMutation<string, Error, string>({
     mutationFn: deleteMessage,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["messages", bookingId] });
+    },
+  });
+
+  const { mutate: updateMutate } = useMutation<string, Error, MessageBackend>({
+    mutationFn: updateMessage,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["messages", bookingId] });
     },
@@ -83,15 +91,7 @@ export const useMessagesAdmin = ({
   };
 
   const saveEdit = (id: string) => {
-    queryClient.setQueryData<MessageUI[]>(
-      ["messages", bookingId],
-      (prev = []) =>
-        prev.map((msg) =>
-          msg.id === id
-            ? { ...msg, title: formData.title, content: formData.content }
-            : msg,
-        ),
-    );
+    updateMutate({...formData, id});
     setEditingId("");
   };
 
