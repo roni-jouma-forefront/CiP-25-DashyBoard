@@ -3,6 +3,7 @@ import type { MessageBackend, MessageUI } from "../types/message.types";
 import { getMessages } from "../services/api/getMessagesAdmin";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { postMessage } from "../services/api/postMessage";
+import { deleteMessage } from "../services/api/deleteMessage";
 
 type UseMessageAccordionParams = {
   initialMessages?: MessageUI[];
@@ -30,6 +31,13 @@ export const useMessagesAdmin = ({
 
   const { mutate } = useMutation<string, Error, MessageBackend>({
     mutationFn: postMessage,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["messages", bookingId] });
+    },
+  });
+
+  const { mutate: deleteMutate } = useMutation<string, Error, string>({
+    mutationFn: deleteMessage,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["messages", bookingId] });
     },
@@ -91,6 +99,10 @@ export const useMessagesAdmin = ({
     setEditingId("");
   };
 
+  const handleDelete = (id: string) => {
+    deleteMutate(id);
+  };
+
   return {
     messages: data,
     isLoading,
@@ -103,5 +115,6 @@ export const useMessagesAdmin = ({
     cancelEdit,
     handleChange,
     onSubmit,
+    handleDelete,
   };
 };
