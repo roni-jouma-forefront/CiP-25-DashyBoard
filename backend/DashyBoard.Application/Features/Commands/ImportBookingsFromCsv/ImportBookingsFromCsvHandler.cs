@@ -1,4 +1,4 @@
-﻿using DashyBoard.Application.Common.Interfaces;
+using DashyBoard.Application.Common.Interfaces;
 using DashyBoard.Application.Common.Interfaces.External;
 using DashyBoard.Application.Common.Models;
 using DashyBoard.Application.DTOs;
@@ -80,7 +80,7 @@ public class ImportBookingsFromCsvHandler(
                 FirstName = row.GuestFirstName,
                 LastName = row.GuestLastName,
                 IsPilot = row.IsPilot,
-                CreatedAt = dateTime.CetNow,
+                CreatedAt = dateTime.UtcNow,
                 CreatedBy = "csv-import",
             };
             await guestRepository.AddAsync(guest, ct);
@@ -107,7 +107,7 @@ public class ImportBookingsFromCsvHandler(
             CheckIn = row.CheckIn,
             CheckOut = row.CheckOut,
             BookingStatus = status,
-            CreatedAt = dateTime.CetNow,
+            CreatedAt = dateTime.UtcNow,
             CreatedBy = "csv-import",
         };
 

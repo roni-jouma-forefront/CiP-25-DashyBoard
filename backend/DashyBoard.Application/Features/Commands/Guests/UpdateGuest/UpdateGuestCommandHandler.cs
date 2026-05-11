@@ -24,7 +24,7 @@ public class UpdateGuestCommandHandler(IRepository<Guest> repository, IDateTime 
         guest.FirstName = request.FirstName;
         guest.LastName = request.LastName;
         guest.IsPilot = request.IsPilot;
-        guest.UpdatedAt = dateTime.CetNow;
+        guest.UpdatedAt = dateTime.UtcNow;
         guest.UpdatedBy = "work in progress";
 
         await repository.UpdateAsync(guest, cancellationToken);

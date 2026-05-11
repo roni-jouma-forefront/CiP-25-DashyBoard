@@ -20,7 +20,7 @@ public class CreateGuestCommandHandler(IRepository<Guest> repository, IDateTime 
             FirstName = request.FirstName,
             LastName = request.LastName,
             IsPilot = request.IsPilot,
-            CreatedAt = dateTime.CetNow,
+            CreatedAt = dateTime.UtcNow,
         };
 
         await repository.AddAsync(guest, cancellationToken);

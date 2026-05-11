@@ -1,4 +1,4 @@
-﻿using DashyBoard.Application.Common.Models;
+using DashyBoard.Application.Common.Models;
 using DashyBoard.Application.DTOs;
 using MediatR;
 
