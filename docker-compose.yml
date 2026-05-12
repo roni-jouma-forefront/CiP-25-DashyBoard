@@ -31,6 +31,7 @@ services:
       - GitHub__ClientId=${GITHUB_CLIENT_ID}
       - GitHub__ClientSecret=${GITHUB_CLIENT_SECRET}
       - GitHub__Repository=${GITHUB_REPOSITORY}
+      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
     volumes:
       - ./backend/data:/app/data
     networks:

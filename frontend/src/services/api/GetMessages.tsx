@@ -25,7 +25,7 @@ export async function GetMessages(
   );
 
   if (!res.ok) {
-    throw new Error(`Cound't get hotelId ${hotelId} or roomId ${roomId}`);
+    throw new Error(`Couldn't get hotelId ${hotelId} or roomId ${roomId}`);
   }
 
   const json = await res.json();

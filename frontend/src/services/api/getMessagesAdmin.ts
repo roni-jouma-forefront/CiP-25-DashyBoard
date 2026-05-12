@@ -22,7 +22,7 @@ export async function getMessages({
   });
 
   if (!res.ok) {
-    throw new Error(`Cound't get messages`);
+    throw new Error(`Couldn't get messages`);
   }
 
   const json = await res.json();
