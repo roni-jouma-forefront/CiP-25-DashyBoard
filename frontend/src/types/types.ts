@@ -1,3 +1,5 @@
+import type { Dayjs } from "dayjs";
+
 export type RoomStatus = "available" | "occupied";
 export type Title = "Mrs" | "Ms" | "Mr" | "Mx" | null;
 
@@ -32,4 +34,9 @@ export type AdditionalGuest = {
 
 export type Staff = {
   name: string;
+};
+
+export type DateTime = {
+  field: "post" | "expires";
+  value: Dayjs | null;
 };

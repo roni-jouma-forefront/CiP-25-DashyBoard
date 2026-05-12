@@ -30,6 +30,5 @@ export async function getMessages({
     ? json
     : (json?.messages ?? json?.data ?? json);
 
-  console.log(items.map(mapMessageFromApi));
   return items.map(mapMessageFromApi);
 }

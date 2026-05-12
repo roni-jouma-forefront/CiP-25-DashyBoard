@@ -4,15 +4,11 @@ import { useState } from "react";
 import type { Dayjs } from "dayjs";
 import type { MessageBackend } from "../../../types/message.types";
 
-interface RoomFormData extends Omit<
-  MessageBackend,
-  "postAt" | "expiresAt" | "id" | "isActive"
-> {
-  postDate: Dayjs | null;
-  postTime: Dayjs | null;
-  expiresTime: Dayjs | null;
-  expiresDate: Dayjs | null;
+interface RoomFormData extends Omit<MessageBackend, "postAt" | "expiresAt" | "id" | "isActive"> {
+  postAt: Dayjs | null;
+  expiresAt: Dayjs | null;
 }
+
 interface RoomFormProps {
   onSubmit: (formData: MessageBackend) => void;
   bookingId?: string | null;
@@ -25,32 +21,22 @@ export const RoomMessageForm = ({ onSubmit, bookingId }: RoomFormProps) => {
     title: "",
     content: "",
     recurring: false,
-    postDate: null,
-    postTime: null,
-    expiresTime: null,
-    expiresDate: null,
+    postAt: null,
+    expiresAt: null,
     author: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const onPostDateChange = (value: Dayjs | null) => {
-    setFormData((prev) => ({ ...prev, postDate: value }));
+  const onPostDateTimeChange = (value: Dayjs | null) => {
+    setFormData((prev) => ({ ...prev, postAt: value }));
   };
-  const onPostTimeChange = (value: Dayjs | null) => {
-    setFormData((prev) => ({ ...prev, postTime: value }));
-  };
-  const onExpiresDateChange = (value: Dayjs | null) => {
-    setFormData((prev) => ({ ...prev, expiresDate: value }));
-  };
-  const onExpiresTimeChange = (value: Dayjs | null) => {
-    setFormData((prev) => ({ ...prev, expiresTime: value }));
+
+  const onExpiresDateTimeChange = (value: Dayjs | null) => {
+    setFormData((prev) => ({ ...prev, expiresAt: value }));
   };
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -64,18 +50,8 @@ export const RoomMessageForm = ({ onSubmit, bookingId }: RoomFormProps) => {
       content: formData.content,
       isActive: true,
       recurring: false,
-      postAt: formData.postDate
-        ? formData.postDate
-            .set("hour", formData.postTime?.hour() ?? 0)
-            .set("minute", formData.postTime?.minute() ?? 0)
-            .toISOString()
-        : null,
-      expiresAt: formData.expiresDate
-        ? formData.expiresDate
-            .set("hour", formData.expiresTime?.hour() ?? 0)
-            .set("minute", formData.expiresTime?.minute() ?? 0)
-            .toISOString()
-        : null,
+      postAt: formData.postAt ? formData.postAt.toISOString() : null,
+      expiresAt: formData.expiresAt ? formData.expiresAt.toISOString() : null,
       author: formData.author,
     });
   };
@@ -98,10 +74,8 @@ export const RoomMessageForm = ({ onSubmit, bookingId }: RoomFormProps) => {
       <Stack spacing={3}>
         <MessageBaseForm
           handleChange={handleChange}
-          onPostTimeChange={onPostTimeChange}
-          onPostDateChange={onPostDateChange}
-          onExpiresTimeChange={onExpiresTimeChange}
-          onExpiresDateChange={onExpiresDateChange}
+          onPostDateTimeChange={onPostDateTimeChange}
+          onExpiresDateTimeChange={onExpiresDateTimeChange}
           title={formData.title}
           content={formData.content}
         />

@@ -13,6 +13,9 @@ import { theme } from "../../theme";
 import type { MsgStatus } from "../../types/theme.types";
 import type { MessageBackend, MessageUI } from "../../types/message.types";
 import type React from "react";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import type { DateTime } from "../../types/types";
 
 const badgeStyle = (status: MsgStatus) => ({
   display: "inline-block",
@@ -37,6 +40,7 @@ interface MessageAccordionProps {
   formData: MessageBackend;
   startEdit: (msg: MessageUI) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDateTimeChange: ({ field, value }: DateTime) => void;
   saveEdit: (id: string) => void;
   cancelEdit: () => void;
   handleDelete: (id: string) => void;
@@ -50,6 +54,7 @@ export const MessageAccordion = ({
   formData,
   startEdit,
   handleChange,
+  handleDateTimeChange,
   saveEdit,
   cancelEdit,
   handleDelete,
@@ -96,20 +101,6 @@ export const MessageAccordion = ({
                     value={formData.title}
                     onChange={handleChange}
                   />
-                  <Button
-                    onClick={() => {
-                      cancelEdit();
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      saveEdit(msg.id);
-                    }}
-                  >
-                    Save
-                  </Button>
                 </>
               ) : (
                 <>
@@ -127,15 +118,65 @@ export const MessageAccordion = ({
           </AccordionSummary>
           <AccordionDetails>
             {editingId === msg.id ? (
-              <TextField
-                label="Content"
-                name="content"
-                multiline
-                rows={4}
-                fullWidth
-                value={formData.content}
-                onChange={handleChange}
-              />
+              <Stack spacing={2}>
+                <TextField
+                  label="Content"
+                  name="content"
+                  multiline
+                  rows={4}
+                  fullWidth
+                  value={formData.content}
+                  onChange={handleChange}
+                />
+                <Box sx={{ display: "flex", gap: 3 }}>
+                  <DateTimePicker
+                    label="Post at"
+                    onChange={(value) =>
+                      handleDateTimeChange({
+                        field: "post",
+                        value,
+                      })
+                    }
+                    value={formData.postAt ? dayjs(formData.postAt) : null}
+                    sx={{ flex: 1 }}
+                  />
+                </Box>
+                <Box sx={{ display: "flex", gap: 3 }}>
+                  <DateTimePicker
+                    label="Expires at"
+                    onChange={(value) =>
+                      handleDateTimeChange({
+                        field: "expires",
+                        value,
+                      })
+                    }
+                    value={
+                      formData.expiresAt ? dayjs(formData.expiresAt) : null
+                    }
+                    sx={{ flex: 1 }}
+                  />
+                </Box>
+                <Stack direction="row" gap={2} width="100%">
+                  <Button
+                    variant="contained"
+                    sx={{ flex: 1 }}
+                    onClick={() => {
+                      cancelEdit();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="contained"
+                    sx={{ flex: 1 }}
+                    onClick={() => {
+                      saveEdit(msg.id);
+                    }}
+                  >
+                    Save
+                  </Button>
+                </Stack>
+              </Stack>
             ) : (
               <>
                 <Stack
