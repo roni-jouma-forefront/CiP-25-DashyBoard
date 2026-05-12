@@ -87,6 +87,10 @@ public class BookingCsvParser : IBookingCsvParser
                     BookingStatus = dict["BookingStatus"],
                     FlightNumber = dict["FlightNumber"],
                     FlightType = dict["FlightType"],
+                    BookingId = dict.TryGetValue("BookingId", out var bid)
+                        && Guid.TryParse(bid, out var parsedId)
+                        ? parsedId
+                        : null,
                 }
             );
         }
