@@ -39,4 +39,4 @@ export type Staff = {
 export type DateTime = {
   field: "post" | "expires";
   value: Dayjs | null;
-}
+};
