@@ -22,6 +22,7 @@ export default function Room() {
     formData,
     startEdit,
     handleChange,
+    handleDateTimeChange,
     saveEdit,
     cancelEdit,
     onSubmit,
@@ -96,6 +97,7 @@ export default function Room() {
           formData={formData}
           startEdit={startEdit}
           handleChange={handleChange}
+          handleDateTimeChange={handleDateTimeChange}
           saveEdit={saveEdit}
           cancelEdit={cancelEdit}
           handleDelete={handleDelete}
