@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { AdditionalGuestList } from "../AdditionalGuestList";
 import type { AdditionalGuest } from "../../../types/types";
 
@@ -12,7 +12,6 @@ interface RoomDetailsProps {
   departureDate?: string;
   additionalGuests?: AdditionalGuest[];
 }
-
 
 export const RoomDetailsForm = ({
   bookingId,
