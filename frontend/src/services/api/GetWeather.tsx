@@ -29,7 +29,7 @@ export async function GetWeather(icao: string): Promise<MetarData> {
   });
 
   if (!res.ok) {
-    throw new Error(`Cound't get weather info for ${icao}`);
+    throw new Error(`Couldn't get weather info for ${icao}`);
   }
 
   const json = await res.json();

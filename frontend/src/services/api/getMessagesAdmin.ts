@@ -12,7 +12,7 @@ export async function getMessages({
   const hotelId = import.meta.env.VITE_HOTEL_ID;
 
   let url = `${apiUrl}/api/Messages/hotel/${hotelId}`;
-  
+
   if (bookingId) {
     url += `?bookingId=${bookingId}`;
   }
@@ -22,7 +22,7 @@ export async function getMessages({
   });
 
   if (!res.ok) {
-    throw new Error(`Cound't get messages`);
+    throw new Error(`Couldn't get messages`);
   }
 
   const json = await res.json();
