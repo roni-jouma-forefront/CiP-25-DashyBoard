@@ -15,6 +15,7 @@ export default function AdminHome() {
     formData,
     startEdit,
     handleChange,
+    handleDateTimeChange,
     saveEdit,
     cancelEdit,
     onSubmit,
@@ -35,6 +36,7 @@ export default function AdminHome() {
           formData={formData}
           startEdit={startEdit}
           handleChange={handleChange}
+          handleDateTimeChange={handleDateTimeChange}
           saveEdit={saveEdit}
           cancelEdit={cancelEdit}
           handleDelete={handleDelete}
