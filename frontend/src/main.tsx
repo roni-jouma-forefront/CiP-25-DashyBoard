@@ -12,6 +12,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TestRender from "./components/admin/RenderAdminLayout.tsx";
+import ProtectedRoute from "./components/admin/ProtectedRoute.tsx";
+import LoginPage from "./pages/admin/Login.tsx";
 import "./weather-icons.css";
 import BookingsPage from "./pages/admin/Bookings.tsx";
 
@@ -24,6 +26,8 @@ const Main = () => {
         <BrowserRouter>
           <StrictMode>
             <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route element={<ProtectedRoute />}>
               <Route path="/admin" element={<TestRender />}>
                 <Route index element={<AdminHome />} />
                 <Route path="rooms" element={<RoomAdminPage />} />
@@ -38,6 +42,7 @@ const Main = () => {
                 />
                 <Route path="bookings" element={<BookingsPage />} />
                 <Route path="settings" element={<SettingsPage />} />
+              </Route>
               </Route>
               <Route path="/room/:id" element={<Room />}></Route>
               <Route
