@@ -1,4 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import { AdditionalGuestList } from "../AdditionalGuestList";
 import type { AdditionalGuest } from "../../../types/types";
 
@@ -41,7 +42,13 @@ export const RoomDetailsForm = ({
             Booking Id:
           </Typography>
           <Typography sx={{ mt: 1, fontWeight: 600 }} variant="body1">
-            {bookingId ?? "—"}
+            {bookingId ? (
+              <Link to={`/mirror/${bookingId}`} style={{ color: "inherit" }}>
+                {bookingId}
+              </Link>
+            ) : (
+              "—"
+            )}
           </Typography>
         </Stack>
         <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 3 }}>
