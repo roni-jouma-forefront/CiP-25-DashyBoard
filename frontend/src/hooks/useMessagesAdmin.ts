@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { postMessage } from "../services/api/postMessage";
 import { deleteMessage } from "../services/api/deleteMessage";
 import { updateMessage } from "../services/api/updateMessage";
+import type { DateTime } from "../types/types";
 
 type UseMessageAccordionParams = {
   initialMessages?: MessageUI[];
@@ -78,6 +79,8 @@ export const useMessagesAdmin = ({
       id: msg.id,
       title: msg.title,
       content: msg.content,
+      postAt: msg.postAt,
+      expiresAt: msg.expiresAt,
     }));
   };
 
@@ -89,6 +92,20 @@ export const useMessagesAdmin = ({
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleDateTimeChange = ({ field, value }: DateTime) => {
+    if (field === "post") {
+      setFormData((prev) => ({
+        ...prev,
+        postAt: value ? value.toISOString() : null,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        expiresAt: value ? value.toISOString() : null,
+      }));
+    }
   };
 
   const saveEdit = (id: string) => {
@@ -115,6 +132,7 @@ export const useMessagesAdmin = ({
     saveEdit,
     cancelEdit,
     handleChange,
+    handleDateTimeChange,
     onSubmit,
     handleDelete,
   };
