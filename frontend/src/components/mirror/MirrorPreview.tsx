@@ -38,7 +38,18 @@ function MirrorPreview() {
           bgcolor: "#000",
         }}
       >
-        {/* Webcam feed as the "reflection" – flipped horizontally like a real mirror */}
+        {/* Widgets as the base layer */}
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+          }}
+        >
+          <MirrorDashboard />
+        </Box>
+
+        {/* Webcam feed on top – blended so widgets shine through the dark areas */}
         <Box
           component="video"
           ref={videoRef}
@@ -52,22 +63,12 @@ function MirrorPreview() {
             height: "100%",
             objectFit: "cover",
             transform: "scaleX(-1)",
-            zIndex: 0,
-            opacity: 0.35,
-            filter: "brightness(0.6) contrast(1.1)",
+            zIndex: 1,
+            opacity: 0.4,
+            mixBlendMode: "screen",
+            filter: "brightness(0.7) contrast(1.2)",
           }}
         />
-
-        {/* Widgets on top – glowing through the mirror */}
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            zIndex: 1,
-          }}
-        >
-          <MirrorDashboard />
-        </Box>
 
         {/* Subtle glass reflection highlights */}
         <Box
