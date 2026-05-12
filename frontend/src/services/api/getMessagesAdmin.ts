@@ -12,7 +12,7 @@ export async function getMessages({
   const hotelId = import.meta.env.VITE_HOTEL_ID;
 
   let url = `${apiUrl}/api/Messages/hotel/${hotelId}`;
-  
+
   if (bookingId) {
     url += `?bookingId=${bookingId}`;
   }
@@ -30,6 +30,5 @@ export async function getMessages({
     ? json
     : (json?.messages ?? json?.data ?? json);
 
-  console.log(items.map(mapMessageFromApi));
   return items.map(mapMessageFromApi);
 }
