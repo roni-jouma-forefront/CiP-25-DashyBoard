@@ -72,7 +72,10 @@ public class ImportBookingsFromCsvHandler(
         return Result<CsvImportResultDto>.Success(result);
     }
 
-    private async Task<(Booking booking, bool wasUpdated)> UpsertBookingFromRow(BookingCsvRowDto row, CancellationToken ct)
+    private async Task<(Booking booking, bool wasUpdated)> UpsertBookingFromRow(
+        BookingCsvRowDto row,
+        CancellationToken ct
+    )
     {
         // 1. Find or create guest
         var guests = await guestRepository.FindAsync(
