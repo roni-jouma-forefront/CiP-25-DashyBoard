@@ -12,7 +12,7 @@ export async function GetGuestName(guestId: string): Promise<GuestNameData> {
   });
 
   if (!res.ok) {
-    throw new Error(`Cound't get name info for ${guestId}`);
+    throw new Error(`Couldn't get name info for ${guestId}`);
   }
 
   const json = await res.json();

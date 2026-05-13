@@ -56,17 +56,12 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
     }));
   };
 
-  const onPostDateChange = (value: Dayjs | null) => {
+  const onPostDateTimeChange = (value: Dayjs | null) => {
     setFormData((prev) => ({ ...prev, postDate: value }));
   };
-  const onPostTimeChange = (value: Dayjs | null) => {
-    setFormData((prev) => ({ ...prev, postTime: value }));
-  };
-  const onExpiresDateChange = (value: Dayjs | null) => {
+
+  const onExpiresDateTimeChange = (value: Dayjs | null) => {
     setFormData((prev) => ({ ...prev, expiresDate: value }));
-  };
-  const onExpiresTimeChange = (value: Dayjs | null) => {
-    setFormData((prev) => ({ ...prev, expiresTime: value }));
   };
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -124,10 +119,8 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
         />
         <MessageBaseForm
           handleChange={handleChange}
-          onPostTimeChange={onPostTimeChange}
-          onPostDateChange={onPostDateChange}
-          onExpiresTimeChange={onExpiresTimeChange}
-          onExpiresDateChange={onExpiresDateChange}
+          onPostDateTimeChange={onPostDateTimeChange}
+          onExpiresDateTimeChange={onExpiresDateTimeChange}
           title={formData.title}
           content={formData.content}
         />

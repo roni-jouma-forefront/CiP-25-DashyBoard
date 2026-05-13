@@ -10,7 +10,9 @@ export const mapMessageFromApi = (msg: MessageBackend): MessageUI => {
     content: msg.content,
     status: msg.isActive ? "posted" : "pending",
     postDateTime: msg.postAt ? formatDateTime(msg.postAt) : null,
+    postAt: msg.postAt,
     expiresAtDateTime: msg.expiresAt ? formatDateTime(msg.expiresAt) : null,
+    expiresAt: msg.expiresAt,
     isActive: msg.isActive,
     author: msg.author,
   };
