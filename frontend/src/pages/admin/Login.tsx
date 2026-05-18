@@ -7,7 +7,10 @@ import {
   TextField,
   Typography,
   Alert,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { login } from "../../services/api/login";
 import { theme } from "../../theme";
@@ -16,6 +19,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [hotelId, setHotelId] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -62,11 +66,20 @@ export default function LoginPage() {
 
           <TextField
             label="Lösenord"
-            type="password"
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             fullWidth
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword((prev) => !prev)} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
           {error && <Alert severity="error">{error}</Alert>}

@@ -24,9 +24,7 @@ export const Sidebar = () => {
         color: theme.palette.sidebar.text,
         display: "flex",
         flexDirection: "column",
-        position: "sticky",
-        top: 0,
-        height: "100%",
+        overflow: "hidden",
       }}
     >
       <List sx={{ flex: 1 }}>

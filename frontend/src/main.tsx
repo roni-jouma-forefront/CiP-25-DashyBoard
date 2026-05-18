@@ -6,7 +6,7 @@ import SettingsPage from "./pages/admin/Settings";
 import RoomDetailsPage from "./pages/admin/RoomDetails";
 import Room from "./pages/Room";
 import MirrorDndProvider from "./components/mirror/MirrorDndProvider.tsx";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -26,6 +26,7 @@ const Main = () => {
         <BrowserRouter>
           <StrictMode>
             <Routes>
+              <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/login" element={<LoginPage />} />
               <Route element={<ProtectedRoute />}>
               <Route path="/admin" element={<TestRender />}>
