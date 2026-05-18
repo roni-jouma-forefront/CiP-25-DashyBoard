@@ -6,6 +6,7 @@ import SettingsPage from "./pages/admin/Settings";
 import RoomDetailsPage from "./pages/admin/RoomDetails";
 import Room from "./pages/Room";
 import MirrorDndProvider from "./components/mirror/MirrorDndProvider.tsx";
+import MirrorPreview from "./components/mirror/MirrorPreview.tsx";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -49,6 +50,10 @@ const Main = () => {
               <Route
                 path="/mirror/:bookingId"
                 element={<MirrorDndProvider />}
+              ></Route>
+              <Route
+                path="/mirror-preview/:bookingId"
+                element={<MirrorPreview />}
               ></Route>
             </Routes>
           </StrictMode>
