@@ -1,4 +1,4 @@
-﻿using DashyBoard.Application.Common.Interfaces;
+using DashyBoard.Application.Common.Interfaces;
 using DashyBoard.Application.DTOs;
 using DashyBoard.Domain.Entities;
 using MediatR;

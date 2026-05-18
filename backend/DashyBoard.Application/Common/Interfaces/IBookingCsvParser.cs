@@ -1,4 +1,4 @@
-﻿using DashyBoard.Application.DTOs;
+using DashyBoard.Application.DTOs;
 
 namespace DashyBoard.Application.Common.Interfaces;
 

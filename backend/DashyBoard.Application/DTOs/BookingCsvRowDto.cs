@@ -1,4 +1,4 @@
-﻿namespace DashyBoard.Application.DTOs;
+namespace DashyBoard.Application.DTOs;
 
 public class BookingCsvRowDto
 {

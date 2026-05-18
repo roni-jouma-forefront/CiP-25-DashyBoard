@@ -23,7 +23,9 @@ export type MessageUI = {
   content: string;
   status: MsgStatus;
   postDateTime: string | null;
+  postAt: string | null;
   expiresAtDateTime: string | null;
+  expiresAt: string | null;
   isActive: boolean;
   author: string;
 };

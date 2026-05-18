@@ -23,7 +23,7 @@ public class UpdateRoomCommandHandler(IRepository<Room> repository, IDateTime da
 
         room.HotelId = request.HotelId;
         room.RoomNumber = request.RoomNumber;
-        room.UpdatedAt = dateTime.CetNow;
+        room.UpdatedAt = dateTime.UtcNow;
         room.UpdatedBy = "work in progress";
 
         await repository.UpdateAsync(room, cancellationToken);

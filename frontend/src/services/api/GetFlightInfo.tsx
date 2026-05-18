@@ -33,7 +33,7 @@ export async function GetFlightInfo(
   );
 
   if (!res.ok) {
-    throw new Error(`Cound't get flight info for ${flight} from ${airport}`);
+    throw new Error(`Couldn't get flight info for ${flight} from ${airport}`);
   }
 
   const json = await res.json();

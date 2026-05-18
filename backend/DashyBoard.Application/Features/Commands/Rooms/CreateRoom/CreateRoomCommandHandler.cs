@@ -19,7 +19,7 @@ public class CreateRoomCommandHandler(IRepository<Room> repository, IDateTime da
             Id = Guid.NewGuid(),
             HotelId = request.HotelId,
             RoomNumber = request.RoomNumber,
-            CreatedAt = dateTime.CetNow,
+            CreatedAt = dateTime.UtcNow,
             CreatedBy = "work in progress",
         };
 

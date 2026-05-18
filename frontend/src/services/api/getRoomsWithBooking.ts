@@ -12,7 +12,7 @@ export async function getRoomsWithBookings(): Promise<Room[]> {
   );
 
   if (!res.ok) {
-    throw new Error(`Cound't get rooms for hotel with id ${hotelId}`);
+    throw new Error(`Couldn't get rooms for hotel with id ${hotelId}`);
   }
 
   const json = await res.json();

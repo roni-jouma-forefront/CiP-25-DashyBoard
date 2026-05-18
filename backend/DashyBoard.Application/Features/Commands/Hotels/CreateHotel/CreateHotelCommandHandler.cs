@@ -19,7 +19,7 @@ public class CreateHotelCommandHandler(IRepository<Hotel> repository, IDateTime 
             Id = Guid.NewGuid(),
             Name = request.Name,
             IcaoCode = request.IcaoCode,
-            CreatedAt = dateTime.CetNow,
+            CreatedAt = dateTime.UtcNow,
             CreatedBy = "Admin",
         };
 

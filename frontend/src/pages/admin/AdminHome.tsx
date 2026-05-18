@@ -15,9 +15,11 @@ export default function AdminHome() {
     formData,
     startEdit,
     handleChange,
+    handleDateTimeChange,
     saveEdit,
     cancelEdit,
-    onSubmit
+    onSubmit,
+    handleDelete,
   } = useMessagesAdmin({ hotelId });
 
   return (
@@ -34,8 +36,10 @@ export default function AdminHome() {
           formData={formData}
           startEdit={startEdit}
           handleChange={handleChange}
+          handleDateTimeChange={handleDateTimeChange}
           saveEdit={saveEdit}
           cancelEdit={cancelEdit}
+          handleDelete={handleDelete}
         />
       </Stack>
     </>

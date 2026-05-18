@@ -21,7 +21,7 @@ export const Sidebar = () => {
           <ListItemIcon>
             <DashboardIcon sx={{ color: theme.palette.sidebar.text }} />
           </ListItemIcon>
-          <ListItemText primary="Dasboard" />
+          <ListItemText primary="Dashboard" />
         </ListItemButton>
         <ListItemButton component={NavLink} to="/admin/rooms/">
           <ListItemIcon>
@@ -39,7 +39,7 @@ export const Sidebar = () => {
           <ListItemIcon>
             <SettingsIcon sx={{ color: theme.palette.sidebar.text }} />
           </ListItemIcon>
-          <ListItemText primary="Setting" />
+          <ListItemText primary="Settings" />
         </ListItemButton>
       </List>
     </Box>
