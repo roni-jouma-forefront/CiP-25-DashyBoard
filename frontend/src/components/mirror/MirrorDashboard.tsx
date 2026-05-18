@@ -15,6 +15,7 @@ import { widgetTheme } from "../../theme/index.ts";
 import { useBookings } from "../../hooks";
 import { useParams } from "react-router";
 import { GetFlightInfo } from "../../services/api/GetFlightInfo.tsx";
+import { useGuestName } from "../../hooks/useGuestName.ts";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
@@ -23,6 +24,8 @@ function MirrorDashboard() {
   const { data, error, isLoading } = useBookings({
     bookingId: bookingId as string,
   });
+  const { data: guestData } = useGuestName({ guestId: data?.guestId ?? "" });
+  const isPilot = guestData?.isPilot ?? false;
 
   async function getDestinationIcao(airport: string, flightnumber: string) {
     const destIcao = await GetFlightInfo(airport, flightnumber).then((res) => {
@@ -183,7 +186,7 @@ function MirrorDashboard() {
                   <DraggableWrapper key={8} id={8}>
                     <WeatherWidgetDestination
                       icao={arrivalAirportIcao ?? "destination weather icao"}
-                      pilotVersion={true}
+                      pilotVersion={isPilot}
                     />
                   </DraggableWrapper>
                 );
