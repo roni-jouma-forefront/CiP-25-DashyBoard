@@ -28,7 +28,7 @@ const Main = () => {
           <StrictMode>
             <Routes>
               <Route path="/" element={<Navigate to="/login" replace />} />
-              <Route path="/login" element={<LoginPage />} />
+              <Route path="/login" element={localStorage.getItem("auth_token") ? <Navigate to="/admin" replace /> : <LoginPage />} />
               <Route element={<ProtectedRoute />}>
               <Route path="/admin" element={<TestRender />}>
                 <Route index element={<AdminHome />} />
