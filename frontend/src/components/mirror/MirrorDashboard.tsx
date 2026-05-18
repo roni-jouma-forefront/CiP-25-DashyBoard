@@ -28,8 +28,6 @@ function MirrorDashboard() {
     const destIcao = await GetFlightInfo(airport, flightnumber).then((res) => {
       setArrivalAirportIcao(res.arrivalAirportIcao);
     });
-    console.log("DESTIN ICAO", destIcao);
-
     return destIcao;
   }
 

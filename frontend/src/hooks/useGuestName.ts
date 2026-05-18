@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetGuestName, type GuestNameData } from "../services/api/GetGuestName";
+import { GetGuest, type GuestNameData } from "../services/api/GetGuest";
 
 interface GuestNameProps {
  guestId: string; 
@@ -8,7 +8,7 @@ interface GuestNameProps {
 export const useGuestName = ({ guestId }: GuestNameProps) => {
   return useQuery<GuestNameData>({
     queryKey: ["guestId", guestId,],
-    queryFn: () => GetGuestName(guestId),
+    queryFn: () => GetGuest(guestId),
     enabled: !!guestId,
   });
 };
