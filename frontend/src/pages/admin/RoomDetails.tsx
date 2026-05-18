@@ -60,6 +60,7 @@ export default function Room() {
       </Typography>
     );
   if (!bookingsData) return <Typography>No booking data found</Typography>;
+  if (!guestData) return <Typography>No guest data found</Typography>;
 
   return (
     <>
@@ -81,8 +82,10 @@ export default function Room() {
       <Stack direction="row" spacing={2} alignItems="flex-start">
         <RoomDetailsForm
           bookingId={bookingId}
-          firstName={guestData?.firstName}
-          lastName={guestData?.lastName}
+          guestId={guestData.id}
+          firstName={guestData.firstName}
+          lastName={guestData.lastName}
+          isPilot={guestData.isPilot}
           departureDate={bookingsData.checkOut}
           departureFlight={bookingsData.flightNumber}
         />
