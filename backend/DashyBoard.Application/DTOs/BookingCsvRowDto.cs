@@ -2,6 +2,7 @@ namespace DashyBoard.Application.DTOs;
 
 public class BookingCsvRowDto
 {
+    public Guid? BookingId { get; set; }
     public required string GuestFirstName { get; set; }
     public required string GuestLastName { get; set; }
     public required string RoomNumber { get; set; }
@@ -21,4 +22,6 @@ public class CsvImportResultDto
     public int FailedImports { get; set; }
     public List<string> Errors { get; set; } = [];
     public List<Guid> CreatedBookingIds { get; set; } = [];
+    public int UpdatedImports { get; set; }
+    public List<Guid> UpdatedBookingIds { get; set; } = [];
 }
