@@ -1,13 +1,22 @@
-import { Box, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  FormControlLabel,
+  Stack,
+  Switch,
+  Typography,
+} from "@mui/material";
 import { Link } from "react-router";
 import { AdditionalGuestList } from "../AdditionalGuestList";
 import type { AdditionalGuest } from "../../../types/types";
+import { updateGuestInfo } from "../../../services/api/updateGuest";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface RoomDetailsProps {
   bookingId?: string | null;
-  firstName?: string;
-  lastName?: string;
-  title?: string;
+  guestId: string;
+  firstName: string;
+  lastName: string;
+  isPilot: boolean;
   departureFlight?: string;
   departureDate?: string;
   additionalGuests?: AdditionalGuest[];
@@ -15,13 +24,27 @@ interface RoomDetailsProps {
 
 export const RoomDetailsForm = ({
   bookingId,
+  guestId,
   firstName,
   lastName,
-  title,
+  isPilot,
   departureFlight,
   departureDate,
   additionalGuests = [],
 }: RoomDetailsProps) => {
+  const queryClient = useQueryClient();
+
+  const handleToggle = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    await updateGuestInfo({
+      id: guestId,
+      firstName: firstName,
+      lastName: lastName,
+      isPilot: e.target.checked,
+    });
+
+    queryClient.invalidateQueries({ queryKey: ["guestId", guestId] });
+  };
+
   return (
     <Box
       sx={{
@@ -68,11 +91,18 @@ export const RoomDetailsForm = ({
         </Stack>
         <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 3 }}>
           <Typography sx={{ flexShrink: 0 }} variant="body2">
-            Title:
+            Is Pilot:
           </Typography>
-          <Typography sx={{ mt: 1, fontWeight: 600 }} variant="body1">
-            {title ?? "—"}
-          </Typography>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isPilot}
+                name="isPilot"
+                onChange={handleToggle}
+              />
+            }
+            label="Is Pilot"
+          />
         </Stack>
         <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 3 }}>
           <Typography sx={{ flexShrink: 0 }} variant="body2">
