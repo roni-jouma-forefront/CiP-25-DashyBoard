@@ -15,7 +15,7 @@ import { widgetTheme } from "../../theme/index.ts";
 import { useBookings } from "../../hooks";
 import { useParams } from "react-router";
 import { GetFlightInfo } from "../../services/api/GetFlightInfo.tsx";
-import { useGuestName } from "../../hooks/useGuestName.ts";
+// import { useGuestName } from "../../hooks/useGuestName.ts";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
@@ -24,8 +24,9 @@ function MirrorDashboard() {
   const { data, error, isLoading } = useBookings({
     bookingId: bookingId as string,
   });
-  const { data: guestData } = useGuestName({ guestId: data?.guestId ?? "" });
-  const isPilot = guestData?.isPilot ?? false;
+  // const { data: guestData } = useGuestName({ guestId: data?.guestId ?? "" });
+  const isPilot = true;
+  // guestData?.isPilot ?? false;
 
   async function getDestinationIcao(airport: string, flightnumber: string) {
     const destIcao = await GetFlightInfo(airport, flightnumber).then((res) => {
@@ -131,11 +132,25 @@ function MirrorDashboard() {
               if (id === 2)
                 return (
                   <DraggableWrapper key={2} id={2}>
-                    {/*För att se de olika layouterna för pilot eller "vanlig" gäst byt boolen nedan. (false = vanlig gäst) */}
-                    <WeatherWidget
-                      icao={import.meta.env.VITE_AIRPORT_ICAO}
-                      pilotVersion={true}
-                    />
+                    {!isPilot ? (
+                      <>
+                        <WeatherWidget
+                          icao={import.meta.env.VITE_AIRPORT_ICAO}
+                          pilotVersion={isPilot}
+                        />
+                        <WeatherWidgetDestination
+                          icao={
+                            arrivalAirportIcao ?? "destination weather icao"
+                          }
+                          pilotVersion={isPilot}
+                        />
+                      </>
+                    ) : (
+                      <WeatherWidget
+                        icao={import.meta.env.VITE_AIRPORT_ICAO}
+                        pilotVersion={isPilot}
+                      />
+                    )}
                   </DraggableWrapper>
                 );
               if (id === 3 && data.flightNumber)
@@ -181,7 +196,7 @@ function MirrorDashboard() {
                     />
                   </DraggableWrapper>
                 );
-              if (id === 8)
+              if (id === 8 && isPilot)
                 return (
                   <DraggableWrapper key={8} id={8}>
                     <WeatherWidgetDestination
