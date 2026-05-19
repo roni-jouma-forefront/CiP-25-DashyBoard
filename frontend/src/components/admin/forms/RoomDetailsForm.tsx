@@ -93,16 +93,8 @@ export const RoomDetailsForm = ({
           <Typography sx={{ flexShrink: 0 }} variant="body2">
             Is Pilot:
           </Typography>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={isPilot}
-                name="isPilot"
-                onChange={handleToggle}
-              />
-            }
-            label="Is Pilot"
-          />
+
+          <Switch checked={isPilot} name="isPilot" onChange={handleToggle} />
         </Stack>
         <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 3 }}>
           <Typography sx={{ flexShrink: 0 }} variant="body2">
