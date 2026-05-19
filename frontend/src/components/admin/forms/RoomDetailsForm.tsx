@@ -1,10 +1,4 @@
-import {
-  Box,
-  FormControlLabel,
-  Stack,
-  Switch,
-  Typography,
-} from "@mui/material";
+import { Box, Stack, Switch, Typography } from "@mui/material";
 import { Link } from "react-router";
 import { AdditionalGuestList } from "../AdditionalGuestList";
 import type { AdditionalGuest } from "../../../types/types";
