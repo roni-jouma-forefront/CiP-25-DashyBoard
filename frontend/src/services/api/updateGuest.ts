@@ -1,4 +1,4 @@
-import type { GuestNameData } from "./GetGuestName";
+import type { GuestNameData } from "./GetGuest";
 
 export async function updateGuestInfo({id, firstName, lastName, isPilot} : GuestNameData) {
   const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
