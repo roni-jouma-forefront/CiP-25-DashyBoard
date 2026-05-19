@@ -10,11 +10,11 @@ interface Props {
 
 export const AdminLayout = ({ children }: Props) => {
   return (
-    <Box sx={{ display: "flex", height: "100vh", flexDirection: "column"}}>
+    <Box sx={{ display: "flex", height: "100vh", flexDirection: "column", overflow: "hidden" }}>
       <Topbar />
-      <Box sx={{ display: "flex", flex: 1}}>
+      <Box sx={{ display: "flex", flex: 1, overflow: "hidden" }}>
         <Sidebar />
-        <Box sx={{ flex: 1, display: "flex", flexDirection: "column", p:3, gap: 3, backgroundColor: theme.palette.background.default }}>
+        <Box sx={{ flex: 1, display: "flex", flexDirection: "column", p:3, gap: 3, backgroundColor: theme.palette.background.default, overflowY: "auto" }}>
           {children}
         </Box>
       </Box>
