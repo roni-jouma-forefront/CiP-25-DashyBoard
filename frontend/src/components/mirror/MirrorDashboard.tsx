@@ -15,6 +15,7 @@ import { widgetTheme } from "../../theme/index.ts";
 import { useBookings } from "../../hooks";
 import { useParams } from "react-router";
 import { GetFlightInfo } from "../../services/api/GetFlightInfo.tsx";
+import { useGuestName } from "../../hooks/useGuestName.ts";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
@@ -23,13 +24,13 @@ function MirrorDashboard() {
   const { data, error, isLoading } = useBookings({
     bookingId: bookingId as string,
   });
+  const { data: guestData } = useGuestName({ guestId: data?.guestId ?? "" });
+  const isPilot = guestData?.isPilot ?? false;
 
   async function getDestinationIcao(airport: string, flightnumber: string) {
     const destIcao = await GetFlightInfo(airport, flightnumber).then((res) => {
       setArrivalAirportIcao(res.arrivalAirportIcao);
     });
-    console.log("DESTIN ICAO", destIcao);
-
     return destIcao;
   }
 
@@ -105,9 +106,7 @@ function MirrorDashboard() {
           <Box
             ref={drop as unknown as React.RefObject<HTMLDivElement>}
             sx={{
-              border: `25px solid ${widgetTheme.palette.primary.light}`,
-              boxShadow: `inset 0 0 0 4px ${widgetTheme.palette.primary.light}`,
-              outlineOffset: "-24px",
+     
               paddingRight: { xs: "1rem", sm: "3rem", md: "10rem" },
               backgroundColor: isOver ? "rgba(0,0,0,0.1)" : "transparent",
               display: "flex",
@@ -120,21 +119,34 @@ function MirrorDashboard() {
               if (id === 1)
                 return (
                   <DraggableWrapper key={1} id={1}>
-                    <Watch
-                      key={1}
-                      location={import.meta.env.VITE_LOCATION_NAME}
-                      timeZone={import.meta.env.VITE_TIMEZONE}
+                    <MessagesWidget
+                      hotelId={import.meta.env.VITE_HOTEL_ID}
+                      bookingId={bookingId}
                     />
                   </DraggableWrapper>
                 );
               if (id === 2)
                 return (
                   <DraggableWrapper key={2} id={2}>
-                    {/*För att se de olika layouterna för pilot eller "vanlig" gäst byt boolen nedan. (false = vanlig gäst) */}
-                    <WeatherWidget
-                      icao={import.meta.env.VITE_AIRPORT_ICAO}
-                      pilotVersion={true}
-                    />
+                    {!isPilot ? (
+                      <>
+                        <WeatherWidget
+                          icao={import.meta.env.VITE_AIRPORT_ICAO}
+                          pilotVersion={isPilot}
+                        />
+                        <WeatherWidgetDestination
+                          icao={
+                            arrivalAirportIcao ?? "destination weather icao"
+                          }
+                          pilotVersion={isPilot}
+                        />
+                      </>
+                    ) : (
+                      <WeatherWidget
+                        icao={import.meta.env.VITE_AIRPORT_ICAO}
+                        pilotVersion={isPilot}
+                      />
+                    )}
                   </DraggableWrapper>
                 );
               if (id === 3 && data.flightNumber)
@@ -166,9 +178,10 @@ function MirrorDashboard() {
               if (id === 6)
                 return (
                   <DraggableWrapper key={6} id={6}>
-                    <MessagesWidget
-                      hotelId={import.meta.env.VITE_HOTEL_ID}
-                      roomId={data.roomId}
+                    <Watch
+                      key={1}
+                      location={import.meta.env.VITE_LOCATION_NAME}
+                      timeZone={import.meta.env.VITE_TIMEZONE}
                     />
                   </DraggableWrapper>
                 );
@@ -180,12 +193,12 @@ function MirrorDashboard() {
                     />
                   </DraggableWrapper>
                 );
-              if (id === 8)
+              if (id === 8 && isPilot)
                 return (
                   <DraggableWrapper key={8} id={8}>
                     <WeatherWidgetDestination
                       icao={arrivalAirportIcao ?? "destination weather icao"}
-                      pilotVersion={true}
+                      pilotVersion={isPilot}
                     />
                   </DraggableWrapper>
                 );

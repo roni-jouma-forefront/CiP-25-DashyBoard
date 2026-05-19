@@ -2,9 +2,10 @@ export type GuestNameData = {
   id: string;
   firstName: string;
   lastName: string;
+  isPilot: boolean;
 };
 
-export async function GetGuestName(guestId: string): Promise<GuestNameData> {
+export async function GetGuest(guestId: string): Promise<GuestNameData> {
   const apiUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
 
   const res = await fetch(`${apiUrl}/api/Guests/${guestId}`, {

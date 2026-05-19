@@ -13,8 +13,6 @@ type UseMessageAccordionParams = {
   bookingId?: string;
 };
 
-// Websocket??
-
 export const useMessagesAdmin = ({
   initialMessages = [],
   bookingId,
@@ -30,6 +28,8 @@ export const useMessagesAdmin = ({
     queryKey: ["messages", bookingId],
     queryFn: () => getMessages({ bookingId }),
     enabled: !!hotelId,
+    refetchInterval: 10_000,
+    refetchIntervalInBackground: true,
   });
 
   const { mutate } = useMutation<string, Error, MessageBackend>({

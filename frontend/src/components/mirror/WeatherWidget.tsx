@@ -122,7 +122,7 @@ function WeatherWidget({ icao, pilotVersion }: WeatherProps) {
                     Weather
                   </Typography>
 
-                  <Box sx={{ mb: 2, display: "flex", alignItems: "center" }}>
+                  <Box sx={{ mb: 1, display: "flex", alignItems: "center" }}>
                     <i className={`icons wi ${getWeatherIconClass()}`}></i>
                   </Box>
                 </Box>
