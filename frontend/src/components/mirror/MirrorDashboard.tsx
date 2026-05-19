@@ -15,7 +15,7 @@ import { widgetTheme } from "../../theme/index.ts";
 import { useBookings } from "../../hooks";
 import { useParams } from "react-router";
 import { GetFlightInfo } from "../../services/api/GetFlightInfo.tsx";
-// import { useGuestName } from "../../hooks/useGuestName.ts";
+import { useGuestName } from "../../hooks/useGuestName.ts";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
@@ -24,9 +24,8 @@ function MirrorDashboard() {
   const { data, error, isLoading } = useBookings({
     bookingId: bookingId as string,
   });
-  // const { data: guestData } = useGuestName({ guestId: data?.guestId ?? "" });
-  const isPilot = true;
-  // guestData?.isPilot ?? false;
+  const { data: guestData } = useGuestName({ guestId: data?.guestId ?? "" });
+  const isPilot = guestData?.isPilot ?? false;
 
   async function getDestinationIcao(airport: string, flightnumber: string) {
     const destIcao = await GetFlightInfo(airport, flightnumber).then((res) => {
@@ -107,9 +106,7 @@ function MirrorDashboard() {
           <Box
             ref={drop as unknown as React.RefObject<HTMLDivElement>}
             sx={{
-              border: `25px solid ${widgetTheme.palette.primary.light}`,
-              boxShadow: `inset 0 0 0 4px ${widgetTheme.palette.primary.light}`,
-              outlineOffset: "-24px",
+     
               paddingRight: { xs: "1rem", sm: "3rem", md: "10rem" },
               backgroundColor: isOver ? "rgba(0,0,0,0.1)" : "transparent",
               display: "flex",
@@ -122,10 +119,9 @@ function MirrorDashboard() {
               if (id === 1)
                 return (
                   <DraggableWrapper key={1} id={1}>
-                    <Watch
-                      key={1}
-                      location={import.meta.env.VITE_LOCATION_NAME}
-                      timeZone={import.meta.env.VITE_TIMEZONE}
+                    <MessagesWidget
+                      hotelId={import.meta.env.VITE_HOTEL_ID}
+                      bookingId={bookingId}
                     />
                   </DraggableWrapper>
                 );
@@ -182,9 +178,10 @@ function MirrorDashboard() {
               if (id === 6)
                 return (
                   <DraggableWrapper key={6} id={6}>
-                    <MessagesWidget
-                      hotelId={import.meta.env.VITE_HOTEL_ID}
-                      roomId={data.roomId}
+                    <Watch
+                      key={1}
+                      location={import.meta.env.VITE_LOCATION_NAME}
+                      timeZone={import.meta.env.VITE_TIMEZONE}
                     />
                   </DraggableWrapper>
                 );

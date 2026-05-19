@@ -10,8 +10,7 @@ export const useDepartureFlights = ({airport = "ARN"}: DepartureFlightsProps = {
     queryKey: ["departures", airport],
     queryFn: () => GetDepartureFlights(airport),
     enabled: Boolean(airport),
-    staleTime: 5*60*1000,
-    refetchInterval: 5*60*1000,
+    refetchInterval: 10_000,
     refetchIntervalInBackground: true,
     })
 }

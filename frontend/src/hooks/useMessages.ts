@@ -8,10 +8,10 @@ interface MessagesProps  {
  
 export const useMessages = ({ hotelId, roomId }: MessagesProps) => {
     return useQuery<MessagesData[]>({
-    queryKey: ["hotelId", hotelId, "bookingId", roomId],
+    queryKey: ["hotelId", hotelId, "roomId", roomId, "messages"],
     queryFn: () => GetMessages( hotelId, roomId ),
     enabled: Boolean(hotelId),
-    refetchInterval: 5*60*1000,
+    refetchInterval: 10_000,
     refetchIntervalInBackground: true,
     })
 }

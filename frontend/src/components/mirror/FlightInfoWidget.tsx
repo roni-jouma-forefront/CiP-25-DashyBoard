@@ -74,7 +74,7 @@ function FlightInfoWidget({ airport, flight }: FlightProps) {
               }}
             >
               <Typography sx={{ fontSize: "1.4rem", fontWeight: 700, mb: 2 }}>
-                Flight <span>{flightData.flightId ?? "-"}</span>
+                Your flight <span>{flightData.flightId ?? "-"}</span>
               </Typography>
             </Box>
             <Stack spacing={1} sx={{ borderRadius: 2 }}>

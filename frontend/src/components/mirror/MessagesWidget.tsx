@@ -1,19 +1,19 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { widgetTheme } from "../../theme/index.ts";
-import { useMessages } from "../../hooks";
+import { useMessagesAdmin } from "../../hooks";
 import formatTime from "../../utils/FormatTime.tsx";
 
 interface MessagesProps {
   hotelId: string;
-  roomId: string;
+  bookingId?: string;
 }
 
-export default function MessagesWidget({ hotelId, roomId }: MessagesProps) {
-  const {
-    data: messagesData = [],
-    error,
+export default function MessagesWidget({ hotelId, bookingId }: MessagesProps) {
+const {
+    messages,
     isLoading,
-  } = useMessages({ hotelId, roomId });
+    error,
+  } = useMessagesAdmin({ hotelId, bookingId });
 
   if (error)
     return (
@@ -69,57 +69,61 @@ export default function MessagesWidget({ hotelId, roomId }: MessagesProps) {
       </Box>
       <Box>
         <Stack spacing={1.2}>
-          {messagesData?.map((message) => {
-            return (
-              <Paper
-                key={message.id}
-                sx={{
-                  p: 1.2,
-                  borderRadius: 2,
-                  bgcolor: `${widgetTheme.palette.primary.dark}`,
-                  color: `${widgetTheme.palette.primary.main}`,
-                  border: `2px solid ${widgetTheme.palette.primary.light}`,
-                }}
-              >
-                <Stack direction="column">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignContent: "center",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "1.2rem", fontWeight: 700 }}>
-                      {message.title}
-                    </Typography>
-                    <Typography
+          
+          {messages?.map((message) => {
+            if(message.isActive) {
+              return (
+                
+                <Paper
+                  key={message.id}
+                  sx={{
+                    p: 1.2,
+                    borderRadius: 2,
+                    bgcolor: `${widgetTheme.palette.primary.dark}`,
+                    color: `${widgetTheme.palette.primary.main}`,
+                    border: `2px solid ${widgetTheme.palette.primary.light}`,
+                  }}
+                >
+                  <Stack direction="column">
+                    <Box
                       sx={{
                         display: "flex",
+                        justifyContent: "space-between",
                         alignContent: "center",
-                        ml: 2,
                       }}
                     >
-                      {formatTime(message.createdAt) ?? "-"}
-                    </Typography>
-                  </Box>
+                      <Typography sx={{ fontSize: "1.2rem", fontWeight: 700 }}>
+                        {message.title}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          display: "flex",
+                          alignContent: "center",
+                          ml: 2,
+                        }}
+                      >
+                        {formatTime(message.postAt ?? "-")}
+                      </Typography>
+                    </Box>
 
-                  <Box>
-                    <Typography sx={{ fontSize: "0.9rem", pt: 1 }}>
-                      {message.content}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      fontSize: "0.8rem",
-                      textAlign: "right",
-                      pt: 2,
-                    }}
-                  >
-                    <Typography>{message.postedBy ?? -" "}</Typography>
-                  </Box>
-                </Stack>
-              </Paper>
-            );
+                    <Box>
+                      <Typography sx={{ fontSize: "0.9rem", pt: 1 }}>
+                        {message.content}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        fontSize: "0.8rem",
+                        textAlign: "right",
+                        pt: 2,
+                      }}
+                    >
+                      <Typography>{message.author ?? " "}</Typography>
+                    </Box>
+                  </Stack>
+                </Paper>
+              );
+            }
           })}
         </Stack>
       </Box>

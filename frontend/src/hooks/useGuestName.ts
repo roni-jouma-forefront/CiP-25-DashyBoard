@@ -10,5 +10,7 @@ export const useGuestName = ({ guestId }: GuestNameProps) => {
     queryKey: ["guestId", guestId,],
     queryFn: () => GetGuest(guestId),
     enabled: !!guestId,
+    refetchInterval: 10_000,
+    refetchIntervalInBackground: true,
   });
 };
