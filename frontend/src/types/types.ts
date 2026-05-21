@@ -23,7 +23,7 @@ export type ActiveBooking = {
 
 export type Room = {
   id: string;
-  hotelId: number;
+  hotelId: string;
   roomNumber: number;
   activeBooking: ActiveBooking | null;
 };
@@ -35,6 +35,12 @@ export type AdditionalGuest = {
 
 export type Staff = {
   name: string;
+};
+
+export type Hotel = {
+  id: string;
+  name: string;
+  icaoCode: string;
 };
 
 export type DateTime = {
