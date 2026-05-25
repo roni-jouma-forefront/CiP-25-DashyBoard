@@ -1,16 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
+import { refetchInterval } from "./index";
 import { GetWaitTimes, type WaitTimesData } from "../services/api/GetWaitTimes";
 
 interface WaitTimesProps {
-    airport?: string
+  airport?: string;
 }
 
-export const useWaitTimes = ({airport = "ARN"}: WaitTimesProps = {}) => {
-    return useQuery<WaitTimesData[]>({
+export const useWaitTimes = ({ airport = "ARN" }: WaitTimesProps = {}) => {
+  return useQuery<WaitTimesData[]>({
     queryKey: ["waittimes", airport],
     queryFn: () => GetWaitTimes(airport),
     enabled: Boolean(airport),
-    refetchInterval: 10_000,
+    refetchInterval: refetchInterval, // 10_000
     refetchIntervalInBackground: true,
-    })
-}
+  });
+};

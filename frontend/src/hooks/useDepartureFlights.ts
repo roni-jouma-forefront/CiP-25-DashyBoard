@@ -1,16 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetDepartureFlights, type DepartureData } from "../services/api/GetDepartureFlights";
+import { refetchInterval } from "./index";
+import {
+  GetDepartureFlights,
+  type DepartureData,
+} from "../services/api/GetDepartureFlights";
 
 interface DepartureFlightsProps {
-    airport?: string
+  airport?: string;
 }
 
-export const useDepartureFlights = ({airport = "ARN"}: DepartureFlightsProps = {}) => {
-    return useQuery<DepartureData[]>({
+export const useDepartureFlights = ({
+  airport = "ARN",
+}: DepartureFlightsProps = {}) => {
+  return useQuery<DepartureData[]>({
     queryKey: ["departures", airport],
     queryFn: () => GetDepartureFlights(airport),
     enabled: Boolean(airport),
-    refetchInterval: 10_000,
+    refetchInterval: refetchInterval, // 10_000
     refetchIntervalInBackground: true,
-    })
-}
+  });
+};
