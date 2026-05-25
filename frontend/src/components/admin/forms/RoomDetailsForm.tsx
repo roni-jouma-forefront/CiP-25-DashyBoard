@@ -4,6 +4,7 @@ import { AdditionalGuestList } from "../AdditionalGuestList";
 import type { AdditionalGuest } from "../../../types/types";
 import { updateGuestInfo } from "../../../services/api/updateGuest";
 import { useQueryClient } from "@tanstack/react-query";
+import { theme } from "../../../theme";
 
 interface RoomDetailsProps {
   bookingId?: string | null;
@@ -59,7 +60,7 @@ export const RoomDetailsForm = ({
           </Typography>
           <Typography sx={{ mt: 1, fontWeight: 600 }} variant="body1">
             {bookingId ? (
-              <Link to={`/mirror/${bookingId}`} style={{ color: "inherit" }}>
+              <Link to={`/mirror/${bookingId}`} style={{ color: `${theme.palette.primary.main}`, textDecoration: "underline" }}>
                 {bookingId}
               </Link>
             ) : (
