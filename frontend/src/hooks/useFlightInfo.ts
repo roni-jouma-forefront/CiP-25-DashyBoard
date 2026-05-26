@@ -12,7 +12,7 @@ export const useFlightInfo = ({ airport, flight }: FlightProps) => {
     queryKey: ["airport", airport, "flight", flight],
     queryFn: () => GetFlightInfo(airport, flight),
     enabled: !!airport && !!flight,
-    refetchInterval: refetchInterval, // 10_000
+    refetchInterval: refetchInterval,
     refetchIntervalInBackground: true,
   });
 };

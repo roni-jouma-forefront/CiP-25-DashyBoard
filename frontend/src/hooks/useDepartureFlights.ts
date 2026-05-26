@@ -16,7 +16,7 @@ export const useDepartureFlights = ({
     queryKey: ["departures", airport],
     queryFn: () => GetDepartureFlights(airport),
     enabled: Boolean(airport),
-    refetchInterval: refetchInterval, // 10_000
+    refetchInterval: refetchInterval,
     refetchIntervalInBackground: true,
   });
 };
