@@ -6,6 +6,8 @@ import { theme } from "../../../theme";
 export const Topbar = () => {
   const hotelId = import.meta.env.VITE_HOTEL_ID;
   const [hotelName, setHotelName] = useState<string>("");
+  const [time, setTime] = useState("");
+  const timeZone = "Europe/Stockholm";
 
   useEffect(() => {
     if (!hotelId) return;
@@ -13,6 +15,24 @@ export const Topbar = () => {
       .then((hotel) => setHotelName(hotel.name))
       .catch(() => setHotelName("Hotel"));
   }, [hotelId]);
+
+    useEffect(() => {
+    const updateTime = () => {
+      const now = new Intl.DateTimeFormat("sv-SE", {
+        timeZone,
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(new Date());
+
+      setTime(now);
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+
+    return () => clearInterval(interval);
+  }, [timeZone]);
+
 
   return (
     <Box
@@ -32,12 +52,17 @@ export const Topbar = () => {
       }}
     >
       <Typography variant="h5">{hotelName}</Typography>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Box
         component="img"
         src="/logo.jpg"
         alt="DashyBoard"
-        sx={{ height: 40 }}
+        sx={{ height: 45 }}
       />
-    </Box>
+      <Typography variant="h6">{time}</Typography>
+      </Box>
+    
+      </Box>
+
   );
 };
