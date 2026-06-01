@@ -11,7 +11,7 @@ export const useWaitTimes = ({ airport = "ARN" }: WaitTimesProps = {}) => {
     queryKey: ["waittimes", airport],
     queryFn: () => GetWaitTimes(airport),
     enabled: Boolean(airport),
+    staleTime: 1000 * 60 * 5,
     refetchInterval: refetchInterval,
-    refetchIntervalInBackground: true,
   });
 };
