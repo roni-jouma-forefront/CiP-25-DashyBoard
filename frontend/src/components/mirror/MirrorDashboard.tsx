@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDrop } from "react-dnd";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
@@ -14,12 +14,11 @@ import WeatherWidgetDestination from "./WeatherWidgetDestination.tsx";
 import { widgetTheme } from "../../theme/index.ts";
 import { useBookings } from "../../hooks";
 import { useParams } from "react-router";
-import { GetFlightInfo } from "../../services/api/GetFlightInfo.tsx";
 import { useGuestName } from "../../hooks/useGuestName.ts";
+import { useFlightInfo } from "../../hooks";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
-  const [arrivalAirportIcao, setArrivalAirportIcao] = useState<string>();
   const { bookingId } = useParams();
   const { data, error, isLoading } = useBookings({
     bookingId: bookingId as string,
@@ -27,18 +26,11 @@ function MirrorDashboard() {
   const { data: guestData } = useGuestName({ guestId: data?.guestId ?? "" });
   const isPilot = guestData?.isPilot ?? false;
 
-  async function getDestinationIcao(airport: string, flightnumber: string) {
-    const destIcao = await GetFlightInfo(airport, flightnumber).then((res) => {
-      setArrivalAirportIcao(res.arrivalAirportIcao);
-    });
-    return destIcao;
-  }
-
-  useEffect(() => {
-    if (data) {
-      getDestinationIcao(import.meta.env.VITE_AIRPORT_NAME, data.flightNumber);
-    }
-  }, [data]);
+  const { data: flightData } = useFlightInfo({
+    airport: import.meta.env.VITE_AIRPORT_NAME,
+    flight: data?.flightNumber ?? "",
+  });
+  const arrivalAirportIcao = flightData?.arrivalAirportIcao;
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "widget",
@@ -106,7 +98,6 @@ function MirrorDashboard() {
           <Box
             ref={drop as unknown as React.RefObject<HTMLDivElement>}
             sx={{
-     
               paddingRight: { xs: "1rem", sm: "3rem", md: "10rem" },
               backgroundColor: isOver ? "rgba(0,0,0,0.1)" : "transparent",
               display: "flex",

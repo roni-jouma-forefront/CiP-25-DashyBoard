@@ -18,6 +18,5 @@ export const useArrivalFlights = ({
     enabled: Boolean(airport),
     staleTime: 1000 * 60 * 5,
     refetchInterval: refetchInterval,
-    refetchIntervalInBackground: true,
   });
 };
