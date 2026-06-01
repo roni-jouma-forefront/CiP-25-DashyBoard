@@ -1,6 +1,6 @@
 import { DashboardForm } from "../../components/admin/forms/DashboardForm";
 import Watch from "../../components/base/watch";
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { MessageAccordion } from "../../components/admin/MessageAccordion";
 import { useMessagesAdmin } from "../../hooks";
 
@@ -32,47 +32,49 @@ export default function AdminHome() {
     <>
       <Typography variant="h2">DashyBoard</Typography>
       <Watch location="Stockholm" timeZone="UTC"></Watch>
-      <Stack direction="row" spacing={2} alignItems="flex-start">
+      <Stack direction="column" spacing={2}>
         <DashboardForm onSubmit={onSubmit} />
-        <MessageAccordion
-          title="General Messages"
-          messages={regularMessages}
-          editingId={editingId}
-          isLoading={isLoading}
-          error={!!error}
-          formData={formData}
-          startEdit={startEdit}
-          startTime={startTime}
-          endTime={endTime}
-          selectedDays={selectedDays}
-          handleChange={handleChange}
-          handleDateTimeChange={handleDateTimeChange}
-          handleRecurrenceTimeChange={handleRecurrenceTimeChange}
-          handleRecurrenceDaysChange={handleRecurrenceDaysChange}
-          saveEdit={saveEdit}
-          cancelEdit={cancelEdit}
-          handleDelete={handleDelete}
-        />
+        <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+          <MessageAccordion
+            title="General Messages"
+            messages={regularMessages}
+            editingId={editingId}
+            isLoading={isLoading}
+            error={!!error}
+            formData={formData}
+            startEdit={startEdit}
+            startTime={startTime}
+            endTime={endTime}
+            selectedDays={selectedDays}
+            handleChange={handleChange}
+            handleDateTimeChange={handleDateTimeChange}
+            handleRecurrenceTimeChange={handleRecurrenceTimeChange}
+            handleRecurrenceDaysChange={handleRecurrenceDaysChange}
+            saveEdit={saveEdit}
+            cancelEdit={cancelEdit}
+            handleDelete={handleDelete}
+          />
+          <MessageAccordion
+            title="Recurring Messages"
+            messages={recurringMessages}
+            editingId={editingId}
+            isLoading={isLoading}
+            error={!!error}
+            formData={formData}
+            startTime={startTime}
+            endTime={endTime}
+            selectedDays={selectedDays}
+            startEdit={startEdit}
+            handleChange={handleChange}
+            handleDateTimeChange={handleDateTimeChange}
+            handleRecurrenceTimeChange={handleRecurrenceTimeChange}
+            handleRecurrenceDaysChange={handleRecurrenceDaysChange}
+            saveEdit={saveEdit}
+            cancelEdit={cancelEdit}
+            handleDelete={handleDelete}
+          />
+        </Box>
       </Stack>
-      <MessageAccordion
-        title="Recurring Messages"
-        messages={recurringMessages}
-        editingId={editingId}
-        isLoading={isLoading}
-        error={!!error}
-        formData={formData}
-        startTime={startTime}
-        endTime={endTime}
-        selectedDays={selectedDays}
-        startEdit={startEdit}
-        handleChange={handleChange}
-        handleDateTimeChange={handleDateTimeChange}
-        handleRecurrenceTimeChange={handleRecurrenceTimeChange}
-        handleRecurrenceDaysChange={handleRecurrenceDaysChange}
-        saveEdit={saveEdit}
-        cancelEdit={cancelEdit}
-        handleDelete={handleDelete}
-      />
     </>
   );
 }

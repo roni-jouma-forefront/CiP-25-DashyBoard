@@ -54,7 +54,7 @@ export const AddStaffForm = () => {
         <Typography variant="h5" mb={3}>
           Staff
         </Typography>
-        <Stack flexDirection="row" spacing={3} alignItems="stretch">
+        <Stack flexDirection="row" spacing={2} alignItems="stretch">
           <TextField
             label="Name"
             sx={{ flex: 1 }}
