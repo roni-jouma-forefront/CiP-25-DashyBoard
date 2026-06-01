@@ -13,9 +13,10 @@ import { theme } from "../../theme";
 import type { MsgStatus } from "../../types/theme.types";
 import type { MessageBackend, MessageUI } from "../../types/message.types";
 import type React from "react";
-import { DateTimePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
-import type { DateTime } from "../../types/types";
+import { DateTimePicker, TimePicker } from "@mui/x-date-pickers";
+import dayjs, { Dayjs } from "dayjs";
+import type { DateTime, Day } from "../../types/types";
+import { DayPicker } from "./DayPicker";
 
 const badgeStyle = (status: MsgStatus) => ({
   display: "inline-block",
@@ -33,14 +34,23 @@ const badgeStyle = (status: MsgStatus) => ({
 });
 
 interface MessageAccordionProps {
+  title: string;
   messages: MessageUI[];
   isLoading: boolean;
   error: boolean;
   editingId: string;
   formData: MessageBackend;
+  startTime: Dayjs | null;
+  endTime: Dayjs | null;
+  selectedDays: Day[];
   startEdit: (msg: MessageUI) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDateTimeChange: ({ field, value }: DateTime) => void;
+  handleRecurrenceTimeChange: (
+    field: "recurrenceTimeStart" | "recurrenceTimeEnd",
+    value: Dayjs | null,
+  ) => void;
+  handleRecurrenceDaysChange: (days: Day[]) => void;
   saveEdit: (id: string) => void;
   cancelEdit: () => void;
   handleDelete: (id: string) => void;
@@ -48,13 +58,19 @@ interface MessageAccordionProps {
 
 export const MessageAccordion = ({
   messages,
+  title,
   isLoading,
   error,
   editingId,
   formData,
+  startTime,
+  endTime,
   startEdit,
+  selectedDays,
   handleChange,
   handleDateTimeChange,
+  handleRecurrenceTimeChange,
+  handleRecurrenceDaysChange,
   saveEdit,
   cancelEdit,
   handleDelete,
@@ -75,7 +91,7 @@ export const MessageAccordion = ({
         background: "white",
       }}
     >
-      <Typography variant="h5">Messages</Typography>
+      <Typography variant="h5">{title}</Typography>
 
       {messages.map((msg) => (
         <Accordion key={msg.id} component="form">
@@ -156,6 +172,26 @@ export const MessageAccordion = ({
                     sx={{ flex: 1 }}
                   />
                 </Box>
+                <Stack direction="row" spacing={2}>
+                  <TimePicker
+                    label="Start time"
+                    value={startTime ? dayjs(startTime) : null}
+                    onChange={(value) => {
+                      handleRecurrenceTimeChange("recurrenceTimeStart", value);
+                    }}
+                  />
+                  <TimePicker
+                    label="End time"
+                    value={endTime ? dayjs(endTime) : null}
+                    onChange={(value) => {
+                      handleRecurrenceTimeChange("recurrenceTimeEnd", value);
+                    }}
+                  />
+                </Stack>
+                <DayPicker
+                  selectedDays={selectedDays}
+                  onChange={handleRecurrenceDaysChange}
+                />
                 <Stack direction="row" gap={2} width="100%">
                   <Button
                     variant="contained"
@@ -172,6 +208,14 @@ export const MessageAccordion = ({
                     onClick={() => {
                       saveEdit(msg.id);
                     }}
+                    disabled={
+                      (formData.recurring &&
+                        formData.recurrenceTimeStart === null) ||
+                      formData.recurrenceTimeEnd === null ||
+                      selectedDays.length === 0
+                        ? true
+                        : false
+                    }
                   >
                     Save
                   </Button>
@@ -215,6 +259,25 @@ export const MessageAccordion = ({
                     </Button>
                   </Stack>
                 </Stack>
+                {msg.recurring && (
+                  <Stack direction="row" spacing={1} mt={1}>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      Active:
+                    </Typography>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      {msg.recurrenceTimeStart}
+                    </Typography>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      -
+                    </Typography>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      {msg.recurrenceTimeEnd}
+                    </Typography>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      ({msg.recurrenceDays})
+                    </Typography>
+                  </Stack>
+                )}
                 <Stack
                   direction="row"
                   spacing={2}
