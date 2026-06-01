@@ -16,6 +16,8 @@ import type React from "react";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import type { DateTime } from "../../types/types";
+import AlertDialog from "../../components/admin/AlertDialog";
+import { useState } from "react";
 
 const badgeStyle = (status: MsgStatus) => ({
   display: "inline-block",
@@ -59,9 +61,13 @@ export const MessageAccordion = ({
   cancelEdit,
   handleDelete,
 }: MessageAccordionProps) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  
   if (isLoading) return <Typography>Loading messages...</Typography>;
   if (error)
     return <Typography color="error">Error loading messages</Typography>;
+
 
   return (
     <Box
@@ -207,7 +213,8 @@ export const MessageAccordion = ({
                     </Button>
                     <Button
                       onClick={() => {
-                        handleDelete(msg.id);
+                        setPendingDeleteId(msg.id);
+                        setDialogOpen(true);
                       }}
                       value={msg.id}
                     >
@@ -228,6 +235,17 @@ export const MessageAccordion = ({
           </AccordionDetails>
         </Accordion>
       ))}
+      <AlertDialog
+        open={dialogOpen}
+        alertTitle="Delete message?"
+        alertContent="This action can't be recalled!"
+        buttonText="Delete"
+        alertAction={() => {
+          if (pendingDeleteId) handleDelete(pendingDeleteId);
+          setDialogOpen(false);
+        }}
+        onClose={() => setDialogOpen(false)}
+      />
     </Box>
   );
 };
