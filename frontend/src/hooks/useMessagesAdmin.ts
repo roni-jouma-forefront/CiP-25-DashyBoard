@@ -88,6 +88,7 @@ export const useMessagesAdmin = ({
       id: msg.id,
       title: msg.title,
       content: msg.content,
+      author: msg.author,
       postAt: msg.postAt,
       expiresAt: msg.expiresAt,
       recurring: msg.recurring,

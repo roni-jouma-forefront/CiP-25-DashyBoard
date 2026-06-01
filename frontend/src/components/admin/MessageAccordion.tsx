@@ -144,37 +144,58 @@ export const MessageAccordion = ({
                   value={formData.content}
                   onChange={handleChange}
                 />
-                <Box sx={{ display: "flex", gap: 3 }}>
-                  <DateTimePicker
-                    label="Post at"
-                    onChange={(value) =>
-                      handleDateTimeChange({
-                        field: "post",
-                        value,
-                      })
-                    }
-                    value={formData.postAt ? dayjs(formData.postAt) : null}
-                    sx={{ flex: 1 }}
-                  />
-                </Box>
-                <Box sx={{ display: "flex", gap: 3 }}>
-                  <DateTimePicker
-                    label="Expires at"
-                    onChange={(value) =>
-                      handleDateTimeChange({
-                        field: "expires",
-                        value,
-                      })
-                    }
-                    value={
-                      formData.expiresAt ? dayjs(formData.expiresAt) : null
-                    }
-                    sx={{ flex: 1 }}
-                  />
+                <TextField
+                  label="Author"
+                  name="author"
+                  fullWidth
+                  value={formData.author}
+                  onChange={handleChange}
+                />
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 2,
+                  }}
+                >
+                  <Box sx={{ display: "flex", gap: 3 }}>
+                    <DateTimePicker
+                      label="Post at"
+                      onChange={(value) =>
+                        handleDateTimeChange({
+                          field: "post",
+                          value,
+                        })
+                      }
+                      value={formData.postAt ? dayjs(formData.postAt) : null}
+                      sx={{ flex: 1 }}
+                    />
+                  </Box>
+                  <Box sx={{ display: "flex", gap: 3 }}>
+                    <DateTimePicker
+                      label="Expires at"
+                      onChange={(value) =>
+                        handleDateTimeChange({
+                          field: "expires",
+                          value,
+                        })
+                      }
+                      value={
+                        formData.expiresAt ? dayjs(formData.expiresAt) : null
+                      }
+                      sx={{ flex: 1 }}
+                    />
+                  </Box>
                 </Box>
                 {formData.recurring && (
                   <>
-                    <Stack direction="row" spacing={2}>
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: 2,
+                      }}
+                    >
                       <TimePicker
                         label="Start time"
                         value={startTime ? dayjs(startTime) : null}
@@ -195,7 +216,7 @@ export const MessageAccordion = ({
                           );
                         }}
                       />
-                    </Stack>
+                    </Box>
                     <DayPicker
                       selectedDays={selectedDays}
                       onChange={handleRecurrenceDaysChange}
@@ -242,12 +263,23 @@ export const MessageAccordion = ({
                   borderColor={theme.palette.divider}
                 >
                   <Stack direction="row" spacing={2} alignItems="flex-start">
-                    <Typography component="span" sx={badgeStyle(msg.status)}>
-                      {msg.status} {msg.postDateTime}
-                    </Typography>
-                    <Typography component="span" sx={badgeStyle("delete")}>
-                      Expires {msg.expiresAtDateTime}
-                    </Typography>
+                    {msg.status === "expired" ? (
+                      <Typography component="span" sx={badgeStyle("delete")}>
+                        Expired {msg.expiresAtDateTime}
+                      </Typography>
+                    ) : (
+                      <>
+                        <Typography
+                          component="span"
+                          sx={badgeStyle(msg.status)}
+                        >
+                          {msg.status} {msg.postDateTime}
+                        </Typography>
+                        <Typography component="span" sx={badgeStyle("delete")}>
+                          Expires {msg.expiresAtDateTime}
+                        </Typography>
+                      </>
+                    )}
                   </Stack>
                   <Stack direction="row" spacing={2}>
                     <Button
@@ -294,6 +326,16 @@ export const MessageAccordion = ({
                 >
                   <Typography flex={1}>{msg.content}</Typography>
                 </Stack>
+                {msg.author && (
+                  <Stack direction="row" spacing={1} mt={1}>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      Author:
+                    </Typography>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      {msg.author}
+                    </Typography>
+                  </Stack>
+                )}
               </>
             )}
           </AccordionDetails>
