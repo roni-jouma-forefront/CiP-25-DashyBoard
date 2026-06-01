@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { refetchInterval } from "./index";
 import { GetFlightInfo, type FlightData } from "../services/api/GetFlightInfo";
 
 interface FlightProps {
@@ -11,7 +12,7 @@ export const useFlightInfo = ({ airport, flight }: FlightProps) => {
     queryKey: ["airport", airport, "flight", flight],
     queryFn: () => GetFlightInfo(airport, flight),
     enabled: !!airport && !!flight,
-    refetchInterval: 10_000,
-    refetchIntervalInBackground: true,
+    staleTime: 1000 * 60 * 5,
+    refetchInterval: refetchInterval,
   });
 };

@@ -1,6 +1,5 @@
 import { DashboardForm } from "../../components/admin/forms/DashboardForm";
-import Watch from "../../components/base/watch";
-import { Box, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { MessageAccordion } from "../../components/admin/MessageAccordion";
 import { useMessagesAdmin } from "../../hooks";
 
@@ -31,7 +30,6 @@ export default function AdminHome() {
   return (
     <>
       <Typography variant="h2">DashyBoard</Typography>
-      <Watch location="Stockholm" timeZone="UTC"></Watch>
       <Stack direction="column" spacing={2}>
         <DashboardForm onSubmit={onSubmit} />
         <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>

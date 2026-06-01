@@ -10,6 +10,7 @@ export const useWeather = ({ icao }: WeatherProps) => {
     queryKey: ["weather", icao],
     queryFn: () => GetWeather(icao),
     enabled: !!icao,
+    staleTime: 1000 * 60 * 5,
     refetchInterval: 60_000,
     refetchIntervalInBackground: true,
   });

@@ -70,7 +70,7 @@ export const theme = createTheme({
       activeBackground: "#1B3F8B",
     },
     sidebar: {
-      background: "#172036",
+      background: "#0B1220",
       text: "#CBD5E1",
       activeBackground: "#1B3F8B",
     },
