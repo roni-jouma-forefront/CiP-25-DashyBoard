@@ -172,26 +172,36 @@ export const MessageAccordion = ({
                     sx={{ flex: 1 }}
                   />
                 </Box>
-                <Stack direction="row" spacing={2}>
-                  <TimePicker
-                    label="Start time"
-                    value={startTime ? dayjs(startTime) : null}
-                    onChange={(value) => {
-                      handleRecurrenceTimeChange("recurrenceTimeStart", value);
-                    }}
-                  />
-                  <TimePicker
-                    label="End time"
-                    value={endTime ? dayjs(endTime) : null}
-                    onChange={(value) => {
-                      handleRecurrenceTimeChange("recurrenceTimeEnd", value);
-                    }}
-                  />
-                </Stack>
-                <DayPicker
-                  selectedDays={selectedDays}
-                  onChange={handleRecurrenceDaysChange}
-                />
+                {formData.recurring && (
+                  <>
+                    <Stack direction="row" spacing={2}>
+                      <TimePicker
+                        label="Start time"
+                        value={startTime ? dayjs(startTime) : null}
+                        onChange={(value) => {
+                          handleRecurrenceTimeChange(
+                            "recurrenceTimeStart",
+                            value,
+                          );
+                        }}
+                      />
+                      <TimePicker
+                        label="End time"
+                        value={endTime ? dayjs(endTime) : null}
+                        onChange={(value) => {
+                          handleRecurrenceTimeChange(
+                            "recurrenceTimeEnd",
+                            value,
+                          );
+                        }}
+                      />
+                    </Stack>
+                    <DayPicker
+                      selectedDays={selectedDays}
+                      onChange={handleRecurrenceDaysChange}
+                    />
+                  </>
+                )}
                 <Stack direction="row" gap={2} width="100%">
                   <Button
                     variant="contained"
@@ -209,12 +219,10 @@ export const MessageAccordion = ({
                       saveEdit(msg.id);
                     }}
                     disabled={
-                      (formData.recurring &&
-                        formData.recurrenceTimeStart === null) ||
-                      formData.recurrenceTimeEnd === null ||
-                      selectedDays.length === 0
-                        ? true
-                        : false
+                      formData.recurring &&
+                      (formData.recurrenceTimeStart === null ||
+                        formData.recurrenceTimeEnd === null ||
+                        selectedDays.length === 0)
                     }
                   >
                     Save

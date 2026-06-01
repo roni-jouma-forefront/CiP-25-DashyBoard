@@ -90,6 +90,7 @@ export const useMessagesAdmin = ({
       content: msg.content,
       postAt: msg.postAt,
       expiresAt: msg.expiresAt,
+      recurring: msg.recurring,
       recurrenceTimeStart: msg.recurrenceTimeStart,
       recurrenceTimeEnd: msg.recurrenceTimeEnd,
       recurrenceDays: msg.recurrenceDays,
