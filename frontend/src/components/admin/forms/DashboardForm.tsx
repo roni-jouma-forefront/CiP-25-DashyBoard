@@ -104,7 +104,7 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
     if (formData.postAt && value && !value.isAfter(formData.postAt)) {
       setError((prev) => ({
         ...prev,
-        expiresAt: "Exeration date and time must be after post date",
+        expiresAt: "Expiration date and time must be after post date",
       }));
       return;
     } else {
