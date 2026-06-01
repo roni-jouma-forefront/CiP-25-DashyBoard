@@ -7,13 +7,15 @@ export type MessageBackend = {
   title: string;
   content: string;
   recurring: boolean;
+  recurrenceType: string | null;
   postAt: string | null;
   expiresAt: string | null;
   isActive: boolean;
+  recurrenceTimeStart: string | null;
+  recurrenceTimeEnd: string | null;
+  recurrenceDays: string | null;
   author: string;
 };
-
-// Återkommande meddelanden? bocka i återkommande
 
 export type MessageUI = {
   id: string;
@@ -21,11 +23,15 @@ export type MessageUI = {
   bookingId: string | null;
   title: string;
   content: string;
+  recurring: boolean;
   status: MsgStatus;
   postDateTime: string | null;
   postAt: string | null;
   expiresAtDateTime: string | null;
   expiresAt: string | null;
+  recurrenceTimeStart: string | null;
+  recurrenceTimeEnd: string | null;
+  recurrenceDays: string | null;
   isActive: boolean;
   author: string;
 };
