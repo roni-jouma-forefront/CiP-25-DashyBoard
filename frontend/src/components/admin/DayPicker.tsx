@@ -1,4 +1,5 @@
 import {
+  Box,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -33,61 +34,63 @@ export const DayPicker = ({ selectedDays, onChange }: DayPickerProps) => {
   return (
     <FormGroup>
       <Typography variant="subtitle2">Chose days to show message:</Typography>
-      <FormControlLabel
-        control={<Checkbox size="small" />}
-        label="All"
-        checked={allSelected}
-        onChange={() => handleAllChange()}
-      />
-      <FormControlLabel
-        control={<Checkbox size="small" />}
-        label="Monday"
-        name="mon"
-        checked={selectedDays.includes(Day.mon)}
-        onChange={() => handleOnChange(Day.mon)}
-      />
-      <FormControlLabel
-        control={<Checkbox size="small" />}
-        label="Tusday"
-        name="tus"
-        checked={selectedDays.includes(Day.tus)}
-        onChange={() => handleOnChange(Day.tus)}
-      />
-      <FormControlLabel
-        control={<Checkbox size="small" />}
-        label="Wednesday"
-        name="wed"
-        checked={selectedDays.includes(Day.wed)}
-        onChange={() => handleOnChange(Day.wed)}
-      />
-      <FormControlLabel
-        control={<Checkbox size="small" />}
-        label="Thursday"
-        name="thu"
-        checked={selectedDays.includes(Day.thu)}
-        onChange={() => handleOnChange(Day.thu)}
-      />
-      <FormControlLabel
-        control={<Checkbox size="small" />}
-        label="Friday"
-        name="fri"
-        checked={selectedDays.includes(Day.fri)}
-        onChange={() => handleOnChange(Day.fri)}
-      />
-      <FormControlLabel
-        control={<Checkbox size="small" />}
-        label="Saturday"
-        name="sat"
-        checked={selectedDays.includes(Day.sat)}
-        onChange={() => handleOnChange(Day.sat)}
-      />
-      <FormControlLabel
-        control={<Checkbox size="small" />}
-        label="Sunday"
-        name="sun"
-        checked={selectedDays.includes(Day.sun)}
-        onChange={() => handleOnChange(Day.sun)}
-      />
+      <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+        <FormControlLabel
+          control={<Checkbox size="small" />}
+          label="All"
+          checked={allSelected}
+          onChange={() => handleAllChange()}
+        />
+        <FormControlLabel
+          control={<Checkbox size="small" />}
+          label="Monday"
+          name="mon"
+          checked={selectedDays.includes(Day.mon)}
+          onChange={() => handleOnChange(Day.mon)}
+        />
+        <FormControlLabel
+          control={<Checkbox size="small" />}
+          label="Tusday"
+          name="tus"
+          checked={selectedDays.includes(Day.tus)}
+          onChange={() => handleOnChange(Day.tus)}
+        />
+        <FormControlLabel
+          control={<Checkbox size="small" />}
+          label="Wednesday"
+          name="wed"
+          checked={selectedDays.includes(Day.wed)}
+          onChange={() => handleOnChange(Day.wed)}
+        />
+        <FormControlLabel
+          control={<Checkbox size="small" />}
+          label="Thursday"
+          name="thu"
+          checked={selectedDays.includes(Day.thu)}
+          onChange={() => handleOnChange(Day.thu)}
+        />
+        <FormControlLabel
+          control={<Checkbox size="small" />}
+          label="Friday"
+          name="fri"
+          checked={selectedDays.includes(Day.fri)}
+          onChange={() => handleOnChange(Day.fri)}
+        />
+        <FormControlLabel
+          control={<Checkbox size="small" />}
+          label="Saturday"
+          name="sat"
+          checked={selectedDays.includes(Day.sat)}
+          onChange={() => handleOnChange(Day.sat)}
+        />
+        <FormControlLabel
+          control={<Checkbox size="small" />}
+          label="Sunday"
+          name="sun"
+          checked={selectedDays.includes(Day.sun)}
+          onChange={() => handleOnChange(Day.sun)}
+        />
+      </Box>
     </FormGroup>
   );
 };
