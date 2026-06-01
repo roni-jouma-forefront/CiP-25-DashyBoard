@@ -8,14 +8,20 @@ const hotelId = import.meta.env.VITE_HOTEL_ID;
 
 export default function AdminHome() {
   const {
-    messages,
+    regularMessages,
+    recurringMessages,
     isLoading,
     error,
     editingId,
     formData,
+    startTime,
+    endTime,
+    selectedDays,
     startEdit,
     handleChange,
     handleDateTimeChange,
+    handleRecurrenceTimeChange,
+    handleRecurrenceDaysChange,
     saveEdit,
     cancelEdit,
     onSubmit,
@@ -29,19 +35,44 @@ export default function AdminHome() {
       <Stack direction="row" spacing={2} alignItems="flex-start">
         <DashboardForm onSubmit={onSubmit} />
         <MessageAccordion
-          messages={messages}
+          title="General Messages"
+          messages={regularMessages}
           editingId={editingId}
           isLoading={isLoading}
           error={!!error}
           formData={formData}
           startEdit={startEdit}
+          startTime={startTime}
+          endTime={endTime}
+          selectedDays={selectedDays}
           handleChange={handleChange}
           handleDateTimeChange={handleDateTimeChange}
+          handleRecurrenceTimeChange={handleRecurrenceTimeChange}
+          handleRecurrenceDaysChange={handleRecurrenceDaysChange}
           saveEdit={saveEdit}
           cancelEdit={cancelEdit}
           handleDelete={handleDelete}
         />
       </Stack>
+      <MessageAccordion
+        title="Recurring Messages"
+        messages={recurringMessages}
+        editingId={editingId}
+        isLoading={isLoading}
+        error={!!error}
+        formData={formData}
+        startTime={startTime}
+        endTime={endTime}
+        selectedDays={selectedDays}
+        startEdit={startEdit}
+        handleChange={handleChange}
+        handleDateTimeChange={handleDateTimeChange}
+        handleRecurrenceTimeChange={handleRecurrenceTimeChange}
+        handleRecurrenceDaysChange={handleRecurrenceDaysChange}
+        saveEdit={saveEdit}
+        cancelEdit={cancelEdit}
+        handleDelete={handleDelete}
+      />
     </>
   );
 }
