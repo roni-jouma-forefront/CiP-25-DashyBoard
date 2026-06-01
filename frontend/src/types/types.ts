@@ -47,3 +47,15 @@ export type DateTime = {
   field: "post" | "expires";
   value: Dayjs | null;
 };
+
+export const Day = {
+  mon: "Mon",
+  tus: "Tus",
+  wed: "Wed",
+  thu: "Thu",
+  fri: "Fri",
+  sat: "Sat",
+  sun: "Sun",
+} as const;
+
+export type Day = (typeof Day)[keyof typeof Day];
