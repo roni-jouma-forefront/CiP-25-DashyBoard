@@ -1,10 +1,8 @@
 import { useParams } from "react-router";
 import { RoomDetailsForm } from "../../components/admin/forms/RoomDetailsForm";
 import { RoomMessageForm } from "../../components/admin/forms/RoomMessageForm";
-import { Button, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { MessageAccordion } from "../../components/admin/MessageAccordion";
-import AlertDialog from "../../components/admin/AlertDialog";
-import React from "react";
 import { useBookings, useMessagesAdmin } from "../../hooks";
 import { theme } from "../../theme";
 import { useGuestName } from "../../hooks/useGuestName";
@@ -13,7 +11,6 @@ const hotelId = import.meta.env.VITE_HOTEL_ID;
 
 export default function Room() {
   const { roomNumber, bookingId } = useParams();
-  const [dialogOpen, setDialogOpen] = React.useState(false);
   const {
     messages,
     isLoading,
@@ -43,14 +40,6 @@ export default function Room() {
     guestId: bookingsData?.guestId ?? "",
   });
 
-  const handleDialog = () => {
-    setDialogOpen(true);
-  };
-
-  const handleClose = () => {
-    setDialogOpen(false);
-  };
-
   if (bookingsIsLoading || guestIsLoading)
     return <Typography>Loading data...</Typography>;
   if (bookingsError || guestError)
@@ -71,13 +60,6 @@ export default function Room() {
         alignItems="flex-end"
       >
         <Typography variant="h2">Details for room {roomNumber}</Typography>
-        <Button
-          variant="contained"
-          color="error"
-          onClick={() => handleDialog()}
-        >
-          Check out
-        </Button>
       </Stack>
       <Stack direction="row" spacing={2} alignItems="flex-start">
         <RoomDetailsForm
@@ -106,7 +88,6 @@ export default function Room() {
           handleDelete={handleDelete}
         />
       )}
-      <AlertDialog open={dialogOpen} onClose={handleClose} />
     </>
   );
 }
