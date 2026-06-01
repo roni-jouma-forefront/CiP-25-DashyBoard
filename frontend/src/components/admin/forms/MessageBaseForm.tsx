@@ -1,4 +1,4 @@
-import { Box, TextField } from "@mui/material";
+import {  Stack, TextField, Typography } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import type { Dayjs } from "dayjs";
 import type React from "react";
@@ -6,6 +6,8 @@ import type React from "react";
 interface MessageBaseFormProps {
   title: string;
   content: string;
+  postAtError: string | null;
+  expiresAtError: string | null;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onPostDateTimeChange: (value: Dayjs | null) => void;
   onExpiresDateTimeChange: (value: Dayjs | null) => void;
@@ -15,6 +17,8 @@ export const MessageBaseForm = ({
   handleChange,
   title,
   content,
+  postAtError,
+  expiresAtError,
   onPostDateTimeChange,
   onExpiresDateTimeChange,
 }: MessageBaseFormProps) => {
@@ -37,20 +41,26 @@ export const MessageBaseForm = ({
         rows={4}
         required
       />
-      <Box sx={{ display: "flex", gap: 3 }}>
+      <Stack spacing={1}>
         <DateTimePicker
           label="Post at"
           sx={{ flex: 1 }}
           onChange={onPostDateTimeChange}
         />
-      </Box>
-      <Box sx={{ display: "flex", gap: 3 }}>
+        <Typography color="error" variant="caption">
+          {postAtError}
+        </Typography>
+      </Stack>
+      <Stack spacing={1}>
         <DateTimePicker
           label="Expires at"
           sx={{ flex: 1 }}
           onChange={onExpiresDateTimeChange}
         />
-      </Box>
+        <Typography color="error" variant="caption">
+          {expiresAtError}
+        </Typography>
+      </Stack>
     </>
   );
 };
