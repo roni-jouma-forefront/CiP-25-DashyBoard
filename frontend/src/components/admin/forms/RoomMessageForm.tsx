@@ -90,13 +90,14 @@ export const RoomMessageForm = ({ onSubmit, bookingId }: RoomFormProps) => {
       <Typography variant="h5" mb={3}>
         Message
       </Typography>
-      <Stack spacing={3}>
+      <Stack spacing={2}>
         <MessageBaseForm
           handleChange={handleChange}
           onPostDateTimeChange={onPostDateTimeChange}
           onExpiresDateTimeChange={onExpiresDateTimeChange}
           title={formData.title}
           content={formData.content}
+          author={formData.author}
           postAtError={formData.postAtError}
           expiresAtError={formData.expiresAtError}
         />

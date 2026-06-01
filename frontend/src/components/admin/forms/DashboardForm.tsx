@@ -2,25 +2,17 @@ import {
   Box,
   Button,
   FormControlLabel,
-  MenuItem,
   Stack,
   Switch,
-  TextField,
   Typography,
 } from "@mui/material";
 import { MessageBaseForm } from "./MessageBaseForm";
 import { DayPicker } from "../DayPicker";
-import type { Day, Staff } from "../../../types/types";
+import type { Day } from "../../../types/types";
 import React, { useState } from "react";
 import { Dayjs } from "dayjs";
 import type { MessageBackend } from "../../../types/message.types";
 import { TimePicker } from "@mui/x-date-pickers";
-
-const mockStaff: Staff[] = [
-  { name: "Emmi Quirin" },
-  { name: "Anna C Hallberg" },
-  { name: "Nikita Sjölander" },
-];
 
 interface DashboardFormProps {
   onSubmit: (formData: MessageBackend) => void;
@@ -217,18 +209,28 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
     <Box
       component="form"
       sx={{
-        width: "500px",
         p: 2,
         borderRadius: 2,
         boxShadow: 1,
         background: "white",
+        flex: 1,
       }}
       onSubmit={handleSubmit}
     >
       <Typography variant="h5" mb={3}>
         Post Message
       </Typography>
-      <Stack spacing={3}>
+      <Stack spacing={2}>
+        <MessageBaseForm
+          handleChange={handleChange}
+          onPostDateTimeChange={onPostDateTimeChange}
+          onExpiresDateTimeChange={onExpiresDateTimeChange}
+          title={formData.title}
+          content={formData.content}
+          author={formData.author}
+          postAtError={error.postAt}
+          expiresAtError={error.expiresAt}
+        />
         <FormControlLabel
           label="Recurring"
           control={
@@ -239,71 +241,53 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
             />
           }
         />
-        <MessageBaseForm
-          handleChange={handleChange}
-          onPostDateTimeChange={onPostDateTimeChange}
-          onExpiresDateTimeChange={onExpiresDateTimeChange}
-          title={formData.title}
-          content={formData.content}
-          postAtError={error.postAt}
-          expiresAtError={error.expiresAt}
-        />
         {formData.recurring && (
-          <>
-            <Stack spacing={1}>
-              <TimePicker
-                label="Start Time"
-                sx={{ flex: 1 }}
-                value={startTime}
-                onChange={onStartTimeChange}
-              />
-              {error.recurrenceTimeStart && (
-                <Typography color="error" variant="caption">
-                  Start time is required and must be before end time
-                </Typography>
-              )}
+          <Stack spacing={2}>
+            <Typography variant="subtitle2" color="text.secondary">
+              Recurrence settings
+            </Typography>
+            <Stack spacing={2} direction="row">
+              <Stack spacing={2} flex={1}>
+                <Stack spacing={2}>
+                  <TimePicker
+                    label="Start Time"
+                    value={startTime}
+                    onChange={onStartTimeChange}
+                  />
+                  {error.recurrenceTimeStart && (
+                    <Typography color="error" variant="caption">
+                      Start time is required and must be before end time
+                    </Typography>
+                  )}
+                </Stack>
+                <Stack spacing={2}>
+                  <TimePicker
+                    label="End Time"
+                    value={endTime}
+                    onChange={onEndTimeChange}
+                  />
+                  {error.recurrenceTimeEnd && (
+                    <Typography color="error" variant="caption">
+                      End time is required and must be after start time
+                    </Typography>
+                  )}
+                </Stack>
+              </Stack>
+              <Stack flex={1}>
+                <DayPicker
+                  selectedDays={selectedDays}
+                  onChange={setSelectedDays}
+                />
+                {error.recurrenceDays && (
+                  <Typography color="error" variant="caption">
+                    Days are required
+                  </Typography>
+                )}
+              </Stack>
             </Stack>
-            <Stack spacing={1}>
-              <TimePicker
-                label="End Time"
-                sx={{ flex: 1 }}
-                value={endTime}
-                onChange={onEndTimeChange}
-              />
-              {error.recurrenceTimeEnd && (
-                <Typography color="error" variant="caption">
-                  End time is required and must be after start time
-                </Typography>
-              )}
-            </Stack>
-            <Stack spacing={1}>
-              <DayPicker
-                selectedDays={selectedDays}
-                onChange={setSelectedDays}
-              />
-              {error.recurrenceDays && (
-                <Typography color="error" variant="caption" mt="0">
-                  Days are required
-                </Typography>
-              )}
-            </Stack>
-          </>
+          </Stack>
         )}
-        <TextField
-          select
-          label="Author"
-          name="author"
-          value={formData.author}
-          onChange={handleChange}
-          required
-          fullWidth
-        >
-          {mockStaff.map((staff, index) => (
-            <MenuItem key={index} value={staff.name}>
-              {staff.name}
-            </MenuItem>
-          ))}
-        </TextField>
+
         <Button variant="contained" type="submit">
           Post
         </Button>
