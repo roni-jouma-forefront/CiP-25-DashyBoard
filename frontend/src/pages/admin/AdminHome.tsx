@@ -1,5 +1,5 @@
 import { DashboardForm } from "../../components/admin/forms/DashboardForm";
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { MessageAccordion } from "../../components/admin/MessageAccordion";
 import { useMessagesAdmin } from "../../hooks";
 
