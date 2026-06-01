@@ -30,6 +30,11 @@ const msgStatusColors: Record<MsgStatus, StatusColor> = {
     text: "#991B1B",
     border: "#EF4444",
   },
+  expired: {
+    background: "#FEE2E2",
+    text: "#991B1B",
+    border: "#EF4444",
+  },
 };
 
 export const theme = createTheme({
