@@ -50,10 +50,10 @@ export const DayPicker = ({ selectedDays, onChange }: DayPickerProps) => {
         />
         <FormControlLabel
           control={<Checkbox size="small" />}
-          label="Tusday"
-          name="tus"
-          checked={selectedDays.includes(Day.tus)}
-          onChange={() => handleOnChange(Day.tus)}
+          label="Tuesday"
+          name="tue"
+          checked={selectedDays.includes(Day.tue)}
+          onChange={() => handleOnChange(Day.tue)}
         />
         <FormControlLabel
           control={<Checkbox size="small" />}

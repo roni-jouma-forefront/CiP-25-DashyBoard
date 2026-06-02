@@ -50,7 +50,7 @@ export type DateTime = {
 
 export const Day = {
   mon: "Mon",
-  tus: "Tus",
+  tue: "Tue",
   wed: "Wed",
   thu: "Thu",
   fri: "Fri",
