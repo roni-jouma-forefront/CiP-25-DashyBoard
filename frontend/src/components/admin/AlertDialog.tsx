@@ -7,30 +7,39 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 interface alertDialogProps {
   open: boolean;
+  alertTitle: string;
+  alertContent: string;
+  buttonText: string;
+  alertAction: () => void;
   onClose: () => void;
 }
 
-export default function AlertDialog(prop: alertDialogProps) {
+export default function AlertDialog({
+  open,
+  alertTitle,
+  alertContent,
+  buttonText,
+  alertAction,
+  onClose,
+}: alertDialogProps) {
   return (
     <>
       <Dialog
-        open={prop.open}
-        onClose={prop.onClose}
+        open={open}
+        onClose={onClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Are you sure ou want to checkout guest?"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{alertTitle}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            If you check out this guest all information will be deleted.
+            {alertContent}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={prop.onClose}>Cancel</Button>
-          <Button onClick={prop.onClose} autoFocus>
-            Check out
+          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={alertAction} autoFocus>
+            {buttonText}
           </Button>
         </DialogActions>
       </Dialog>
