@@ -13,8 +13,5 @@ export const useBookings = ( { bookingId } :BookingProp ) => {
         return GetBookings(bookingId);
     },
     enabled: !!bookingId,
-    // staleTime: 5*60*1000,
-    // refetchInterval: 5*60*1000,
-    // refetchIntervalInBackground: true,
     })
 }

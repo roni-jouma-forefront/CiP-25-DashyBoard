@@ -154,7 +154,6 @@ function MirrorDashboard() {
                   <DraggableWrapper key={4} id={4}>
                     <ArrivalsWidget
                       airport={import.meta.env.VITE_AIRPORT_NAME}
-                      timezone={import.meta.env.VITE_TIMEZONE}
                     />
                   </DraggableWrapper>
                 );
