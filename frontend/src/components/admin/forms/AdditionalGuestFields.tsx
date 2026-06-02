@@ -1,14 +1,14 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { theme } from "../../../theme";
 
 export const AdditionalGuestFields = () => {
   return (
     <Box
       sx={{
         flex: 1,
-        p: 2,
-        borderRadius: 2,
-        border: `1px solid ${theme.palette.divider}`,
+        p: 3,
+        borderRadius: 3,
+        boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+        border: "1px solid rgba(0,0,0,0.06)",
         background: "white",
         mt: 3,
       }}

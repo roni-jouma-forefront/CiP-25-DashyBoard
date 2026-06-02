@@ -91,9 +91,10 @@ export const MessageAccordion = ({
         display: "flex",
         gap: 2,
         flexDirection: "column",
-        p: 2,
-        borderRadius: 2,
-        boxShadow: 1,
+        p: 3,
+        borderRadius: 3,
+        boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+        border: "1px solid rgba(0,0,0,0.06)",
         background: "white",
       }}
     >
