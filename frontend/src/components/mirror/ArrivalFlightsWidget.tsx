@@ -5,17 +5,13 @@ import formatTime from "../../utils/FormatTime.tsx";
 
 interface ArrivalProps {
   airport: string;
-  timezone: string;
 }
 
-export default function ArrivalsWidget({ airport, timezone }: ArrivalProps) {
+export default function ArrivalsWidget({ airport }: ArrivalProps) {
   const today = new Date().toLocaleDateString("en-GB", {
     month: "long",
     day: "numeric",
   });
-
-  const test = timezone;
-  console.log(test);
 
   const {
     data: arrivals = [],

@@ -38,7 +38,6 @@ function MirrorPreview() {
           bgcolor: "#000",
         }}
       >
-        {/* Widgets as the base layer */}
         <Box
           sx={{
             position: "absolute",
@@ -69,8 +68,6 @@ function MirrorPreview() {
             filter: "brightness(0.7) contrast(1.2)",
           }}
         />
-
-        {/* Subtle glass reflection highlights */}
         <Box
           sx={{
             position: "absolute",
@@ -91,8 +88,6 @@ function MirrorPreview() {
             `,
           }}
         />
-
-        {/* Mirror frame – wooden style like the reference */}
         <Box
           sx={{
             position: "absolute",
