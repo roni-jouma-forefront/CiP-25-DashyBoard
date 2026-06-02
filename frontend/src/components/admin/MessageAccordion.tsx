@@ -13,11 +13,10 @@ import { theme } from "../../theme";
 import type { MsgStatus } from "../../types/theme.types";
 import type { MessageBackend, MessageUI } from "../../types/message.types";
 import type React from "react";
-import { DateTimePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
-import type { DateTime } from "../../types/types";
-import AlertDialog from "../../components/admin/AlertDialog";
-import { useState } from "react";
+import { DateTimePicker, TimePicker } from "@mui/x-date-pickers";
+import dayjs, { Dayjs } from "dayjs";
+import type { DateTime, Day } from "../../types/types";
+import { DayPicker } from "./DayPicker";
 
 const badgeStyle = (status: MsgStatus) => ({
   display: "inline-block",
@@ -35,14 +34,23 @@ const badgeStyle = (status: MsgStatus) => ({
 });
 
 interface MessageAccordionProps {
+  title: string;
   messages: MessageUI[];
   isLoading: boolean;
   error: boolean;
   editingId: string;
   formData: MessageBackend;
+  startTime: Dayjs | null;
+  endTime: Dayjs | null;
+  selectedDays: Day[];
   startEdit: (msg: MessageUI) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDateTimeChange: ({ field, value }: DateTime) => void;
+  handleRecurrenceTimeChange: (
+    field: "recurrenceTimeStart" | "recurrenceTimeEnd",
+    value: Dayjs | null,
+  ) => void;
+  handleRecurrenceDaysChange: (days: Day[]) => void;
   saveEdit: (id: string) => void;
   cancelEdit: () => void;
   handleDelete: (id: string) => void;
@@ -50,13 +58,19 @@ interface MessageAccordionProps {
 
 export const MessageAccordion = ({
   messages,
+  title,
   isLoading,
   error,
   editingId,
   formData,
+  startTime,
+  endTime,
   startEdit,
+  selectedDays,
   handleChange,
   handleDateTimeChange,
+  handleRecurrenceTimeChange,
+  handleRecurrenceDaysChange,
   saveEdit,
   cancelEdit,
   handleDelete,
@@ -81,7 +95,7 @@ export const MessageAccordion = ({
         background: "white",
       }}
     >
-      <Typography variant="h5">Messages</Typography>
+      <Typography variant="h5">{title}</Typography>
 
       {messages.map((msg) => (
         <Accordion key={msg.id} component="form">
@@ -134,34 +148,85 @@ export const MessageAccordion = ({
                   value={formData.content}
                   onChange={handleChange}
                 />
-                <Box sx={{ display: "flex", gap: 3 }}>
-                  <DateTimePicker
-                    label="Post at"
-                    onChange={(value) =>
-                      handleDateTimeChange({
-                        field: "post",
-                        value,
-                      })
-                    }
-                    value={formData.postAt ? dayjs(formData.postAt) : null}
-                    sx={{ flex: 1 }}
-                  />
+                <TextField
+                  label="Author"
+                  name="author"
+                  fullWidth
+                  value={formData.author}
+                  onChange={handleChange}
+                />
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 2,
+                  }}
+                >
+                  <Box sx={{ display: "flex", gap: 3 }}>
+                    <DateTimePicker
+                      label="Post at"
+                      onChange={(value) =>
+                        handleDateTimeChange({
+                          field: "post",
+                          value,
+                        })
+                      }
+                      value={formData.postAt ? dayjs(formData.postAt) : null}
+                      sx={{ flex: 1 }}
+                    />
+                  </Box>
+                  <Box sx={{ display: "flex", gap: 3 }}>
+                    <DateTimePicker
+                      label="Expires at"
+                      onChange={(value) =>
+                        handleDateTimeChange({
+                          field: "expires",
+                          value,
+                        })
+                      }
+                      value={
+                        formData.expiresAt ? dayjs(formData.expiresAt) : null
+                      }
+                      sx={{ flex: 1 }}
+                    />
+                  </Box>
                 </Box>
-                <Box sx={{ display: "flex", gap: 3 }}>
-                  <DateTimePicker
-                    label="Expires at"
-                    onChange={(value) =>
-                      handleDateTimeChange({
-                        field: "expires",
-                        value,
-                      })
-                    }
-                    value={
-                      formData.expiresAt ? dayjs(formData.expiresAt) : null
-                    }
-                    sx={{ flex: 1 }}
-                  />
-                </Box>
+                {formData.recurring && (
+                  <>
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: 2,
+                      }}
+                    >
+                      <TimePicker
+                        label="Start time"
+                        value={startTime ? dayjs(startTime) : null}
+                        onChange={(value) => {
+                          handleRecurrenceTimeChange(
+                            "recurrenceTimeStart",
+                            value,
+                          );
+                        }}
+                      />
+                      <TimePicker
+                        label="End time"
+                        value={endTime ? dayjs(endTime) : null}
+                        onChange={(value) => {
+                          handleRecurrenceTimeChange(
+                            "recurrenceTimeEnd",
+                            value,
+                          );
+                        }}
+                      />
+                    </Box>
+                    <DayPicker
+                      selectedDays={selectedDays}
+                      onChange={handleRecurrenceDaysChange}
+                    />
+                  </>
+                )}
                 <Stack direction="row" gap={2} width="100%">
                   <Button
                     variant="contained"
@@ -178,6 +243,12 @@ export const MessageAccordion = ({
                     onClick={() => {
                       saveEdit(msg.id);
                     }}
+                    disabled={
+                      formData.recurring &&
+                      (formData.recurrenceTimeStart === null ||
+                        formData.recurrenceTimeEnd === null ||
+                        selectedDays.length === 0)
+                    }
                   >
                     Save
                   </Button>
@@ -196,12 +267,23 @@ export const MessageAccordion = ({
                   borderColor={theme.palette.divider}
                 >
                   <Stack direction="row" spacing={2} alignItems="flex-start">
-                    <Typography component="span" sx={badgeStyle(msg.status)}>
-                      {msg.status} {msg.postDateTime}
-                    </Typography>
-                    <Typography component="span" sx={badgeStyle("delete")}>
-                      Expires {msg.expiresAtDateTime}
-                    </Typography>
+                    {msg.status === "expired" ? (
+                      <Typography component="span" sx={badgeStyle("delete")}>
+                        Expired {msg.expiresAtDateTime}
+                      </Typography>
+                    ) : (
+                      <>
+                        <Typography
+                          component="span"
+                          sx={badgeStyle(msg.status)}
+                        >
+                          {msg.status} {msg.postDateTime}
+                        </Typography>
+                        <Typography component="span" sx={badgeStyle("delete")}>
+                          Expires {msg.expiresAtDateTime}
+                        </Typography>
+                      </>
+                    )}
                   </Stack>
                   <Stack direction="row" spacing={2}>
                     <Button
@@ -222,6 +304,25 @@ export const MessageAccordion = ({
                     </Button>
                   </Stack>
                 </Stack>
+                {msg.recurring && (
+                  <Stack direction="row" spacing={1} mt={1}>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      Active:
+                    </Typography>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      {msg.recurrenceTimeStart}
+                    </Typography>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      -
+                    </Typography>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      {msg.recurrenceTimeEnd}
+                    </Typography>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      ({msg.recurrenceDays})
+                    </Typography>
+                  </Stack>
+                )}
                 <Stack
                   direction="row"
                   spacing={2}
@@ -230,6 +331,16 @@ export const MessageAccordion = ({
                 >
                   <Typography flex={1}>{msg.content}</Typography>
                 </Stack>
+                {msg.author && (
+                  <Stack direction="row" spacing={1} mt={1}>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      Author:
+                    </Typography>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      {msg.author}
+                    </Typography>
+                  </Stack>
+                )}
               </>
             )}
           </AccordionDetails>

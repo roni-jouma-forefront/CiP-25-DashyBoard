@@ -7,7 +7,6 @@ interface WaitTimeaProps {
 }
 
 export default function WaitTimeWidget({ airport }: WaitTimeaProps) {
-  console.log(airport);
   const {
     data: waitTimes = [],
     error,

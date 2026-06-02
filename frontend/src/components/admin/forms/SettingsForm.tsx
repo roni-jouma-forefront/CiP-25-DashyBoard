@@ -42,7 +42,7 @@ export const SettingsForm = () => {
       <Typography variant="h5" mb={3}>
         Hotel Details
       </Typography>
-      <Stack spacing={3}>
+      <Stack spacing={2}>
         <TextField
           label="Hotel Name"
           name="name"

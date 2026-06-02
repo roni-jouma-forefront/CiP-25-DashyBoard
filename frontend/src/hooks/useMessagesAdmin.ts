@@ -5,7 +5,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { postMessage } from "../services/api/postMessage";
 import { deleteMessage } from "../services/api/deleteMessage";
 import { updateMessage } from "../services/api/updateMessage";
-import type { DateTime } from "../types/types";
+import { Day, type DateTime } from "../types/types";
+import dayjs, { Dayjs } from "dayjs";
 
 type UseMessageAccordionParams = {
   initialMessages?: MessageUI[];
@@ -58,6 +59,10 @@ export const useMessagesAdmin = ({
   };
 
   const [editingId, setEditingId] = useState("");
+  const [startTime, setStartTime] = useState<Dayjs | null>(null);
+  const [endTime, setEndTime] = useState<Dayjs | null>(null);
+  const [selectedDays, setSelectedDays] = useState<Day[]>([]);
+
   const [formData, setFormData] = useState<MessageBackend>({
     id: "",
     bookingId: null,
@@ -65,9 +70,13 @@ export const useMessagesAdmin = ({
     title: "",
     content: "",
     recurring: false,
+    recurrenceType: null,
     postAt: null,
     expiresAt: null,
     isActive: false,
+    recurrenceDays: null,
+    recurrenceTimeStart: null,
+    recurrenceTimeEnd: null,
     author: "",
   });
 
@@ -79,9 +88,26 @@ export const useMessagesAdmin = ({
       id: msg.id,
       title: msg.title,
       content: msg.content,
+      author: msg.author,
       postAt: msg.postAt,
       expiresAt: msg.expiresAt,
+      recurring: msg.recurring,
+      recurrenceTimeStart: msg.recurrenceTimeStart,
+      recurrenceTimeEnd: msg.recurrenceTimeEnd,
+      recurrenceDays: msg.recurrenceDays,
     }));
+
+    setStartTime(
+      msg.recurrenceTimeStart
+        ? dayjs(msg.recurrenceTimeStart, "HH:mm:ss")
+        : null,
+    );
+    setEndTime(
+      msg.recurrenceTimeEnd ? dayjs(msg.recurrenceTimeEnd, "HH:mm:ss") : null,
+    );
+    setSelectedDays(
+      msg.recurrenceDays ? (msg.recurrenceDays.split(",") as Day[]) : [],
+    );
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,31 +134,73 @@ export const useMessagesAdmin = ({
     }
   };
 
+  const handleRecurrenceTimeChange = (
+    field: "recurrenceTimeStart" | "recurrenceTimeEnd",
+    value: Dayjs | null,
+  ) => {
+    if (field === "recurrenceTimeStart") {
+      setStartTime(value);
+      setFormData((prev) => ({
+        ...prev,
+        recurrenceTimeStart: value ? value.format("HH:mm:ss") : null,
+      }));
+    } else {
+      setEndTime(value);
+      setFormData((prev) => ({
+        ...prev,
+        recurrenceTimeEnd: value ? value.format("HH:mm:ss") : null,
+      }));
+    }
+  };
+
+  const handleRecurrenceDaysChange = (value: Day[]) => {
+    setSelectedDays(value);
+    setFormData((prev) => ({
+      ...prev,
+      recurrenceDays: value.length > 0 ? value.join(",") : null,
+    }));
+  };
+
   const saveEdit = (id: string) => {
     updateMutate({ ...formData, id });
     setEditingId("");
+    setStartTime(null);
+    setEndTime(null);
+    setSelectedDays([]);
   };
 
   const cancelEdit = () => {
     setEditingId("");
+    setStartTime(null);
+    setEndTime(null);
+    setSelectedDays([]);
   };
 
   const handleDelete = (id: string) => {
     deleteMutate(id);
   };
 
+  const regularMessages = data.filter((m) => !m.recurring);
+  const recurringMessages = data.filter((m) => m.recurring);
+
   return {
-    messages: data,
+    regularMessages,
+    recurringMessages,
     isLoading,
     isPending,
     error,
     editingId,
     formData,
+    startTime,
+    endTime,
+    selectedDays,
     startEdit,
     saveEdit,
     cancelEdit,
     handleChange,
     handleDateTimeChange,
+    handleRecurrenceTimeChange,
+    handleRecurrenceDaysChange,
     onSubmit,
     handleDelete,
   };
