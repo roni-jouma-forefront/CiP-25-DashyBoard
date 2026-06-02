@@ -1,4 +1,4 @@
-import { Box, TextField } from "@mui/material";
+import { Stack, TextField, Typography } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import type { Dayjs } from "dayjs";
 import type React from "react";
@@ -6,6 +6,9 @@ import type React from "react";
 interface MessageBaseFormProps {
   title: string;
   content: string;
+  postAtError: string | null;
+  expiresAtError: string | null;
+  author: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onPostDateTimeChange: (value: Dayjs | null) => void;
   onExpiresDateTimeChange: (value: Dayjs | null) => void;
@@ -15,42 +18,63 @@ export const MessageBaseForm = ({
   handleChange,
   title,
   content,
+  author,
+  postAtError,
+  expiresAtError,
   onPostDateTimeChange,
   onExpiresDateTimeChange,
 }: MessageBaseFormProps) => {
   return (
-    <>
-      <TextField
-        label="Title"
-        name="title"
-        value={title}
-        onChange={handleChange}
-        fullWidth
-        required
-      />
-      <TextField
-        label="Message"
-        name="content"
-        value={content}
-        onChange={handleChange}
-        multiline
-        rows={4}
-        required
-      />
-      <Box sx={{ display: "flex", gap: 3 }}>
-        <DateTimePicker
-          label="Post at"
-          sx={{ flex: 1 }}
-          onChange={onPostDateTimeChange}
+    <Stack direction="row" spacing={2}>
+      <Stack spacing={2} flex={1}>
+        <TextField
+          label="Title"
+          name="title"
+          value={title}
+          onChange={handleChange}
+          fullWidth
+          required
         />
-      </Box>
-      <Box sx={{ display: "flex", gap: 3 }}>
-        <DateTimePicker
-          label="Expires at"
-          sx={{ flex: 1 }}
-          onChange={onExpiresDateTimeChange}
+        <TextField
+          label="Message"
+          name="content"
+          value={content}
+          onChange={handleChange}
+          multiline
+          rows={4}
+          required
         />
-      </Box>
-    </>
+      </Stack>
+      <Stack flex={1}>
+        <Stack spacing={2}>
+          <DateTimePicker
+            label="Post at"
+            sx={{ flex: 1 }}
+            onChange={onPostDateTimeChange}
+          />
+          <Typography color="error" variant="caption">
+            {postAtError}
+          </Typography>
+        </Stack>
+        <Stack spacing={2}>
+          <DateTimePicker
+            label="Expires at"
+            sx={{ flex: 1 }}
+            onChange={onExpiresDateTimeChange}
+          />
+          <Typography color="error" variant="caption">
+            {expiresAtError}
+          </Typography>
+        </Stack>
+        <TextField
+          label="Author"
+          name="author"
+          value={author}
+          onChange={handleChange}
+          required
+          fullWidth
+        ></TextField>
+      </Stack>
+    </Stack>
   );
 };

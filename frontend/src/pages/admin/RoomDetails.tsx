@@ -15,14 +15,20 @@ export default function Room() {
   const { roomNumber, bookingId } = useParams();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const {
-    messages,
+    regularMessages,
+    recurringMessages,
     isLoading,
     error,
     editingId,
     formData,
+    startTime,
+    endTime,
+    selectedDays,
     startEdit,
     handleChange,
     handleDateTimeChange,
+    handleRecurrenceTimeChange,
+    handleRecurrenceDaysChange,
     saveEdit,
     cancelEdit,
     onSubmit,
@@ -93,14 +99,20 @@ export default function Room() {
       </Stack>
       {bookingId && (
         <MessageAccordion
-          messages={messages}
+          title="Room Messages"
+          messages={[...regularMessages, ...recurringMessages]}
           editingId={editingId}
           isLoading={isLoading}
           error={!!error}
           formData={formData}
+          startTime={startTime}
+          endTime={endTime}
+          selectedDays={selectedDays}
           startEdit={startEdit}
           handleChange={handleChange}
           handleDateTimeChange={handleDateTimeChange}
+          handleRecurrenceTimeChange={handleRecurrenceTimeChange}
+          handleRecurrenceDaysChange={handleRecurrenceDaysChange}
           saveEdit={saveEdit}
           cancelEdit={cancelEdit}
           handleDelete={handleDelete}

@@ -1,6 +1,7 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { widgetTheme } from "../../theme/index.ts";
 import { useMessagesAdmin } from "../../hooks";
+import type { MessageUI } from "../../types/message.types";
 import formatTime from "../../utils/FormatTime.tsx";
 
 interface MessagesProps {
@@ -9,11 +10,10 @@ interface MessagesProps {
 }
 
 export default function MessagesWidget({ hotelId, bookingId }: MessagesProps) {
-const {
-    messages,
-    isLoading,
-    error,
-  } = useMessagesAdmin({ hotelId, bookingId });
+  const { regularMessages, recurringMessages, isLoading, error } =
+    useMessagesAdmin({ hotelId, bookingId });
+
+  const messages = [...regularMessages, ...recurringMessages];
 
   if (error)
     return (
@@ -69,11 +69,9 @@ const {
       </Box>
       <Box>
         <Stack spacing={1.2}>
-          
-          {messages?.map((message) => {
-            if(message.isActive) {
+          {messages.map((message: MessageUI) => {
+            if (message.isActive) {
               return (
-                
                 <Paper
                   key={message.id}
                   sx={{
