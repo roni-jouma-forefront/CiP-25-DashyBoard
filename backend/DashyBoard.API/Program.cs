@@ -130,7 +130,7 @@ builder
         {
             metrics.AddOtlpExporter(options =>
             {
-                options.Endpoint = new Uri(otelEndpoint);
+                options.Endpoint = new Uri($"{otelEndpoint}/v1/metrics");
                 options.Headers = otelHeaders;
                 options.Protocol = OtlpExportProtocol.HttpProtobuf;
             });
@@ -156,7 +156,7 @@ builder
         {
             tracing.AddOtlpExporter(options =>
             {
-                options.Endpoint = new Uri(otelEndpoint);
+                options.Endpoint = new Uri($"{otelEndpoint}/v1/traces");
                 options.Headers = otelHeaders;
                 options.Protocol = OtlpExportProtocol.HttpProtobuf;
             });
