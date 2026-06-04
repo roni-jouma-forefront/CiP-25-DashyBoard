@@ -7,10 +7,10 @@ using DashyBoard.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using OpenTelemetry.Exporter;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,24 +104,26 @@ var otelHeaders = builder.Configuration["Grafana:OtlpHeaders"];
 builder
     .Services.AddOpenTelemetry()
     .ConfigureResource(resource =>
-        resource.AddService(
-            serviceName: "DashyBoard.API",
-            serviceVersion: "1.0.0",
-            serviceInstanceId: Environment.MachineName
-        )
-        .AddAttributes(new Dictionary<string, object>
-        {
-            ["deployment.environment"] = builder.Environment.EnvironmentName,
-            ["host.name"] = Environment.MachineName
-        })
+        resource
+            .AddService(
+                serviceName: "DashyBoard.API",
+                serviceVersion: "1.0.0",
+                serviceInstanceId: Environment.MachineName
+            )
+            .AddAttributes(
+                new Dictionary<string, object>
+                {
+                    ["deployment.environment"] = builder.Environment.EnvironmentName,
+                    ["host.name"] = Environment.MachineName,
+                }
+            )
     )
     .WithMetrics(metrics =>
     {
         metrics
             .AddAspNetCoreInstrumentation()
             .AddHttpClientInstrumentation()
-            .AddRuntimeInstrumentation()
-            .AddPrometheusExporter(); // Local scraping
+            .AddRuntimeInstrumentation();
 
         // Export to Grafana Cloud if configured
         if (!string.IsNullOrEmpty(otelEndpoint))
@@ -205,7 +207,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHealthChecks("/health");
-app.MapPrometheusScrapingEndpoint("/metrics");
 
 app.Run();
 

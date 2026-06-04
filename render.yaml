@@ -67,6 +67,6 @@ services:
       - key: VITE_GITHUB_CLIENT_ID
         value: your-github-client-id-here
       - key: VITE_GITHUB_CLIENT_SECRET
-        value: your-github-client-secret-here  
+        value: your-github-client-secret-here
       - key: VITE_GITHUB_REPOSITORY
         value: your-github-repository-here
