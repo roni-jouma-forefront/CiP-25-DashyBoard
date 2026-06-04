@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -101,6 +102,40 @@ builder.Services.AddHealthChecks();
 var otelEndpoint = builder.Configuration["Grafana:OtlpEndpoint"];
 var otelHeaders = builder.Configuration["Grafana:OtlpHeaders"];
 
+// Export application logs to Grafana Cloud via OTLP
+if (!string.IsNullOrEmpty(otelEndpoint))
+{
+    builder.Logging.AddOpenTelemetry(options =>
+    {
+        options.IncludeFormattedMessage = true;
+        options.IncludeScopes = true;
+        options.ParseStateValues = true;
+        options.SetResourceBuilder(
+            ResourceBuilder
+                .CreateDefault()
+                .AddService(
+                    serviceName: "DashyBoard.API",
+                    serviceVersion: "1.0.0",
+                    serviceInstanceId: Environment.MachineName
+                )
+                .AddAttributes(
+                    new Dictionary<string, object>
+                    {
+                        ["deployment.environment"] = builder.Environment.EnvironmentName,
+                        ["host.name"] = Environment.MachineName,
+                    }
+                )
+        );
+
+        options.AddOtlpExporter(exporter =>
+        {
+            exporter.Endpoint = new Uri($"{otelEndpoint}/v1/logs");
+            exporter.Headers = otelHeaders;
+            exporter.Protocol = OtlpExportProtocol.HttpProtobuf;
+        });
+    });
+}
+
 builder
     .Services.AddOpenTelemetry()
     .ConfigureResource(resource =>
@@ -123,7 +158,8 @@ builder
         metrics
             .AddAspNetCoreInstrumentation()
             .AddHttpClientInstrumentation()
-            .AddRuntimeInstrumentation();
+            .AddRuntimeInstrumentation()
+            .AddMeter("Npgsql"); // Database metrics for Neon/PostgreSQL
 
         // Export to Grafana Cloud if configured
         if (!string.IsNullOrEmpty(otelEndpoint))

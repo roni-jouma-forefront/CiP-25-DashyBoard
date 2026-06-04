@@ -7,6 +7,7 @@ using DashyBoard.Infrastructure.Services.External;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using Polly;
 using Polly.Extensions.Http;
 
@@ -21,24 +22,33 @@ public static class DependencyInjection
     {
         // Database
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<ApplicationDbContext>(options =>
+
+        // Configure Npgsql with OpenTelemetry for PostgreSQL connections
+        if (
+            connectionString != null
+            && (connectionString.Contains("postgresql://") || connectionString.Contains("Host="))
+        )
         {
-            if (connectionString != null && connectionString.Contains("postgresql://"))
+            var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+            dataSourceBuilder.EnableParameterLogging();
+            var dataSource = dataSourceBuilder.Build();
+
+            services.AddSingleton(dataSource);
+            services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseNpgsql(connectionString);
-            }
-            else if (connectionString != null && connectionString.Contains("Host="))
-            {
-                options.UseNpgsql(connectionString);
-            }
-            else
+                options.UseNpgsql(dataSource);
+            });
+        }
+        else
+        {
+            services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlite(
                     connectionString,
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
                 );
-            }
-        });
+            });
+        }
 
         services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>()
