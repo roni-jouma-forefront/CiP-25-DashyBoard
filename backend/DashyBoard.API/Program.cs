@@ -101,6 +101,18 @@ builder.Services.AddHealthChecks();
 // --------------------
 var otelEndpoint = builder.Configuration["Grafana:OtlpEndpoint"];
 var otelHeaders = builder.Configuration["Grafana:OtlpHeaders"];
+var otelHost = string.IsNullOrWhiteSpace(otelEndpoint) ? null : new Uri(otelEndpoint).Host;
+
+bool ShouldInstrumentOutgoingRequest(HttpRequestMessage request)
+{
+    // Prevent OTLP exporter HTTP calls from appearing as app outbound traffic.
+    if (string.IsNullOrWhiteSpace(otelHost))
+    {
+        return true;
+    }
+
+    return !string.Equals(request.RequestUri?.Host, otelHost, StringComparison.OrdinalIgnoreCase);
+}
 
 // Export application logs to Grafana Cloud via OTLP
 if (!string.IsNullOrEmpty(otelEndpoint))
@@ -180,7 +192,10 @@ builder
                 options.RecordException = true;
                 options.Filter = ctx => !ctx.Request.Path.StartsWithSegments("/health");
             })
-            .AddHttpClientInstrumentation()
+            .AddHttpClientInstrumentation(options =>
+            {
+                options.FilterHttpRequestMessage = ShouldInstrumentOutgoingRequest;
+            })
             .AddEntityFrameworkCoreInstrumentation(options =>
             {
                 options.SetDbStatementForText = true;
