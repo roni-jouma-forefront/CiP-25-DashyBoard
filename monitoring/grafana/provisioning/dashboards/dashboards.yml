@@ -1,0 +1,13 @@
+apiVersion: 1
+
+providers:
+  - name: "DashyBoard Dashboards"
+    orgId: 1
+    folder: "DashyBoard"
+    folderUid: dashyboard
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

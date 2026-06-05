@@ -7,6 +7,11 @@ using DashyBoard.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -90,6 +95,124 @@ builder.Services.AddCors(options =>
 // Health checks
 // --------------------
 builder.Services.AddHealthChecks();
+
+// --------------------
+// OpenTelemetry (Grafana Cloud + Local Prometheus)
+// --------------------
+var otelEndpoint = builder.Configuration["Grafana:OtlpEndpoint"];
+var otelHeaders = builder.Configuration["Grafana:OtlpHeaders"];
+var otelHost = string.IsNullOrWhiteSpace(otelEndpoint) ? null : new Uri(otelEndpoint).Host;
+
+bool ShouldInstrumentOutgoingRequest(HttpRequestMessage request)
+{
+    // Prevent OTLP exporter HTTP calls from appearing as app outbound traffic.
+    if (string.IsNullOrWhiteSpace(otelHost))
+    {
+        return true;
+    }
+
+    return !string.Equals(request.RequestUri?.Host, otelHost, StringComparison.OrdinalIgnoreCase);
+}
+
+// Export application logs to Grafana Cloud via OTLP
+if (!string.IsNullOrEmpty(otelEndpoint))
+{
+    builder.Logging.AddOpenTelemetry(options =>
+    {
+        options.IncludeFormattedMessage = true;
+        options.IncludeScopes = true;
+        options.ParseStateValues = true;
+        options.SetResourceBuilder(
+            ResourceBuilder
+                .CreateDefault()
+                .AddService(
+                    serviceName: "DashyBoard.API",
+                    serviceVersion: "1.0.0",
+                    serviceInstanceId: Environment.MachineName
+                )
+                .AddAttributes(
+                    new Dictionary<string, object>
+                    {
+                        ["deployment.environment"] = builder.Environment.EnvironmentName,
+                        ["host.name"] = Environment.MachineName,
+                    }
+                )
+        );
+
+        options.AddOtlpExporter(exporter =>
+        {
+            exporter.Endpoint = new Uri($"{otelEndpoint}/v1/logs");
+            exporter.Headers = otelHeaders;
+            exporter.Protocol = OtlpExportProtocol.HttpProtobuf;
+        });
+    });
+}
+
+builder
+    .Services.AddOpenTelemetry()
+    .ConfigureResource(resource =>
+        resource
+            .AddService(
+                serviceName: "DashyBoard.API",
+                serviceVersion: "1.0.0",
+                serviceInstanceId: Environment.MachineName
+            )
+            .AddAttributes(
+                new Dictionary<string, object>
+                {
+                    ["deployment.environment"] = builder.Environment.EnvironmentName,
+                    ["host.name"] = Environment.MachineName,
+                }
+            )
+    )
+    .WithMetrics(metrics =>
+    {
+        metrics
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddRuntimeInstrumentation()
+            .AddMeter("Npgsql"); // Database metrics for Neon/PostgreSQL
+
+        // Export to Grafana Cloud if configured
+        if (!string.IsNullOrEmpty(otelEndpoint))
+        {
+            metrics.AddOtlpExporter(options =>
+            {
+                options.Endpoint = new Uri($"{otelEndpoint}/v1/metrics");
+                options.Headers = otelHeaders;
+                options.Protocol = OtlpExportProtocol.HttpProtobuf;
+            });
+        }
+    })
+    .WithTracing(tracing =>
+    {
+        tracing
+            .AddAspNetCoreInstrumentation(options =>
+            {
+                options.RecordException = true;
+                options.Filter = ctx => !ctx.Request.Path.StartsWithSegments("/health");
+            })
+            .AddHttpClientInstrumentation(options =>
+            {
+                options.FilterHttpRequestMessage = ShouldInstrumentOutgoingRequest;
+            })
+            .AddEntityFrameworkCoreInstrumentation(options =>
+            {
+                options.SetDbStatementForText = true;
+            })
+            .AddSource("DashyBoard.API");
+
+        // Export to Grafana Cloud if configured
+        if (!string.IsNullOrEmpty(otelEndpoint))
+        {
+            tracing.AddOtlpExporter(options =>
+            {
+                options.Endpoint = new Uri($"{otelEndpoint}/v1/traces");
+                options.Headers = otelHeaders;
+                options.Protocol = OtlpExportProtocol.HttpProtobuf;
+            });
+        }
+    });
 
 // --------------------
 // Clean Architecture layers
