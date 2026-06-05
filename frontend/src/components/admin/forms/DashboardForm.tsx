@@ -209,9 +209,10 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
     <Box
       component="form"
       sx={{
-        p: 2,
-        borderRadius: 2,
-        boxShadow: 1,
+        p: 3,
+        borderRadius: 3,
+        boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+        border: "1px solid rgba(0,0,0,0.06)",
         background: "white",
         flex: 1,
       }}
@@ -288,9 +289,11 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
           </Stack>
         )}
 
-        <Button variant="contained" type="submit">
-          Post
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button variant="contained" type="submit" size="large" sx={{ px: 4, py: 1.2 }}>
+            Post
+          </Button>
+        </Box>
       </Stack>
     </Box>
   );

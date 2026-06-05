@@ -38,31 +38,25 @@ export const Topbar = () => {
     <Box
       sx={{
         width: "100%",
-        bgcolor: theme.palette.topbar.background,
+        background: "linear-gradient(90deg, #0B1220 0%, #172036 60%, #1B3F8B 100%)",
         color: theme.palette.topbar.text,
-        p: 2,
+        px: 3,
+        py: 1.5,
         boxSizing: "border-box",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        boxShadow: `
-      0 1px 0 rgba(255,255,255,0.05),
-      0 6px 12px rgba(0,0,0,0.35)
-    `,
+        borderBottom: "1px solid rgba(255,255,255,0.08)",
+        boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
       }}
     >
-      <Typography variant="h5">{hotelName}</Typography>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Box
-        component="img"
-        src="/logo.jpg"
-        alt="DashyBoard"
-        sx={{ height: 45 }}
-      />
-      <Typography variant="h6">{time}</Typography>
+      <Typography variant="h5" sx={{ color: "#F1F5F9", fontWeight: 600 }}>
+        {hotelName}
+      </Typography>
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <Box component="img" src="/logo.jpg" alt="DashyBoard" sx={{ height: 45 }} />
+        <Typography variant="h6">{time}</Typography>
       </Box>
-    
-      </Box>
-
+    </Box>
   );
 };

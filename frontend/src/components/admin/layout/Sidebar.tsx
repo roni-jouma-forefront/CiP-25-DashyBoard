@@ -20,11 +20,12 @@ export const Sidebar = () => {
     <Box
       sx={{
         width: 240,
-        bgcolor: theme.palette.sidebar.background,
+        background: "linear-gradient(180deg, #0B1220 0%, #172036 100%)",
         color: theme.palette.sidebar.text,
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
+        borderRight: "1px solid rgba(255,255,255,0.07)",
       }}
     >
       <List sx={{ flex: 1 }}>

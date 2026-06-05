@@ -1,4 +1,4 @@
-import { Button, Collapse, Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
  
 type RoomFilters = {
   roomNumber: string;
@@ -22,12 +22,9 @@ export const RoomFilter = ({
   onClear,
 }: RoomFilterProps) => {
   return (
-    <>
-      <Button variant="outlined" onClick={onToggle}>
-        {filterOpen ? "Hide Filters" : "Filter"}
-      </Button>
-      <Collapse in={filterOpen}>
-        <Stack direction="row" spacing={2} mt={2}>
+    <Stack direction="row" spacing={2} alignItems="center">
+      {filterOpen && (
+        <>
           <TextField
             label="Room number"
             value={filters.roomNumber}
@@ -49,9 +46,12 @@ export const RoomFilter = ({
           <Button variant="text" onClick={onClear}>
             Clear
           </Button>
-        </Stack>
-      </Collapse>
-    </>
+        </>
+      )}
+      <Button variant="outlined" onClick={onToggle}>
+        {filterOpen ? "Hide Filters" : "Filter"}
+      </Button>
+    </Stack>
   );
 };
  

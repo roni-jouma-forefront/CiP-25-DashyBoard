@@ -29,10 +29,10 @@ export default function AdminHome() {
 
   return (
     <>
-      <Typography variant="h2">DashyBoard</Typography>
+      <Typography variant="h2" sx={{ fontWeight: 700, color: "#0F172A", letterSpacing: "-0.5px" }}>DashyBoard</Typography>
       <Stack direction="column" spacing={2}>
         <DashboardForm onSubmit={onSubmit} />
-        <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+        <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
           <MessageAccordion
             title="General Messages"
             messages={regularMessages}
