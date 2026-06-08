@@ -9,6 +9,8 @@ interface MessageBaseFormProps {
   postAtError: string | null;
   expiresAtError: string | null;
   author: string;
+  postAt?: Dayjs | null;
+  expiresAt?: Dayjs | null;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onPostDateTimeChange: (value: Dayjs | null) => void;
   onExpiresDateTimeChange: (value: Dayjs | null) => void;
@@ -21,11 +23,13 @@ export const MessageBaseForm = ({
   author,
   postAtError,
   expiresAtError,
+  postAt,
+  expiresAt,
   onPostDateTimeChange,
   onExpiresDateTimeChange,
 }: MessageBaseFormProps) => {
   return (
-    <Stack direction="row" spacing={2}>
+    <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
       <Stack spacing={2} flex={1}>
         <TextField
           label="Title"
@@ -49,6 +53,7 @@ export const MessageBaseForm = ({
         <Stack spacing={2}>
           <DateTimePicker
             label="Post at"
+            value={postAt ?? null}
             sx={{ flex: 1 }}
             onChange={onPostDateTimeChange}
           />
@@ -59,6 +64,7 @@ export const MessageBaseForm = ({
         <Stack spacing={2}>
           <DateTimePicker
             label="Expires at"
+            value={expiresAt ?? null}
             sx={{ flex: 1 }}
             onChange={onExpiresDateTimeChange}
           />

@@ -15,7 +15,7 @@ export async function postMessage(data: MessageBackend) {
       postAt: data.postAt,
       expiresAt: data.expiresAt,
       recurring: data.recurring,
-      recurrenceType: data.recurrenceType,
+      recurrenceType: data.recurrenceType ?? "None",
       recurrenceTimeStart: data.recurrenceTimeStart,
       recurrenceTimeEnd: data.recurrenceTimeEnd,
       recurrenceDays: data.recurrenceDays,

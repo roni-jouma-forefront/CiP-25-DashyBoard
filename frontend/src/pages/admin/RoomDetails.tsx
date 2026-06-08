@@ -30,6 +30,8 @@ export default function Room() {
     cancelEdit,
     onSubmit,
     handleDelete,
+    isPostPending,
+    isPostSuccess,
   } = useMessagesAdmin({ hotelId, bookingId });
   const {
     data: bookingsData,
@@ -67,7 +69,11 @@ export default function Room() {
       >
         <Typography variant="h2">Details for room {roomNumber}</Typography>
       </Stack>
-      <Stack direction="row" spacing={2} alignItems="flex-start">
+      <Stack
+        direction={{ xs: "column", lg: "row" }}
+        spacing={2}
+        alignItems={{ xs: "stretch", lg: "flex-start" }}
+      >
         <RoomDetailsForm
           bookingId={bookingId}
           guestId={guestData.id}
@@ -77,7 +83,12 @@ export default function Room() {
           departureDate={bookingsData.checkOut}
           departureFlight={bookingsData.flightNumber}
         />
-        <RoomMessageForm onSubmit={onSubmit} bookingId={bookingId} />
+        <RoomMessageForm
+          onSubmit={onSubmit}
+          bookingId={bookingId}
+          isPostPending={isPostPending}
+          isPostSuccess={isPostSuccess}
+        />
       </Stack>
       {bookingId && (
         <MessageAccordion

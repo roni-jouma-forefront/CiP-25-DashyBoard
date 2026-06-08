@@ -25,14 +25,31 @@ export default function AdminHome() {
     cancelEdit,
     onSubmit,
     handleDelete,
+    isPostPending,
+    isPostSuccess,
   } = useMessagesAdmin({ hotelId });
 
   return (
     <>
-      <Typography variant="h2" sx={{ fontWeight: 700, color: "#0F172A", letterSpacing: "-0.5px" }}>DashyBoard</Typography>
+      <Typography
+        variant="h2"
+        sx={{ fontWeight: 700, color: "#0F172A", letterSpacing: "-0.5px" }}
+      >
+        DashyBoard
+      </Typography>
       <Stack direction="column" spacing={2}>
-        <DashboardForm onSubmit={onSubmit} />
-        <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
+        <DashboardForm
+          onSubmit={onSubmit}
+          isPostPending={isPostPending}
+          isPostSuccess={isPostSuccess}
+        />
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", lg: "1fr 1fr" },
+            gap: 2,
+          }}
+        >
           <MessageAccordion
             title="General Messages"
             messages={regularMessages}

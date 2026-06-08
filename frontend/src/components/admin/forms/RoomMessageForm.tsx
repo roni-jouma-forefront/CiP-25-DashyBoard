@@ -1,6 +1,6 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { MessageBaseForm } from "./MessageBaseForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Dayjs } from "dayjs";
 import type { MessageBackend } from "../../../types/message.types";
 
@@ -24,9 +24,29 @@ interface RoomFormData extends Omit<
 interface RoomFormProps {
   onSubmit: (formData: MessageBackend) => void;
   bookingId?: string | null;
+  isPostPending?: boolean;
+  isPostSuccess?: boolean;
 }
 
-export const RoomMessageForm = ({ onSubmit, bookingId }: RoomFormProps) => {
+export const RoomMessageForm = ({
+  onSubmit,
+  bookingId,
+  isPostPending,
+  isPostSuccess,
+}: RoomFormProps) => {
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    if (isPostSuccess) {
+      const showTimer = setTimeout(() => setShowSuccess(true), 0);
+      const hideTimer = setTimeout(() => setShowSuccess(false), 5000);
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, [isPostSuccess]);
+
   const [formData, setFormData] = useState<RoomFormData>({
     hotelId: import.meta.env.VITE_HOTEL_ID,
     bookingId: bookingId ? bookingId : null,
@@ -73,6 +93,15 @@ export const RoomMessageForm = ({ onSubmit, bookingId }: RoomFormProps) => {
       recurrenceTimeStart: null,
       recurrenceTimeEnd: null,
     });
+
+    setFormData((prev) => ({
+      ...prev,
+      title: "",
+      content: "",
+      author: "",
+      postAt: null,
+      expiresAt: null,
+    }));
   };
 
   return (
@@ -101,10 +130,19 @@ export const RoomMessageForm = ({ onSubmit, bookingId }: RoomFormProps) => {
           author={formData.author}
           postAtError={formData.postAtError}
           expiresAtError={formData.expiresAtError}
+          postAt={formData.postAt}
+          expiresAt={formData.expiresAt}
         />
-        <Button variant="contained" type="submit">
-          Post
-        </Button>
+        <Stack spacing={1} alignItems="flex-end">
+          {showSuccess && (
+            <Typography variant="body2" color="success.main">
+              Message posted successfully
+            </Typography>
+          )}
+          <Button variant="contained" type="submit" disabled={isPostPending}>
+            {isPostPending ? "Posting..." : "Post"}
+          </Button>
+        </Stack>
       </Stack>
     </Box>
   );

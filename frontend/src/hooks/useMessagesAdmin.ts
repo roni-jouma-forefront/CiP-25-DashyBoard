@@ -33,7 +33,7 @@ export const useMessagesAdmin = ({
     refetchIntervalInBackground: true,
   });
 
-  const { mutate } = useMutation<string, Error, MessageBackend>({
+  const { mutate, isPending: isPostPending, isSuccess: isPostSuccess } = useMutation<string, Error, MessageBackend>({
     mutationFn: postMessage,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["messages", bookingId] });
@@ -203,5 +203,7 @@ export const useMessagesAdmin = ({
     handleRecurrenceDaysChange,
     onSubmit,
     handleDelete,
+    isPostPending,
+    isPostSuccess,
   };
 };

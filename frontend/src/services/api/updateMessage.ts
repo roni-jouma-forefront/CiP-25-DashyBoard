@@ -16,10 +16,10 @@ export async function updateMessage(data: MessageBackend) {
       postAt: data.postAt,
       expiresAt: data.expiresAt,
       recurring: data.recurring,
-      recurrenceType: data.recurrenceType,
+      recurrenceType: data.recurrenceType ?? "None",
       recurrenceTimeStart: data.recurrenceTimeStart,
       recurrenceTimeEnd: data.recurrenceTimeEnd,
-      recurrenceDays: data.recurrenceDays,Time: data.recurrenceTimeStart
+      recurrenceDays: data.recurrenceDays,
     }),
   });
 
