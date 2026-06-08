@@ -9,13 +9,15 @@ import {
 import { MessageBaseForm } from "./MessageBaseForm";
 import { DayPicker } from "../DayPicker";
 import type { Day } from "../../../types/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dayjs } from "dayjs";
 import type { MessageBackend } from "../../../types/message.types";
 import { TimePicker } from "@mui/x-date-pickers";
 
 interface DashboardFormProps {
   onSubmit: (formData: MessageBackend) => void;
+  isPostPending?: boolean;
+  isPostSuccess?: boolean;
 }
 interface FormErrors {
   postAt: string | null;
@@ -25,7 +27,24 @@ interface FormErrors {
   recurrenceDays: boolean;
 }
 
-export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
+export const DashboardForm = ({
+  onSubmit,
+  isPostPending,
+  isPostSuccess,
+}: DashboardFormProps) => {
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    if (isPostSuccess) {
+      const showTimer = setTimeout(() => setShowSuccess(true), 0);
+      const hideTimer = setTimeout(() => setShowSuccess(false), 5000);
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, [isPostSuccess]);
+
   const [formData, setFormData] = useState<MessageBackend>({
     hotelId: import.meta.env.VITE_HOTEL_ID,
     bookingId: null,
@@ -54,6 +73,8 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
   const [selectedDays, setSelectedDays] = useState<Day[]>([]);
   const [startTime, setStartTime] = useState<Dayjs | null>(null);
   const [endTime, setEndTime] = useState<Dayjs | null>(null);
+  const [postAt, setPostAt] = useState<Dayjs | null>(null);
+  const [expiresAt, setExpiresAt] = useState<Dayjs | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -85,6 +106,7 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
         postAt: null,
         expiresAt: null,
       }));
+      setPostAt(value);
       setFormData((prev) => ({
         ...prev,
         postAt: value ? value.toISOString() : null,
@@ -105,6 +127,7 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
         postAt: null,
         expiresAt: null,
       }));
+      setExpiresAt(value);
       setFormData((prev) => ({
         ...prev,
         expiresAt: value ? value.toISOString() : null,
@@ -193,6 +216,22 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
         : null,
     });
 
+    setFormData({
+      hotelId: import.meta.env.VITE_HOTEL_ID,
+      bookingId: null,
+      id: "",
+      isActive: false,
+      title: "",
+      content: "",
+      recurring: false,
+      recurrenceType: null,
+      postAt: null,
+      expiresAt: null,
+      author: "",
+      recurrenceDays: null,
+      recurrenceTimeStart: null,
+      recurrenceTimeEnd: null,
+    });
     setError({
       postAt: null,
       expiresAt: null,
@@ -203,6 +242,8 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
     setSelectedDays([]);
     setStartTime(null);
     setEndTime(null);
+    setPostAt(null);
+    setExpiresAt(null);
   };
 
   return (
@@ -231,6 +272,8 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
           author={formData.author}
           postAtError={error.postAt}
           expiresAtError={error.expiresAt}
+          postAt={postAt}
+          expiresAt={expiresAt}
         />
         <FormControlLabel
           label="Recurring"
@@ -289,11 +332,22 @@ export const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
           </Stack>
         )}
 
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button variant="contained" type="submit" size="large" sx={{ px: 4, py: 1.2 }}>
-            Post
+        <Stack spacing={1} alignItems="flex-end">
+          {showSuccess && (
+            <Typography variant="body2" color="success.main">
+              Message posted successfully
+            </Typography>
+          )}
+          <Button
+            variant="contained"
+            type="submit"
+            size="large"
+            sx={{ px: 4, py: 1.2 }}
+            disabled={isPostPending}
+          >
+            {isPostPending ? "Posting..." : "Post"}
           </Button>
-        </Box>
+        </Stack>
       </Stack>
     </Box>
   );
