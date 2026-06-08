@@ -5,18 +5,22 @@ import { theme } from "../../../theme";
 
 export const Topbar = () => {
   const hotelId = import.meta.env.VITE_HOTEL_ID;
-  const [hotelName, setHotelName] = useState<string>("");
+  const [hotelName, setHotelName] = useState<string>(
+    import.meta.env.VITE_LOCATION_NAME ?? "Hotel",
+  );
   const [time, setTime] = useState("");
   const timeZone = "Europe/Stockholm";
 
   useEffect(() => {
-    if (!hotelId) return;
+    if (!hotelId) {
+      return;
+    }
     GetHotel(hotelId)
       .then((hotel) => setHotelName(hotel.name))
-      .catch(() => setHotelName("Hotel"));
+      .catch(() => setHotelName(import.meta.env.VITE_LOCATION_NAME ?? "Hotel"));
   }, [hotelId]);
 
-    useEffect(() => {
+  useEffect(() => {
     const updateTime = () => {
       const now = new Intl.DateTimeFormat("sv-SE", {
         timeZone,
@@ -33,12 +37,12 @@ export const Topbar = () => {
     return () => clearInterval(interval);
   }, [timeZone]);
 
-
   return (
     <Box
       sx={{
         width: "100%",
-        background: "linear-gradient(90deg, #0B1220 0%, #172036 60%, #1B3F8B 100%)",
+        background:
+          "linear-gradient(90deg, #0B1220 0%, #172036 60%, #1B3F8B 100%)",
         color: theme.palette.topbar.text,
         px: 3,
         py: 1.5,
@@ -53,8 +57,15 @@ export const Topbar = () => {
       <Typography variant="h5" sx={{ color: "#F1F5F9", fontWeight: 600 }}>
         {hotelName}
       </Typography>
-      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <Box component="img" src="/logo.jpg" alt="DashyBoard" sx={{ height: 45 }} />
+      <Box
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      >
+        <Box
+          component="img"
+          src="/logo.jpg"
+          alt="DashyBoard"
+          sx={{ height: 45 }}
+        />
         <Typography variant="h6">{time}</Typography>
       </Box>
     </Box>
