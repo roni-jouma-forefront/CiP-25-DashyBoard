@@ -41,5 +41,38 @@ export async function GetDepartureFlights(
   const departuresFiltered = (json as DepartureData[]).filter(
     (flight) => flight.locationAndStatus?.flightLegStatusEnglish !== "Deleted",
   );
-  return departuresFiltered;
+
+
+  const getFlightTime = (flight: DepartureData): number => {
+    const utc =
+      flight.departureTime?.scheduledUtc ??
+      flight.departureTime?.estimatedUtc;
+
+    if (!utc) return Number.POSITIVE_INFINITY;
+
+    const parsed = Date.parse(utc);
+    return Number.isNaN(parsed) ? Number.POSITIVE_INFINITY : parsed;
+  };
+
+  const now = Date.now();
+
+  const sortedDepartures = [...departuresFiltered].sort((a, b) => {
+    const aTime = getFlightTime(a);
+    const bTime = getFlightTime(b);
+
+    const aIsUpcoming = aTime >= now;
+    const bIsUpcoming = bTime >= now;
+
+    if (aIsUpcoming !== bIsUpcoming) {
+      return aIsUpcoming ? -1 : 1;
+    }
+
+    if (aIsUpcoming) {
+      return aTime - bTime;
+    }
+
+    return bTime - aTime;
+  });
+
+  return sortedDepartures;
 }
