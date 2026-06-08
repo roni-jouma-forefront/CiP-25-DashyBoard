@@ -9,9 +9,9 @@ export const useWeather = ({ icao }: WeatherProps) => {
   return useQuery<MetarData>({
     queryKey: ["weather", icao],
     queryFn: () => GetWeather(icao),
-    enabled: !!icao,
+    enabled: /^[A-Za-z]{4}$/.test(icao),
     staleTime: 1000 * 60 * 5,
-    refetchInterval: 60_000,
-    refetchIntervalInBackground: true,
+    refetchInterval: 1000 * 60 * 15,
+    refetchIntervalInBackground: false,
   });
 };
