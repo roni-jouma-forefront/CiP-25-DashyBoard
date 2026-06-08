@@ -40,7 +40,7 @@ export type Staff = {
 export type Hotel = {
   id: string;
   name: string;
-  icaoCode: string;
+  iataCode: string;
 };
 
 export type DateTime = {
