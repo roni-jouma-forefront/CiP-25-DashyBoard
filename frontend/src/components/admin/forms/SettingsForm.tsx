@@ -1,15 +1,40 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import { useState } from "react";
-import { postHotel } from "../../../services/api/postHotel";
+import { useEffect, useState } from "react";
+import { GetHotel } from "../../../services/api/GetHotel";
+import { updateHotel } from "../../../services/api/updateHotel";
 
 export const SettingsForm = () => {
-  const [formData, setFormData] = useState({ id: "", name: "", icaoCode: "" });
+  const hotelId = import.meta.env.VITE_HOTEL_ID;
+  const missingHotelId = !hotelId;
+  const [formData, setFormData] = useState({ id: "", name: "", iataCode: "" });
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (missingHotelId) {
+      return;
+    }
+
+    GetHotel(hotelId)
+      .then((hotel) => {
+        setFormData({
+          id: hotel.id,
+          name: hotel.name,
+          iataCode: hotel.icaoCode,
+        });
+      })
+      .catch((loadError) => {
+        console.error("Error loading hotel settings:", loadError);
+        setError("Failed to load hotel settings");
+      });
+  }, [hotelId, missingHotelId]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const nextValue =
+      name === "iataCode" ? value.toUpperCase().replace(/[^A-Z]/g, "") : value;
+
+    setFormData((prev) => ({ ...prev, [name]: nextValue }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,10 +42,26 @@ export const SettingsForm = () => {
     setSuccess(false);
     setError(null);
 
+    if (!hotelId) {
+      setError("VITE_HOTEL_ID is missing.");
+      return;
+    }
+
     try {
-      await postHotel(formData);
+      const normalizedFormData = {
+        ...formData,
+        name: formData.name.trim(),
+        iataCode: formData.iataCode.trim().toUpperCase(),
+      };
+
+      await updateHotel(hotelId, normalizedFormData);
+
       setSuccess(true);
-      setFormData({ id: "", name: "", icaoCode: "" });
+      setFormData((prev) => ({
+        ...prev,
+        name: normalizedFormData.name,
+        iataCode: normalizedFormData.iataCode,
+      }));
     } catch (error) {
       console.error("Error posting hotel:", error);
       setError(error instanceof Error ? error.message : "Failed to save hotel");
@@ -53,20 +94,22 @@ export const SettingsForm = () => {
           required
         />
         <TextField
-          label="Hotel Location (ICAO Code)"
-          name="icaoCode"
-          value={formData.icaoCode}
+          label="Hotel Location (IATA code)"
+          name="iataCode"
+          value={formData.iataCode}
           onChange={handleChange}
           fullWidth
           required
-          slotProps={{ htmlInput: { maxLength: 4 } }}
-          helperText="Must be exactly 4 letters"
-          error={formData.icaoCode.length > 0 && !/^[A-Za-z]{4}$/.test(formData.icaoCode)}
+          slotProps={{ htmlInput: { maxLength: 3 } }}
+          helperText="Must be exactly 3 letters"
+          error={
+            formData.iataCode.length > 0 &&
+            !/^[A-Za-z]{3}$/.test(formData.iataCode)
+          }
         />
-        <TextField type="number" label="Number of Rooms" />
-        {error && (
+        {(error || missingHotelId) && (
           <Typography color="error" variant="body2">
-            {error}
+            {error ?? "VITE_HOTEL_ID is missing."}
           </Typography>
         )}
         {success && (
@@ -77,7 +120,11 @@ export const SettingsForm = () => {
         <Button
           type="submit"
           variant="contained"
-          disabled={formData.name.length < 5 || !/^[A-Za-z]{4}$/.test(formData.icaoCode)}
+          disabled={
+            missingHotelId ||
+            formData.name.trim().length < 2 ||
+            !/^[A-Za-z]{3}$/.test(formData.iataCode)
+          }
         >
           Save
         </Button>

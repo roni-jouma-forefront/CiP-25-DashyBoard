@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDrop } from "react-dnd";
 import DraggableWrapper from "./DraggableWrapper";
 import WeatherWidget from "./WeatherWidget";
@@ -16,9 +16,16 @@ import { useBookings } from "../../hooks";
 import { useParams } from "react-router";
 import { useGuestName } from "../../hooks/useGuestName.ts";
 import { useFlightInfo } from "../../hooks";
+import { useDepartureFlights } from "../../hooks/useDepartureFlights";
+import { GetHotel } from "../../services/api/GetHotel";
 
 function MirrorDashboard() {
   const [order, setOrder] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
+  const hotelId = import.meta.env.VITE_HOTEL_ID;
+  const [iataCode, setIataCode] = useState("");
+  const [hotelSettingsLoading, setHotelSettingsLoading] = useState(
+    Boolean(hotelId),
+  );
   const { bookingId } = useParams();
   const { data, error, isLoading } = useBookings({
     bookingId: bookingId as string,
@@ -26,10 +33,39 @@ function MirrorDashboard() {
   const { data: guestData } = useGuestName({ guestId: data?.guestId ?? "" });
   const isPilot = guestData?.isPilot ?? false;
 
+  useEffect(() => {
+    if (!hotelId) {
+      return;
+    }
+
+    GetHotel(hotelId)
+      .then((hotel) => {
+        setIataCode(hotel.icaoCode.toUpperCase());
+      })
+      .catch((loadError) => {
+        console.error("Error loading hotel for mirror:", loadError);
+      })
+      .finally(() => {
+        setHotelSettingsLoading(false);
+      });
+  }, [hotelId]);
+
   const { data: flightData } = useFlightInfo({
-    airport: import.meta.env.VITE_AIRPORT_NAME,
+    airport: iataCode,
     flight: data?.flightNumber ?? "",
   });
+  const { data: departuresData = [] } = useDepartureFlights({
+    airport: iataCode,
+  });
+
+  const homeAirportIcao =
+    departuresData
+      .find((d) => d.departureAirportIcao)
+      ?.departureAirportIcao?.toUpperCase() ||
+    flightData?.arrivalAirportIcao?.toUpperCase() ||
+    flightData?.departureAirportIcao?.toUpperCase() ||
+    "";
+
   const arrivalAirportIcao = flightData?.arrivalAirportIcao;
 
   const [{ isOver }, drop] = useDrop(() => ({
@@ -44,6 +80,14 @@ function MirrorDashboard() {
       isOver: monitor.isOver(),
     }),
   }));
+
+  if (hotelSettingsLoading) {
+    return <Typography>Loading hotel settings...</Typography>;
+  }
+
+  if (!iataCode) {
+    return <Typography>Hotel IATA code is missing.</Typography>;
+  }
 
   if (!data) {
     return <div>Ingen data</div>;
@@ -122,19 +166,19 @@ function MirrorDashboard() {
                     {!isPilot ? (
                       <>
                         <WeatherWidget
-                          icao={import.meta.env.VITE_AIRPORT_ICAO}
+                          icao={homeAirportIcao}
                           pilotVersion={isPilot}
                         />
                         <WeatherWidgetDestination
                           icao={
-                            arrivalAirportIcao ?? "destination weather icao"
+                            arrivalAirportIcao ?? ""
                           }
                           pilotVersion={isPilot}
                         />
                       </>
                     ) : (
                       <WeatherWidget
-                        icao={import.meta.env.VITE_AIRPORT_ICAO}
+                        icao={homeAirportIcao}
                         pilotVersion={isPilot}
                       />
                     )}
@@ -143,26 +187,19 @@ function MirrorDashboard() {
               if (id === 3 && data.flightNumber)
                 return (
                   <DraggableWrapper key={3} id={3}>
-                    <FlightInfo
-                      airport={import.meta.env.VITE_AIRPORT_NAME}
-                      flight={data.flightNumber}
-                    />
+                    <FlightInfo airport={iataCode} flight={data.flightNumber} />
                   </DraggableWrapper>
                 );
               if (id === 4)
                 return (
                   <DraggableWrapper key={4} id={4}>
-                    <ArrivalsWidget
-                      airport={import.meta.env.VITE_AIRPORT_NAME}
-                    />
+                    <ArrivalsWidget airport={iataCode} />
                   </DraggableWrapper>
                 );
               if (id === 5)
                 return (
                   <DraggableWrapper key={5} id={5}>
-                    <DeparturesWidget
-                      airport={import.meta.env.VITE_AIRPORT_NAME}
-                    />
+                    <DeparturesWidget airport={iataCode} />
                   </DraggableWrapper>
                 );
               if (id === 6)
@@ -178,16 +215,14 @@ function MirrorDashboard() {
               if (id === 7)
                 return (
                   <DraggableWrapper key={7} id={7}>
-                    <WaitTimeWidget
-                      airport={import.meta.env.VITE_AIRPORT_NAME}
-                    />
+                    <WaitTimeWidget airport={iataCode} />
                   </DraggableWrapper>
                 );
               if (id === 8 && isPilot)
                 return (
                   <DraggableWrapper key={8} id={8}>
                     <WeatherWidgetDestination
-                      icao={arrivalAirportIcao ?? "destination weather icao"}
+                      icao={arrivalAirportIcao ?? ""}
                       pilotVersion={isPilot}
                     />
                   </DraggableWrapper>
