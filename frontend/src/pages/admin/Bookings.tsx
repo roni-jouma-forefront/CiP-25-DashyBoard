@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Box,
   Chip,
+  IconButton,
   Stack,
   Table,
   TableBody,
@@ -9,13 +10,17 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import TableChartIcon from "@mui/icons-material/TableChart";
 import UploadForm from "../../components/admin/forms/UploadForm";
 import {
   BookingFilter,
   type BookingStatusFilter,
 } from "../../components/admin/BookingFilter";
+import { BookingCalendar } from "../../components/admin/BookingCalendar";
 import { useAllBookings } from "../../hooks/useAllBookings";
 
 const statusMap: Record<number, { label: string; color: "success" | "info" | "error" | "default" }> = {
@@ -42,13 +47,31 @@ function filterToStatus(filter: BookingStatusFilter): number | undefined {
 
 export default function BookingsPage() {
   const [statusFilter, setStatusFilter] = useState<BookingStatusFilter>("all");
+  const [view, setView] = useState<"table" | "calendar">("table");
   const backendStatus = filterToStatus(statusFilter);
   const { data: bookings = [], isLoading, error } = useAllBookings(backendStatus);
+
+  // For the calendar we also fetch all bookings (unfiltered) so room timelines are complete
+  const { data: allBookings = [] } = useAllBookings(undefined);
+
+  const roomNumbers = useMemo(() => {
+    const set = new Set<string>();
+    allBookings.forEach((b) => {
+      const room = b.roomNumber ?? b.roomId;
+      if (room) set.add(room);
+    });
+    return Array.from(set).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  }, [allBookings]);
 
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h2">Bookings</Typography>
+        <Tooltip title={view === "table" ? "Calendar view" : "Table view"}>
+          <IconButton onClick={() => setView((v) => (v === "table" ? "calendar" : "table"))}>
+            {view === "table" ? <CalendarMonthIcon /> : <TableChartIcon />}
+          </IconButton>
+        </Tooltip>
       </Stack>
 
       <Stack spacing={2}>
@@ -57,7 +80,7 @@ export default function BookingsPage() {
         {isLoading && <Typography>Loading bookings...</Typography>}
         {error && <Typography color="error">Error loading bookings</Typography>}
 
-        {!isLoading && !error && (
+        {!isLoading && !error && view === "table" && (
           <TableContainer
             component={Box}
             sx={{
@@ -70,8 +93,8 @@ export default function BookingsPage() {
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell><strong>Room ID</strong></TableCell>
-                  <TableCell><strong>Guest ID</strong></TableCell>
+                  <TableCell><strong>Room</strong></TableCell>
+                  <TableCell><strong>Guest</strong></TableCell>
                   <TableCell><strong>Flight</strong></TableCell>
                   <TableCell><strong>Guests</strong></TableCell>
                   <TableCell><strong>Check-in</strong></TableCell>
@@ -91,12 +114,8 @@ export default function BookingsPage() {
                     const status = statusMap[b.bookingStatus] ?? { label: "Unknown", color: "default" as const };
                     return (
                       <TableRow key={b.id}>
-                        <TableCell sx={{ fontFamily: "monospace", fontSize: "0.75rem" }}>
-                          {b.roomId?.slice(0, 8) ?? "—"}
-                        </TableCell>
-                        <TableCell sx={{ fontFamily: "monospace", fontSize: "0.75rem" }}>
-                          {b.guestId?.slice(0, 8) ?? "—"}
-                        </TableCell>
+                        <TableCell>{b.roomNumber ?? "—"}</TableCell>
+                        <TableCell>{b.guestName ?? "—"}</TableCell>
                         <TableCell>{b.flightNumber || "—"}</TableCell>
                         <TableCell>{b.numberOfGuests}</TableCell>
                         <TableCell>{new Date(b.checkIn).toLocaleDateString()}</TableCell>
@@ -111,6 +130,10 @@ export default function BookingsPage() {
               </TableBody>
             </Table>
           </TableContainer>
+        )}
+
+        {!isLoading && !error && view === "calendar" && (
+          <BookingCalendar bookings={allBookings} rooms={roomNumbers} />
         )}
 
         <UploadForm />

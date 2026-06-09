@@ -5,8 +5,11 @@ using MediatR;
 
 namespace DashyBoard.Application.Features.Queries.Bookings.GetAllBookings;
 
-public class GetAllBookingsQueryHandler(IRepository<Booking> repository)
-    : IRequestHandler<GetAllBookingsQuery, List<BookingDto>>
+public class GetAllBookingsQueryHandler(
+    IRepository<Booking> repository,
+    IRepository<Room> roomRepository,
+    IRepository<Guest> guestRepository
+) : IRequestHandler<GetAllBookingsQuery, List<BookingDto>>
 {
     public async Task<List<BookingDto>> Handle(
         GetAllBookingsQuery request,
@@ -28,12 +31,20 @@ public class GetAllBookingsQueryHandler(IRepository<Booking> repository)
                 )
                 : await repository.GetAllAsync(cancellationToken);
 
+        var rooms = await roomRepository.GetAllAsync(cancellationToken);
+        var guests = await guestRepository.GetAllAsync(cancellationToken);
+
+        var roomLookup = rooms.ToDictionary(r => r.Id, r => r.RoomNumber);
+        var guestLookup = guests.ToDictionary(g => g.Id, g => $"{g.FirstName} {g.LastName}");
+
         return bookings
             .Select(b => new BookingDto
             {
                 Id = b.Id,
                 RoomId = b.RoomId,
                 GuestId = b.GuestId,
+                RoomNumber = b.RoomId.HasValue && roomLookup.TryGetValue(b.RoomId.Value, out var rn) ? rn : null,
+                GuestName = b.GuestId.HasValue && guestLookup.TryGetValue(b.GuestId.Value, out var gn) ? gn : null,
                 FlightNumber = b.FlightNumber,
                 NumberOfGuests = b.NumberOfGuests,
                 CheckIn = b.CheckIn,

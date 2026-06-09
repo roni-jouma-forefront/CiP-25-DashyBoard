@@ -2,6 +2,8 @@ export type BookingsData = {
   id: string;
   roomId: string;
   guestId: string;
+  roomNumber?: string;
+  guestName?: string;
   flightNumber: string;
   numberOfGuests: number;
   checkIn: string;

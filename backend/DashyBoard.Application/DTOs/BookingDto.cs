@@ -7,6 +7,8 @@ public class BookingDto
     public Guid Id { get; set; }
     public Guid? RoomId { get; set; }
     public Guid? GuestId { get; set; }
+    public string? RoomNumber { get; set; }
+    public string? GuestName { get; set; }
     public string FlightNumber { get; set; } = null!;
     public int NumberOfGuests { get; set; }
     public DateTime CheckIn { get; set; } = DateTime.UtcNow;
