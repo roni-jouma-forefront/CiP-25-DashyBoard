@@ -5,6 +5,7 @@ export { useDepartureFlights } from "./useDepartureFlights";
 export { useArrivalFlights } from "./useArrivalFlights";
 export { useMessages } from "./useMessages";
 export { useBookings } from "./useBookings";
+export { useAllBookings } from "./useAllBookings";
 export { useWaitTimes } from "./useWaitTimes";
 export { useRoomFilter } from "./useRoomFilter";
 
